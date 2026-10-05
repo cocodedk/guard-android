@@ -1,0 +1,1 @@
+First version: blocks dangerous sites and ads for every app on the phone with the AdGuard DNS filter, through a local tunnel that only DNS lookups enter. Says plainly when protection stops, warns when Private DNS bypasses the filter, and works with TalkBack.

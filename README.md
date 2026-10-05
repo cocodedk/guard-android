@@ -83,4 +83,4 @@ Babak Bandpey, [Cocode](https://cocode.dk).
 
 ## License
 
-[GPL-3.0](LICENSE).
+[GPL-3.0-or-later](LICENSE) (SPDX `GPL-3.0-or-later`).

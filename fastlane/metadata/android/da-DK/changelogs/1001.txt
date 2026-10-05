@@ -1,0 +1,1 @@
+Første version: blokerer farlige sider og reklamer for alle apps på telefonen med AdGuard DNS filter, gennem en lokal tunnel, som kun DNS-opslag går ind i. Siger tydeligt til, når beskyttelsen stopper, advarer når Privat DNS går uden om filteret, og virker med TalkBack.
