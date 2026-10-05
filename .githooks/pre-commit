@@ -1,0 +1,14 @@
+#!/bin/sh
+set -eu
+
+# Fast static checks only. The full suite runs at pre-push, so the commit loop
+# stays quick enough that nobody is tempted to use --no-verify.
+# Gradle needs a JDK, and this machine may not have one on PATH. Fail with the
+# actual reason instead of a Gradle stacktrace that buries it.
+if ! command -v java >/dev/null 2>&1 && [ -z "${JAVA_HOME:-}" ]; then
+  echo "pre-commit: no Java found. Set JAVA_HOME to a JDK 17 install, or install one." >&2
+  exit 1
+fi
+
+echo "pre-commit: linting..." >&2
+./gradlew lintDebug --no-daemon --quiet
