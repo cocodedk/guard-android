@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Themed icons use only the alpha of this layer, so the check mark is cut out of the shield
+     (evenOdd) instead of drawn on top of it as in ic_launcher_foreground. -->
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    android:width="108dp"
+    android:height="108dp"
+    android:viewportWidth="108"
+    android:viewportHeight="108">
+    <path
+        android:fillColor="#FFFFFFFF"
+        android:fillType="evenOdd"
+        android:pathData="M54,28 L76,36 L76,52 C76,66 66,77 54,82 C42,77 32,66 32,52 L32,36 Z M49.5,63 L41,54.5 L44.5,51 L49.5,56 L63.5,42 L67,45.5 Z" />
+</vector>

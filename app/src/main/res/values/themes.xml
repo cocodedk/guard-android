@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- Only shows until Compose draws; enableEdgeToEdge() sets the system bars. -->
+    <style name="Theme.Guard" parent="android:Theme.Material.NoActionBar">
+        <item name="android:windowBackground">@color/night</item>
+    </style>
+</resources>

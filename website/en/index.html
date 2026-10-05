@@ -1,0 +1,171 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Cocode Guard for Android: blocks dangerous sites and ads in every app</title>
+<meta name="description" content="A free app that blocks dangerous sites and ads in every Android app, on any network. It happens inside the phone. No account, no server.">
+<meta name="theme-color" content="#0f1e36">
+<link rel="canonical" href="https://android.guard.cocode.dk/en/">
+<link rel="alternate" hreflang="da" href="https://android.guard.cocode.dk/">
+<link rel="alternate" hreflang="en" href="https://android.guard.cocode.dk/en/">
+<link rel="alternate" hreflang="x-default" href="https://android.guard.cocode.dk/">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="Cocode Guard for Android">
+<meta property="og:title" content="Cocode Guard for Android: blocks dangerous sites and ads in every app">
+<meta property="og:description" content="A free app that blocks dangerous sites and ads in every Android app, on any network. It happens inside the phone. No account, no server.">
+<meta property="og:url" content="https://android.guard.cocode.dk/en/">
+<meta property="og:locale" content="en_GB">
+<meta property="og:locale:alternate" content="da_DK">
+<link rel="icon" type="image/svg+xml" href="/favicon.svg">
+<link rel="preload" href="/fonts/schibsted-grotesk-latin.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="stylesheet" href="/styles.css">
+<script type="application/ld+json">
+{
+ "@context": "https://schema.org",
+ "@type": "MobileApplication",
+ "name": "Cocode Guard for Android",
+ "description": "A free app that blocks dangerous sites and ads in every Android app, on any network. It happens inside the phone. No account, no server.",
+ "url": "https://android.guard.cocode.dk/en/",
+ "operatingSystem": "Android",
+ "applicationCategory": "SecurityApplication",
+ "inLanguage": "en",
+ "offers": {
+  "@type": "Offer",
+  "price": "0",
+  "priceCurrency": "DKK"
+ },
+ "author": {
+  "@type": "Person",
+  "name": "Babak Bandpey",
+  "url": "https://cocode.dk"
+ },
+ "license": "https://www.gnu.org/licenses/gpl-3.0.html"
+}
+</script>
+</head>
+<body>
+<a class="skip" href="#main">Skip to content</a>
+<header class="night">
+  <div class="wrap bar">
+    <a class="brand" href="/en/"><img src="/favicon.svg" alt="" width="30" height="30"><span>Cocode Guard for Android</span></a>
+    <nav class="menu" aria-label="Main menu"><ul><li><a href="/en/#how">How it works</a></li><li><a href="/en/#get">Get the app</a></li><li><a href="/en/privacy/">Privacy</a></li></ul></nav>
+    <nav class="lang" aria-label="Language"><ul><li><a href="/" hreflang="da" lang="da">Dansk</a></li><li><a href="/en/" hreflang="en" lang="en" aria-current="page">English</a></li></ul></nav>
+  </div>
+</header>
+<main id="main" tabindex="-1">
+<section class="night hero">
+  <div class="wrap hero-grid">
+    <div>
+      <p class="eyebrow">Free. No account. Open source.</p>
+      <h1>Dangerous sites and ads are stopped inside your phone.</h1>
+      <p class="lede">Cocode Guard for Android blocks dangerous sites and ads in every app, on any network: at home, on mobile data and on café Wi-Fi. It happens inside the phone. There is no account and no server.</p>
+      <p class="status"><strong>Early version.</strong> The first release is still being built, and the download is coming soon. This page describes how the app is meant to work.</p>
+      <div class="actions">
+        <a class="btn" href="#get">How to get the app</a>
+        <a class="more" href="https://github.com/cocodedk/guard-android">Follow the work on GitHub</a>
+      </div>
+    </div>
+    <figure class="log">
+      <figcaption>An example: three lookups</figcaption>
+      <ul role="list">
+        <li><div class="row"><code>nyheder.example</code><span class="tag">Let through</span></div><small>Passed on to the network's DNS server.</small></li>
+        <li><div class="row"><code>reklame.example</code><span class="tag block">Blocked</span></div><small>Empty answer. The ad is never loaded.</small></li>
+        <li><div class="row"><code>svindel.example</code><span class="tag block">Blocked</span></div><small>Empty answer. The site does not open.</small></li>
+      </ul>
+    </figure>
+  </div>
+</section>
+
+<section class="day" id="what" aria-labelledby="h-what">
+  <div class="wrap">
+    <h2 id="h-what">What it does</h2>
+    <p class="intro">The app blocks known dangerous sites and ad servers for every app on the phone.</p>
+    <ul class="cards" role="list">
+      <li><h3>Every app</h3><p>Games, news apps and browsers are filtered the same way. You don't set anything up app by app.</p></li>
+      <li><h3>Any network</h3><p>At home, on mobile data or on hotel Wi-Fi. The filter travels with the phone.</p></li>
+      <li><h3>Free, with no account</h3><p>No payment, no login and no server run by us. The code is open under the GPL-3.0.</p></li>
+      <li><h3>A well-known list</h3><p>The block list is AdGuard's DNS filter. It comes bundled in the app.</p></li>
+    </ul>
+  </div>
+</section>
+
+<section class="day mist" id="how" aria-labelledby="h-how">
+  <div class="wrap">
+    <h2 id="h-how">How it works</h2>
+    <p class="intro">Here it is in plain words.</p>
+    <ol class="steps" role="list">
+      <li><h3>The phone looks up a name</h3><p>Before an app can open a site, the phone has to find out where the site lives. It asks a DNS server, a bit like looking a number up in a phone book.</p></li>
+      <li><h3>The app listens in</h3><p>The lookup passes through the app first, inside the phone. If the name is on the block list, the app answers with nothing. The phone never learns where the site is, so it never opens.</p></li>
+      <li><h3>The rest is passed on</h3><p>Every other lookup goes on to the network's own DNS server, and the site opens as usual. Later you will be able to pick a different DNS server yourself.</p></li>
+    </ol>
+    <div class="why">
+      <h3>Why does the app ask for VPN permission?</h3>
+      <p>Android's VPN feature is how an ordinary app can see DNS lookups. The app uses it only as a local tunnel that starts and ends inside the app itself. There is no VPN server, and the rest of your traffic does not go through the app. The app sends nothing to us or anyone else. The DNS lookups go only to the network's own DNS server, just as before.</p>
+    </div>
+  </div>
+</section>
+
+<section class="day" id="privacy-short" aria-labelledby="h-privacy">
+  <div class="wrap">
+    <h2 id="h-privacy">Privacy in short</h2>
+    <ul class="checks" role="list">
+      <li>No account and no server run by us.</li>
+      <li>No tracking, no statistics and no ads in the app.</li>
+      <li>Your DNS lookups go only to the DNS server the app uses. By default that is the network's own.</li>
+      <li>Counts of blocked sites stay on the phone.</li>
+      <li>You grant only two permissions: the VPN permission and notifications. Network access is granted by Android automatically. No access to contacts, location, files or Android's accessibility features.</li>
+    </ul>
+    <p class="after"><a href="/en/privacy/">Read the full privacy policy</a></p>
+  </div>
+</section>
+
+<section class="day mist" id="limits" aria-labelledby="h-limits">
+  <div class="wrap">
+    <h2 id="h-limits">What the app cannot do</h2>
+    <p class="intro">It is better to know up front.</p>
+    <ul class="cards" role="list">
+      <li><h3>Android's Private DNS bypasses the filter</h3><p>If Private DNS is turned on in the phone's settings, the phone sends its lookups encrypted and around the app, so the app cannot see them. Turn Private DNS off if you want protection.</p></li>
+      <li><h3>Apps with their own secure DNS bypass the filter</h3><p>Some apps and browsers look sites up in their own encrypted way. The app cannot see those lookups.</p></li>
+      <li><h3>One VPN at a time</h3><p>Android allows only one VPN-type app at a time, so a work VPN cannot run alongside Cocode Guard.</p></li>
+      <li><h3>No list catches everything</h3><p>The app blocks what is on the list. A new dangerous site can slip through, and a harmless site can be blocked by mistake.</p></li>
+      <li><h3>If protection stops, you are told</h3><p>If protection stops, the app says so with a notification. It never stops in silence.</p></li>
+    </ul>
+  </div>
+</section>
+
+<section class="day" id="get" aria-labelledby="h-get">
+  <div class="wrap">
+    <h2 id="h-get">Get the app</h2>
+    <!-- When the first release is out: change the intro, and drop the "only works once" sentence. -->
+    <p class="intro"><strong>The download is coming soon.</strong> The first version has not been released yet. The app is free.</p>
+    <ul class="cards three" role="list">
+      <li><h3>GitHub</h3><p><a href="https://github.com/cocodedk/guard-android/releases/latest/download/GuardAndroid.apk">Download GuardAndroid.apk, the Android installation file</a>. The link only works once the first version is released.</p></li>
+      <li><h3>F-Droid</h3><p>Coming soon. There is no F-Droid page yet.</p></li>
+      <li><h3>Source code</h3><p><a href="https://github.com/cocodedk/guard-android">Read the source code on GitHub</a>. The app is free software under the GPL-3.0.</p></li>
+    </ul>
+  </div>
+</section>
+
+<section class="day mist" id="box" aria-labelledby="h-box">
+  <div class="wrap">
+    <h2 id="h-box">The Cocode Guard box</h2>
+    <p class="box-text">The app is the phone companion to the Cocode Guard box, the small box by the router that watches over the whole home and writes to you on Telegram. The box protects the house. The app protects the phone when it leaves the house. The app also works fine without the box.</p>
+    <p class="box-link"><a class="btn dark" href="https://guard.cocode.dk/en/">Read about the Cocode Guard box</a></p>
+  </div>
+</section>
+</main>
+
+<footer class="night">
+  <div class="wrap foot">
+    <p>Cocode Guard for Android is free software, released under the <a href="https://www.gnu.org/licenses/gpl-3.0.html">GNU General Public License version 3 (GPL-3.0)</a>.</p>
+    <ul>
+      <li><a href="https://github.com/cocodedk/guard-android">Source code on GitHub</a></li>
+      <li><a href="/en/privacy/">Privacy policy</a></li>
+      <li><a href="mailto:bb@cocode.dk">bb@cocode.dk</a></li>
+      <li><a href="https://cocode.dk">Made by Babak, cocode.dk</a></li>
+    </ul>
+  </div>
+</footer>
+</body>
+</html>

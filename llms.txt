@@ -1,0 +1,37 @@
+# Cocode Guard for Android
+
+> A free-software (GPL-3.0) Android app that blocks dangerous sites and ads for every app on the
+> phone, on any network, by filtering DNS lookups on the phone itself. It uses Android's VpnService
+> only as a local tunnel that ends inside the app: no VPN server, no account, no analytics. Kotlin
+> and Jetpack Compose, no Google libraries, built for TalkBack and large text. The phone companion
+> of the Cocode Guard home-network box.
+
+Built by Babak Bandpey (Cocode, https://cocode.dk). Status: early; the first version with
+protection is being built (spec 01 in docs/lean), so the behaviour below is the design.
+
+Design rules that explain most of the code:
+
+- **Only DNS enters the tunnel.** The tunnel's single route is a fake DNS address; all other
+  traffic bypasses the app.
+- **Stop means stop, said plainly.** If protection stops, a notification says so; the app never
+  fails silently.
+- **Blind-friendly is a requirement, not a polish step.** Spoken labels, live-region status,
+  200% font size, WCAG AA contrast enforced by a unit test.
+
+## Docs
+
+- [README](https://github.com/cocodedk/guard-android/blob/main/README.md): what it does, how it works, limits, build
+- [Setup design](https://github.com/cocodedk/guard-android/blob/main/docs/superpowers/specs/2026-10-05-guard-android-setup-design.md): decisions and the first feature
+- [Feature specs](https://github.com/cocodedk/guard-android/tree/main/docs/lean): one file per feature
+- [Contributing](https://github.com/cocodedk/guard-android/blob/main/CONTRIBUTING.md): build, hooks, accessibility rules
+
+## Website
+
+- [Website (Danish)](https://android.guard.cocode.dk/)
+- [Website (English)](https://android.guard.cocode.dk/en/)
+- [Privacy policy](https://android.guard.cocode.dk/en/privacy/)
+
+## Optional
+
+- [The Cocode Guard box](https://guard.cocode.dk)
+- [License: GPL-3.0](https://github.com/cocodedk/guard-android/blob/main/LICENSE)

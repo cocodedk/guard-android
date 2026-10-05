@@ -1,0 +1,10 @@
+#!/bin/sh
+set -eu
+# Only the subject line counts; "!" before the colon marks a breaking change.
+SUBJECT=$(head -n 1 "$1")
+if ! printf '%s\n' "$SUBJECT" | grep -qE '^(feat|fix|chore|docs|style|refactor|test|ci|build|perf|revert)(\(.+\))?!?: .+'; then
+  echo "ERROR: Commit message must follow Conventional Commits." >&2
+  echo "  Example: feat: add dns filter" >&2
+  echo "  Types: feat|fix|chore|docs|style|refactor|test|ci|build|perf|revert" >&2
+  exit 1
+fi

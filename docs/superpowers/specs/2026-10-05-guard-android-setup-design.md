@@ -85,8 +85,9 @@ no VPN server and no account; only DNS lookups enter it.
 - **Lookup path:** read an IPv4/UDP packet from the tunnel → parse the DNS question → a blocked
   name gets `0.0.0.0` for A and `::` for AAAA (other types: an empty NOERROR answer) → any other
   name is forwarded to the upstream and its reply is wrapped back into the tunnel.
-- **Upstream:** the DNS servers of the current Wi-Fi or mobile network, read from the default
-  network's `LinkProperties` and kept current by a default-network callback.
+- **Upstream:** the current Wi-Fi or mobile network's DNS, reached through Android's own
+  `DnsResolver.rawQuery` on API 29+ (it encrypts the lookup when Private DNS is on, so the
+  filter never downgrades it to plaintext), and by UDP to the network's DNS server on API 26–28.
 - **Block list:** a snapshot of the AdGuard DNS filter committed in `app/src/main/assets/`.
   Nothing is fetched at build time or run time. Only `||domain^` block rules and `@@||domain^`
   exceptions are used; a rule matches the domain and all its subdomains; an exception wins over a
@@ -98,13 +99,15 @@ no VPN server and no account; only DNS lookups enter it.
 - **Stop means stop:** a foreground notification while protecting. If the tunnel is revoked
   (`onRevoke`, for example another VPN app took over) or the service fails, a notification says
   that protection stopped and the phone now uses normal DNS without blocking.
-- **Permissions:** `BIND_VPN_SERVICE` on the service, `POST_NOTIFICATIONS`,
+- **Permissions:** `BIND_VPN_SERVICE` on the service, `INTERNET` and `ACCESS_NETWORK_STATE`
+  (install-time, for the upstream socket and the network callback), `POST_NOTIFICATIONS`,
   `FOREGROUND_SERVICE` and `FOREGROUND_SERVICE_SYSTEM_EXEMPTED` (service
   `foregroundServiceType="systemExempted"`). Nothing else.
 - **Tests (JVM, offline, part of the gate):** DNS question parsing and answer building; IPv4/UDP
   packet parse and build including checksums; rule parsing and subdomain/exception matching. No
   real sockets or name lookups in tests. Device behaviour is checked by hand on the owner's phone.
-- **Out of scope:** start on boot or always-on, list updates, allowlist UI, per-site alerts, DoH
+- **Out of scope:** a boot receiver of our own (Android's Always-on VPN setting starts the
+  service and is honoured), list updates, allowlist UI, per-site alerts, DoH
   blocking, a history of blocked lookups, the owner-chosen upstream (spec 02).
 
 ## Part 3 — graph-loop

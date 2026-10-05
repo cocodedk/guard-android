@@ -1,0 +1,20 @@
+Cocode Guard blocks dangerous sites and ads for every app on your phone, on any network: at home, on mobile data, on café Wi-Fi, abroad.
+
+<b>How it works</b>
+The app uses Android's VPN feature only as a local tunnel that ends inside the app. Only DNS lookups enter it. Names on the block list (the AdGuard DNS filter) get an empty answer; every other lookup is passed on to your network's own DNS server. There is no VPN server: your other traffic goes out exactly as before.
+
+<b>Private by design</b>
+<ul>
+<li>No account, no server, no analytics, no ads.</li>
+<li>You grant only two permissions: the VPN connection and notifications. Network access is granted by Android automatically.</li>
+<li>Free software under the GPL-3.0, free of charge.</li>
+</ul>
+
+<b>Says plainly when it stops</b>
+If protection stops, for example because another VPN app took over, a notification says so. The app never fails silently.
+
+<b>Made for everyone</b>
+Built for TalkBack and large text from the start.
+
+<b>Limits</b>
+Android's Private DNS setting and apps with their own secure DNS bypass the filter; the app warns you about Private DNS. Only one VPN app can run at a time.

@@ -1,0 +1,5 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="status_not_built">Not protected yet</string>
+    <string name="home_explain">The app blocks dangerous sites and ads for every app on the phone, on any network. Protection arrives in the next version.</string>
+</resources>
