@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name" translatable="false">Cocode Guard</string>
+    <string name="status_not_built">Ikke beskyttet endnu</string>
+    <string name="home_explain">Appen blokerer farlige sider og reklamer for alle apps på telefonen, på ethvert netværk. Beskyttelsen kommer i næste version.</string>
+</resources>
