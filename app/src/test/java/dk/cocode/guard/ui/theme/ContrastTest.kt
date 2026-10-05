@@ -26,6 +26,11 @@ class ContrastTest {
     }
 
     @Test
+    fun blackOnWhiteIsTwentyOne() {
+        assertEquals(21f, contrastRatio(Color.Black, Color.White), 0.01f)
+    }
+
+    @Test
     fun textColorsReadOnBothBackgrounds() {
         // State words are drawn in Ok, Notice and Urgent, so they must pass as body text.
         val text = mapOf(
