@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"
+        xmlns:xhtml="http://www.w3.org/1999/xhtml">
+  <url>
+    <loc>https://android.guard.cocode.dk/</loc>
+    <lastmod>2026-10-05</lastmod>
+    <xhtml:link rel="alternate" hreflang="da" href="https://android.guard.cocode.dk/"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://android.guard.cocode.dk/en/"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://android.guard.cocode.dk/"/>
+  </url>
+  <url>
+    <loc>https://android.guard.cocode.dk/en/</loc>
+    <lastmod>2026-10-05</lastmod>
+    <xhtml:link rel="alternate" hreflang="da" href="https://android.guard.cocode.dk/"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://android.guard.cocode.dk/en/"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://android.guard.cocode.dk/"/>
+  </url>
+  <url>
+    <loc>https://android.guard.cocode.dk/privacy/</loc>
+    <lastmod>2026-10-05</lastmod>
+    <xhtml:link rel="alternate" hreflang="da" href="https://android.guard.cocode.dk/privacy/"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://android.guard.cocode.dk/en/privacy/"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://android.guard.cocode.dk/privacy/"/>
+  </url>
+  <url>
+    <loc>https://android.guard.cocode.dk/en/privacy/</loc>
+    <lastmod>2026-10-05</lastmod>
+    <xhtml:link rel="alternate" hreflang="da" href="https://android.guard.cocode.dk/privacy/"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://android.guard.cocode.dk/en/privacy/"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://android.guard.cocode.dk/privacy/"/>
+  </url>
+</urlset>

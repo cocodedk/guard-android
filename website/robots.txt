@@ -1,0 +1,4 @@
+User-agent: *
+Allow: /
+
+Sitemap: https://android.guard.cocode.dk/sitemap.xml
