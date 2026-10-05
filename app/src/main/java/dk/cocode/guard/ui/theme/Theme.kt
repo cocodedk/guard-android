@@ -7,7 +7,7 @@ import androidx.compose.runtime.Composable
 // One dark scheme in every system mode: the box's night palette is the product's look, and its
 // contrast is what ContrastTest checks. Type stays Material's default, sized in sp, so it follows
 // the owner's font-size setting.
-private val GuardScheme = darkColorScheme(
+internal val GuardScheme = darkColorScheme(
     primary = GuardColors.Ok,
     onPrimary = GuardColors.Night,
     secondary = GuardColors.Notice,

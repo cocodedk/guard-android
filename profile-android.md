@@ -77,8 +77,6 @@ Count the failures in the XML, not in the console.
 ## house
 
 The JDK is not pinned in the repository, no toolchain resolver is declared, and release keeps R8 and
-resource shrinking on — an F-Droid build must stay reproducible. The manifest gains no permission a
-spec does not name. Spec 01 names exactly four: `android.permission.BIND_VPN_SERVICE` (as the VPN
-service's `android:permission`), `POST_NOTIFICATIONS`, `FOREGROUND_SERVICE` and
-`FOREGROUND_SERVICE_SYSTEM_EXEMPTED`. No Google or Play library is added. Every screen stays usable
-with TalkBack and at 200% font size (see `CLAUDE.md`, Accessibility).
+resource shrinking on — an F-Droid build must stay reproducible. The manifest gains only the
+permissions the spec being built names in its Permissions section. The rest of the house rules are
+in `CLAUDE.md`.

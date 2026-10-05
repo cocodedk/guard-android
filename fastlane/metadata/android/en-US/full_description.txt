@@ -6,7 +6,7 @@ The app uses Android's VPN feature only as a local tunnel that ends inside the a
 <b>Private by design</b>
 <ul>
 <li>No account, no server, no analytics, no ads.</li>
-<li>Only two permissions: the VPN connection and notifications.</li>
+<li>You grant only two permissions: the VPN connection and notifications. Network access is granted by Android automatically.</li>
 <li>Free software under the GPL-3.0, free of charge.</li>
 </ul>
 

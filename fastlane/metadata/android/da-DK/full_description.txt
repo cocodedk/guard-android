@@ -6,7 +6,7 @@ Appen bruger Androids VPN-funktion som en lokal tunnel, der ender inde i appen. 
 <b>Privat fra starten</b>
 <ul>
 <li>Ingen konto, ingen server, ingen statistik, ingen reklamer.</li>
-<li>Kun to tilladelser: VPN-forbindelsen og notifikationer.</li>
+<li>Du skal kun give to tilladelser: VPN-forbindelsen og notifikationer. Netværksadgang giver Android automatisk.</li>
 <li>Fri software under GPL-3.0, og gratis.</li>
 </ul>
 

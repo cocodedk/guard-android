@@ -21,13 +21,15 @@ Accessibility). Read `CLAUDE.md` first; its rules apply.
   so its own upstream sockets use the real network.
 - **Read loop** (one dedicated thread): read a packet from the tunnel `FileInputStream`. Keep only
   IPv4 + UDP + destination `10.111.222.2:53`; drop everything else silently (including TCP).
-- **Each query** (handled on `Dispatchers.IO`, the read loop never waits for the network):
+- **Each query** (handled on `Dispatchers.IO.limitedParallelism(16)`, so slow upstream replies
+  cannot exhaust the shared IO pool; the read loop never waits for the network):
   1. Parse the DNS question. If the payload is not a parseable query with exactly one question,
      forward it unchanged (never break DNS because our parser is strict).
   2. If `BlockList.isBlocked(name)`: build the blocked answer, increment the blocked counter, and
      write the reply packet to the tunnel.
   3. Otherwise forward the payload byte-for-byte to the upstream server on UDP port 53 from a new
-     `DatagramSocket` (also call `protect(socket)`), wait at most 5 s, and write the reply payload
+     `DatagramSocket` (no `protect()` needed: the app is excluded from its own tunnel), wait at
+     most 5 s, and write the reply payload
      back unchanged in a UDP/IPv4 packet with source and destination swapped. On timeout or
      socket error, send nothing (the asking app retries).
   4. If no upstream server is known, answer `SERVFAIL` at once.
@@ -37,7 +39,8 @@ Accessibility). Read `CLAUDE.md` first; its rules apply.
   app is excluded from its own tunnel). Unregister when protection stops.
 - **Block list:** `app/src/main/assets/adguard-dns-filter.txt` (already in the repository, about
   177,700 usable rules). Load it on `Dispatchers.IO` **before** `establish()`, so DNS never enters
-  a tunnel that cannot answer yet. Parsing rules:
+  a tunnel that cannot answer yet. Load it once per process and keep the `BlockList` for later
+  starts (the sets are presized, about 10–15 MB). Parsing rules:
   - Block rule: a line that is exactly `||<domain>^`.
   - Exception: a line that is exactly `@@||<domain>^` or `@@||<domain>^|`.
   - `<domain>` is one or more labels of `[a-z0-9_-]` joined by single dots, after lowercasing; no
@@ -76,8 +79,11 @@ Accessibility). Read `CLAUDE.md` first; its rules apply.
 - `<service android:name=".vpn.GuardVpnService" android:permission="android.permission.BIND_VPN_SERVICE"
   android:exported="true" android:foregroundServiceType="systemExempted">` with an intent filter
   for `android.net.VpnService`.
-- `<uses-permission>`: `android.permission.POST_NOTIFICATIONS`, `android.permission.FOREGROUND_SERVICE`,
-  `android.permission.FOREGROUND_SERVICE_SYSTEM_EXEMPTED`.
+- `<uses-permission>`: `android.permission.INTERNET` (the upstream socket),
+  `android.permission.ACCESS_NETWORK_STATE` (`registerDefaultNetworkCallback`),
+  `android.permission.POST_NOTIFICATIONS`, `android.permission.FOREGROUND_SERVICE`,
+  `android.permission.FOREGROUND_SERVICE_SYSTEM_EXEMPTED`. Only the VPN consent and notifications
+  are asked of the owner; the others are granted at install.
 
 ## State
 

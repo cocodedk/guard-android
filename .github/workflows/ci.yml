@@ -3,8 +3,9 @@ name: CI
 on:
   pull_request:
     branches: [main]
+  # Branches are checked through their pull request; pushing to both would build twice.
   push:
-    branches: ['**']
+    branches: [main]
 
 # PR CI is the one place cancel-in-progress belongs: a superseded run has nothing
 # to tell us. Deploy and release workflows must never cancel mid-flight.

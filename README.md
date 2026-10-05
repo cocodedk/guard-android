@@ -47,7 +47,9 @@ AA contrast.
 
 ## Permissions
 
-Only the VPN connection and notifications. No contacts, location, storage or accessibility access.
+You grant only the VPN connection and notifications. Network access (to pass lookups on) is an
+install-time permission Android grants automatically. No contacts, location, storage or
+accessibility access.
 
 ## Build from source
 

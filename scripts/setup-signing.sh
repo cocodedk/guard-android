@@ -7,7 +7,7 @@ set -eu
 restore_tty() { stty echo 2>/dev/null || true; }
 trap restore_tty EXIT INT TERM
 
-REPO="cocodedk/guard-android"
+REPO=$(gh repo view --json nameWithOwner -q .nameWithOwner)
 KEYSTORE="${KEYSTORE_FILE:-$HOME/release.keystore}"  # override: KEYSTORE_FILE=/path/to/key.jks ./scripts/setup-signing.sh
 ALIAS="${KEYSTORE_ALIAS:-android}"                   # override: KEYSTORE_ALIAS=mykey ./scripts/setup-signing.sh
 

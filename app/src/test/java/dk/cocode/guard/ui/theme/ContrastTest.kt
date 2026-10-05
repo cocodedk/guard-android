@@ -1,6 +1,7 @@
 package dk.cocode.guard.ui.theme
 
 import androidx.compose.ui.graphics.Color
+import java.io.File
 import org.junit.Assert.assertEquals
 import org.junit.Assert.assertTrue
 import org.junit.Test
@@ -20,32 +21,40 @@ class ContrastTest {
     }
 
     @Test
-    fun ratioIsSymmetric() {
-        assertEquals(contrastRatio(GuardColors.OnNight, GuardColors.Night),
-            contrastRatio(GuardColors.Night, GuardColors.OnNight), 1e-9)
+    fun textColorsReadOnBothBackgrounds() {
+        // State words are drawn in Ok, Notice and Urgent, so they must pass as body text.
+        val text = mapOf(
+            "OnNight" to GuardColors.OnNight, "OnNightQuiet" to GuardColors.OnNightQuiet,
+            "Ok" to GuardColors.Ok, "Notice" to GuardColors.Notice, "Urgent" to GuardColors.Urgent,
+        )
+        val backgrounds = mapOf("Night" to GuardColors.Night, "Panel" to GuardColors.Panel)
+        for ((fgName, fg) in text) for ((bgName, bg) in backgrounds) {
+            assertAtLeast("$fgName on $bgName", fg, bg, 4.5)
+        }
     }
 
     @Test
-    fun bodyTextOnNightMeetsAA() {
-        assertAtLeast("OnNight", GuardColors.OnNight, GuardColors.Night, 4.5)
-        assertAtLeast("OnNightQuiet", GuardColors.OnNightQuiet, GuardColors.Night, 4.5)
-        assertAtLeast("OnNight on Panel", GuardColors.OnNight, GuardColors.Panel, 4.5)
-        assertAtLeast("OnNightQuiet on Panel", GuardColors.OnNightQuiet, GuardColors.Panel, 4.5)
+    fun everySchemeRolePairMeetsAA() {
+        val s = GuardScheme
+        assertAtLeast("onPrimary", s.onPrimary, s.primary, 4.5)
+        assertAtLeast("onSecondary", s.onSecondary, s.secondary, 4.5)
+        assertAtLeast("onError", s.onError, s.error, 4.5)
+        assertAtLeast("onBackground", s.onBackground, s.background, 4.5)
+        assertAtLeast("onSurface", s.onSurface, s.surface, 4.5)
+        assertAtLeast("onSurfaceVariant", s.onSurfaceVariant, s.surfaceVariant, 4.5)
     }
 
     @Test
-    fun stateColorsReadAsTextOnNight() {
-        // State words are drawn in these colors, so they must pass as body text, not just icons.
-        assertAtLeast("Ok", GuardColors.Ok, GuardColors.Night, 4.5)
-        assertAtLeast("Notice", GuardColors.Notice, GuardColors.Night, 4.5)
-        assertAtLeast("Urgent", GuardColors.Urgent, GuardColors.Night, 4.5)
-        assertAtLeast("Ok on Panel", GuardColors.Ok, GuardColors.Panel, 4.5)
-        assertAtLeast("Notice on Panel", GuardColors.Notice, GuardColors.Panel, 4.5)
-        assertAtLeast("Urgent on Panel", GuardColors.Urgent, GuardColors.Panel, 4.5)
-    }
-
-    @Test
-    fun buttonLabelOnAccentMeetsAA() {
-        assertAtLeast("Night on Ok", GuardColors.Night, GuardColors.Ok, 4.5)
+    fun xmlColorsMatchThePalette() {
+        // The window background and launcher icon can't read Kotlin, so colors.xml repeats two
+        // tokens. Unit tests run from the module directory.
+        val xml = File("src/main/res/values/colors.xml").readText()
+        fun xmlColor(name: String): Color {
+            val hex = Regex("""<color name="$name">#([0-9A-Fa-f]{6})</color>""").find(xml)!!
+                .groupValues[1]
+            return Color(0xFF000000 or hex.toLong(16))
+        }
+        assertEquals(GuardColors.Night, xmlColor("night"))
+        assertEquals(GuardColors.Ok, xmlColor("ok"))
     }
 }

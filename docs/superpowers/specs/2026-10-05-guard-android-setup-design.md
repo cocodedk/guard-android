@@ -98,7 +98,8 @@ no VPN server and no account; only DNS lookups enter it.
 - **Stop means stop:** a foreground notification while protecting. If the tunnel is revoked
   (`onRevoke`, for example another VPN app took over) or the service fails, a notification says
   that protection stopped and the phone now uses normal DNS without blocking.
-- **Permissions:** `BIND_VPN_SERVICE` on the service, `POST_NOTIFICATIONS`,
+- **Permissions:** `BIND_VPN_SERVICE` on the service, `INTERNET` and `ACCESS_NETWORK_STATE`
+  (install-time, for the upstream socket and the network callback), `POST_NOTIFICATIONS`,
   `FOREGROUND_SERVICE` and `FOREGROUND_SERVICE_SYSTEM_EXEMPTED` (service
   `foregroundServiceType="systemExempted"`). Nothing else.
 - **Tests (JVM, offline, part of the gate):** DNS question parsing and answer building; IPv4/UDP

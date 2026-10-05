@@ -14,7 +14,7 @@ rather than guessing.
 - **No Cocode server, no account, no analytics, no remote code.** Block lists ship in `assets/`.
 - **Stop means stop, said plainly.** Any path that ends protection posts a notification saying the
   phone now uses normal DNS without blocking. Never fail silently.
-- **Few permissions.** Only those a spec names (see `profile-android.md`, `house`).
+- **Few permissions.** Only those the spec being built names in its Permissions section.
 - **No Google or Play libraries.** F-Droid builds must stay reproducible: no JDK toolchain pin, no
   foojay resolver, version only in `gradle.properties`, R8 on in release.
 - **Plain words** in every message, Danish (`values/`, the default) and English (`values-en/`).
@@ -36,7 +36,8 @@ rather than guessing.
 Kotlin, Jetpack Compose (Material 3), one `app` module, package root `dk.cocode.guard`:
 
 - `MainActivity.kt`: sets `GuardTheme` and the home screen.
-- `ui/`: screens. `ui/theme/`: `GuardColors` (box palette, contrast math) and `GuardTheme`.
+- `ui/`: screens. `ui/theme/`: `GuardColors` (box palette) and `GuardTheme`.
+  The contrast math lives with `ContrastTest` in `src/test`.
 - Packages that spec 01 adds (`vpn/`, `dns/`, `blocklist/`) keep Android-free logic (packet and DNS
   parsing, rule matching) in plain Kotlin, so it is unit-tested on the JVM.
 

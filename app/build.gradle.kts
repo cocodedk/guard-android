@@ -23,8 +23,7 @@ val hasSigningConfig = keystoreFile != null && keystorePassword != null &&
 
 android {
     namespace = "dk.cocode.guard"
-    // 37 is a floor, not a preference: androidx.core 1.19.0 and lifecycle 2.11.0 declare
-    // minCompileSdk=37 in their AAR metadata, and nothing resolves under it.
+    // Current AndroidX releases declare minCompileSdk=37 in their AAR metadata.
     // targetSdk 36 is the newest runtime behaviour this app has been checked against;
     // AGP 9 defaults targetSdk to compileSdk, so it is set explicitly below.
     compileSdk = 37
@@ -114,18 +113,9 @@ dependencies {
     val composeBom = platform("androidx.compose:compose-bom:2024.09.03")
     implementation(composeBom)
 
-    implementation("androidx.core:core-ktx:1.19.0")
     implementation("androidx.activity:activity-compose:1.9.3")
-    implementation("androidx.lifecycle:lifecycle-runtime-ktx:2.11.0")
-    implementation("androidx.lifecycle:lifecycle-viewmodel-compose:2.11.0")
-    implementation("androidx.lifecycle:lifecycle-runtime-compose:2.11.0")
-
     implementation("androidx.compose.ui:ui")
-    implementation("androidx.compose.ui:ui-graphics")
-    implementation("androidx.compose.ui:ui-tooling-preview")
     implementation("androidx.compose.material3:material3")
-
-    debugImplementation("androidx.compose.ui:ui-tooling")
 
     testImplementation("junit:junit:4.13.2")
 }
