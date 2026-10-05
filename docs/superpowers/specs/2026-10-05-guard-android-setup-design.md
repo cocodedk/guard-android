@@ -21,6 +21,7 @@ contact, and spec 01 is written and handed to the loop.
 | Topic | Decision |
 |---|---|
 | Repository | Public `cocodedk/guard-android`, GPL-3.0 |
+| Price | Free software, free of charge for everyone; no paid tier, no box required (owner, 2026-10-05) |
 | App id | `dk.cocode.guard` |
 | Stack | Kotlin + Jetpack Compose, one `app` module, minSdk 26, compile/target 36 |
 | Distribution | F-Droid + GitHub releases; no Google libraries; Play later, if ever |
@@ -29,6 +30,23 @@ contact, and spec 01 is written and handed to the loop.
 | Visual style | The box site's tokens (`../network-defence/website/styles.css`), not the naval theme |
 | Upstream DNS | The current network's DNS in spec 01; an owner-chosen resolver (network DNS by default) in spec 02 |
 | Session scope | Infrastructure + graph-loop setup + spec 01 |
+| Accessibility | Blind-friendly is a hard requirement: TalkBack-first app, WCAG 2.2 AA site |
+| Driving | The owner handed every decision, including app UI/UX, to Claude (2026-10-05) |
+
+## Accessibility (applies to every part)
+
+Blind and low-vision people must be able to use the app and the site without sighted help.
+
+- **App:** every control has a spoken label that says what it does ("Start beskyttelse"), not
+  what it looks like; the status is announced by TalkBack when it changes (polite live region);
+  the screen title is a heading; the warning card and its action read as one unit; meaning never
+  rests on color alone (each state has words and an icon); touch targets are at least 48dp; text
+  scales with the system font size up to 200% without clipping; reading order follows the visual
+  order; notifications carry the same plain words as the screen.
+- **Colors:** every text/background pair in the app theme meets WCAG AA (4.5:1 for body text,
+  3:1 for large text and icons), enforced by a unit test in the gate.
+- **Site:** WCAG 2.2 AA — semantic landmarks, one `h1`, skip link, visible focus, alt text,
+  `lang` per page, no information by color alone, contrast checked.
 
 ## Part 1 — Infrastructure (android-setup)
 
