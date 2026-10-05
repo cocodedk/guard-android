@@ -27,16 +27,24 @@ Accessibility). Read `CLAUDE.md` first; its rules apply.
      forward it unchanged (never break DNS because our parser is strict).
   2. If `BlockList.isBlocked(name)`: build the blocked answer, increment the blocked counter, and
      write the reply packet to the tunnel.
-  3. Otherwise forward the payload byte-for-byte to the upstream server on UDP port 53 from a new
-     `DatagramSocket` (no `protect()` needed: the app is excluded from its own tunnel), wait at
-     most 5 s, and write the reply payload
-     back unchanged in a UDP/IPv4 packet with source and destination swapped. On timeout or
-     socket error, send nothing (the asking app retries).
-  4. If no upstream server is known, answer `SERVFAIL` at once.
+  3. Otherwise forward the payload to the network's DNS through Android's own resolver (below),
+     wait at most 5 s, set the reply's first two bytes back to the query's id, and write the reply
+     in a UDP/IPv4 packet with source and destination swapped. On timeout or error, send nothing
+     (the asking app retries).
+  4. If there is no way to forward (no network, or no DNS server known on API 26–28), answer
+     `SERVFAIL` at once.
 - **Writes** to the tunnel `FileOutputStream` are serialized (one lock).
-- **Upstream:** the first DNS server in the `LinkProperties` of the default network, kept current
-  with `ConnectivityManager.registerDefaultNetworkCallback` (it sees the real network because the
-  app is excluded from its own tunnel). Unregister when protection stops.
+- **Forwarding — "Upstream":**
+  - **API 29+:** `DnsResolver.getInstance().rawQuery(null, payload, DnsResolver.FLAG_EMPTY,
+    executor, cancellationSignal, callback)`. `null` means the app's default network, which is the
+    real network because the app is excluded from its own tunnel. Android's resolver then talks to
+    the network's DNS server and encrypts the lookup itself whenever Private DNS is on, so the
+    filter never turns an encrypted lookup into a plaintext one. Cancel the signal at 5 s.
+  - **API 26–28** (no `DnsResolver`; Private DNS exists only from API 28 and cannot be honoured
+    here): send the payload byte-for-byte on UDP port 53 from a new `DatagramSocket` to the first
+    DNS server in the default network's `LinkProperties`. No `protect()` is needed.
+  - `ConnectivityManager.registerDefaultNetworkCallback` keeps the current `LinkProperties`
+    (DNS servers for API 26–28, and `privateDnsStrict`, below). Unregister when protection stops.
 - **Block list:** `app/src/main/assets/adguard-dns-filter.txt` (already in the repository, about
   177,700 usable rules). Load it on `Dispatchers.IO` **before** `establish()`, so DNS never enters
   a tunnel that cannot answer yet. Load it once per process and keep the `BlockList` for later
@@ -72,14 +80,16 @@ Accessibility). Read `CLAUDE.md` first; its rules apply.
   exception in the read loop or in `establish()`): do the same cleanup, then post the alert
   notification "Beskyttelsen er stoppet" / "Protection has stopped" with the reason text from the
   strings table below, and set the state to `Stopped(reason)`. Never fail silently.
-- Whenever the system starts the service (including always-on VPN), it starts protection.
+- Whenever the system starts the service (Android's own "Always-on VPN" setting does this), it
+  starts protection. The app adds nothing of its own for boot: no boot receiver, no
+  `RECEIVE_BOOT_COMPLETED`.
 
 ## Permissions (exactly these; nothing else is added)
 
 - `<service android:name=".vpn.GuardVpnService" android:permission="android.permission.BIND_VPN_SERVICE"
   android:exported="true" android:foregroundServiceType="systemExempted">` with an intent filter
   for `android.net.VpnService`.
-- `<uses-permission>`: `android.permission.INTERNET` (the upstream socket),
+- `<uses-permission>`: `android.permission.INTERNET` (forwarding lookups),
   `android.permission.ACCESS_NETWORK_STATE` (`registerDefaultNetworkCallback`),
   `android.permission.POST_NOTIFICATIONS`, `android.permission.FOREGROUND_SERVICE`,
   `android.permission.FOREGROUND_SERVICE_SYSTEM_EXEMPTED`. Only the VPN consent and notifications
@@ -188,7 +198,7 @@ column scrolls (`verticalScroll`) and respects `safeDrawingPadding`; nothing has
 | counter | Blokeret siden start: %1$d | Blocked since start: %1$d |
 | list_line | Blokeringsliste: AdGuard DNS filter, %1$s navne | Block list: AdGuard DNS filter, %1$s names |
 | card_refused_title | Tilladelsen blev afvist | Permission was refused |
-| card_refused_body | Appen skal have Androids VPN-tilladelse for at se DNS-opslag. Den bruges kun på telefonen; intet sendes til en server. | The app needs Android's VPN permission to see DNS lookups. It is used only on the phone; nothing is sent to a server. |
+| card_refused_body | Appen skal have Androids VPN-tilladelse for at se DNS-opslag. Den bruges kun på telefonen, og der er ingen Cocode-server: opslag, der ikke blokeres, går til netværkets egen DNS-server som før. | The app needs Android's VPN permission to see DNS lookups. It is used only on the phone, and there is no Cocode server: lookups that are not blocked go to the network's own DNS server, as before. |
 | card_other_vpn_title | Beskyttelsen er stoppet | Protection has stopped |
 | card_other_vpn_body | En anden VPN-app tog over. Telefonen bruger nu almindelig DNS uden blokering. | Another VPN app took over. The phone now uses normal DNS without blocking. |
 | card_error_title | Beskyttelsen er stoppet | Protection has stopped |
@@ -199,7 +209,7 @@ column scrolls (`verticalScroll`) and respects `safeDrawingPadding`; nothing has
 | card_notifications_title | Notifikationer er slået fra | Notifications are off |
 | card_notifications_body | Appen kan ikke sige til, hvis beskyttelsen stopper. | The app can't tell you if protection stops. |
 | card_notifications_action | Åbn notifikationsindstillinger | Open notification settings |
-| closing_line | Kun DNS-opslag går gennem appen. Ingen server, ingen konto. | Only DNS lookups pass through the app. No server, no account. |
+| closing_line | Kun DNS-opslag går gennem appen. Ingen server, ingen konto. Apps med deres egen sikre DNS går uden om filteret. | Only DNS lookups pass through the app. No server, no account. Apps with their own secure DNS bypass the filter. |
 | channel_protection | Beskyttelse | Protection |
 | channel_alerts | Advarsler | Alerts |
 | notif_protected_title | Beskyttet | Protected |
@@ -228,8 +238,8 @@ Keep Android-free logic in plain Kotlin so it runs in JVM tests. Every code file
   would pass the end; compression pointers in the question are rejected);
   `fun blockedAnswer(query: ByteArray, q: DnsQuestion): ByteArray`;
   `fun servfail(query: ByteArray, q: DnsQuestion): ByteArray`.
-- `vpn/GuardVpnService.kt`, `vpn/PacketLoop.kt`, `vpn/Upstream.kt` (callback, current server,
-  private-DNS flag), `vpn/ProtectionRepository.kt` (state above).
+- `vpn/GuardVpnService.kt`, `vpn/PacketLoop.kt`, `vpn/Upstream.kt` (forwarding through
+  `DnsResolver` or UDP, the network callback, the private-DNS flag), `vpn/ProtectionRepository.kt` (state above).
 - `notify/Notifications.kt` — channels, ongoing and alert notifications.
 - `ui/HomeUi.kt` (`homeUi` and its types), `ui/HomeScreen.kt`, `ui/HomeCards.kt`,
   `MainActivity.kt` (permission and VPN-consent launchers).
@@ -278,6 +288,7 @@ name and see the card; font size at maximum with nothing clipped.
 
 ## Out of scope
 
-Start on boot, list updates or downloads, an allowlist screen, per-site alerts, blocking DoH
+A boot receiver of our own (Android's Always-on VPN setting is honoured, see above), list updates
+or downloads, an allowlist screen, per-site alerts, blocking DoH
 endpoints, a history of lookups, TCP DNS (dropped), IPv6 transport inside the tunnel, the
 owner-chosen upstream resolver (spec 02), battery-optimisation guidance, Google Play.

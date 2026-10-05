@@ -44,6 +44,10 @@ The failing test names and their exception types live here, not in the console.
                            the build's code that debug key; a dedicated per-project debug key
                            avoids it, at the cost of one reinstall (which clears the app's data)
 
+**This project:** `ANDROID_USER_HOME` holds a debug key made for this project only, never the
+owner's personal `~/.android` key: autonomous builds run code that can read it, and no build of
+this app has been installed yet, so there is nothing to update.
+
 A gate box that hides the user's home hides both. The SDK is read-only; the cache must be writable
 and should survive between gates, or every gate downloads the toolchain again.
 
@@ -51,7 +55,8 @@ and should survive between gates, or every gate downloads the toolchain again.
 
     ./gradlew --version
 
-Fails when the JDK is a JRE, when the SDK is unreachable, or when the wrapper cannot download.
+Fails when the JDK is a JRE or when the wrapper cannot download. It runs no task, so it does not
+check the SDK; a missing SDK shows up in the suite as "SDK location not found" (below).
 
 ## the_machine_not_the_card
 
@@ -66,8 +71,9 @@ A gate ending with one of these is the machine's fault. The card keeps its statu
 
 ## after_a_gate
 
-The build leaves a daemon alive per gate, and each holds a gigabyte or more. They must be closed
-with the gate that started them, or the machine runs out of memory and the next card is blamed.
+This repository's gate commands pass `--no-daemon`, so each build's daemon is single-use and stops
+with the build. A command without it would leave a daemon alive per gate, each holding a gigabyte or
+more, and the machine would run out of memory with the next card blamed.
 
 ## red_first
 

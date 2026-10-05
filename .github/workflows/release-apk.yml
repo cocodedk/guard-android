@@ -21,6 +21,9 @@ jobs:
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
         with:
           fetch-depth: 0   # shallow clones hide tags, and the already-released check needs them
+          # Gradle runs here with the signing secrets; it gets no stored push token.
+          # The release step authenticates with its own token.
+          persist-credentials: false
 
       - name: Check signing secrets are present
         # Through env, not ${{ }}: interpolation splices the secret's *value* into the
@@ -80,7 +83,7 @@ jobs:
           # separate key password, and keytool ignores the flag with a warning. The
           # apksigner step below is what actually proves the signature.
           keytool -list -keystore release.keystore -alias "$KEY_ALIAS" \
-              -storepass "$KEYSTORE_PASSWORD" >/dev/null
+              -storepass:env KEYSTORE_PASSWORD >/dev/null
 
       - name: Build signed release APK
         env:

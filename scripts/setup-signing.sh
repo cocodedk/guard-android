@@ -70,8 +70,9 @@ echo ""
 
 # ── Verify ───────────────────────────────────────────────────────────────────
 echo "Verifying keystore..."
-keytool -list -keystore "$KEYSTORE" -alias "$ALIAS" \
-    -storepass "$KSPASS" >/dev/null 2>&1 || {
+# Through the environment, so the password never shows in a process listing.
+KSPASS="$KSPASS" keytool -list -keystore "$KEYSTORE" -alias "$ALIAS" \
+    -storepass:env KSPASS >/dev/null 2>&1 || {
     echo ""
     echo "ERROR: Wrong keystore password or alias. Nothing was uploaded."
     exit 1

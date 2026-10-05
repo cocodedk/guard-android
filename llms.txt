@@ -6,7 +6,8 @@
 > and Jetpack Compose, no Google libraries, built for TalkBack and large text. The phone companion
 > of the Cocode Guard home-network box.
 
-Built by Babak Bandpey (Cocode, https://cocode.dk).
+Built by Babak Bandpey (Cocode, https://cocode.dk). Status: early; the first version with
+protection is being built (spec 01 in docs/lean), so the behaviour below is the design.
 
 Design rules that explain most of the code:
 
