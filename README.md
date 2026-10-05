@@ -70,6 +70,11 @@ Kotlin and Jetpack Compose, one `app` module, no Google libraries. Package root 
 
 Feature work is specified in [`docs/lean/`](docs/lean/), one file per feature.
 
+## Third-party data
+
+`app/src/main/assets/adguard-dns-filter.txt` is the [AdGuard DNS filter](https://github.com/AdguardTeam/AdGuardSDNSFilter)
+(GPL-3.0), snapshot of 2026-10-05.
+
 ## Author
 
 Babak Bandpey, [Cocode](https://cocode.dk).
