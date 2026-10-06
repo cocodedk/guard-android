@@ -78,7 +78,10 @@ answers 200.
 ## Part 2 — Spec 01: DNS filter over a local tunnel
 
 The "VPN" is Android's `VpnService` API used as a local tunnel that ends inside the app. There is
-no VPN server and no account; only DNS lookups enter it.
+no VPN server and no account; in spec 01 only DNS lookups enter it. Spec 02
+(`docs/lean/02-ip-block.md`) adds routes for known-bad address ranges, refused inside the app, so
+the rule becomes: only DNS and traffic to listed bad addresses enter the tunnel, and nothing is
+ever relayed.
 
 - **Tunnel shape:** a private address and one fake DNS server (`10.111.222.2`); the only route is
   that /32, so only DNS enters the tunnel and all other traffic bypasses it. The app excludes
@@ -90,7 +93,9 @@ no VPN server and no account; only DNS lookups enter it.
   `DnsResolver.rawQuery` (it encrypts the lookup when Private DNS is on, so the filter never
   downgrades it to plaintext).
 - **Block list:** a snapshot of the AdGuard DNS filter committed in `app/src/main/assets/`.
-  Nothing is fetched at build time or run time. Only `||domain^` block rules and `@@||domain^`
+  It is never fetched at build time or run time. (Spec 02's IP lists are the exception: the phone
+  downloads them from their publishers, since they go stale in days and Spamhaus may not be
+  redistributed.) Only `||domain^` block rules and `@@||domain^`
   exceptions are used; a rule matches the domain and all its subdomains; an exception wins over a
   block. Other rule types are skipped.
 - **UI (one screen):** status in plain words ("Beskyttet" / "Ikke beskyttet" and English
