@@ -15,7 +15,7 @@ The app uses Android's VPN feature, but only as a local tunnel that ends inside 
 
 <b>Privacy</b>
 <ul>
-<li>The app sends no information about you to anyone. No account, no analytics, no ads, and no server run by us.</li>
+<li>The app collects no information about you. No account, no analytics, no ads, and no server run by us.</li>
 <li>Lookups that are not blocked go to the network's own DNS server, just as before you installed the app.</li>
 <li>The address lists are downloaded straight from the publishers to the phone, normally once a day and only while protection runs. As with any visit to a website, the publishers can see your IP address.</li>
 <li>You grant only two permissions: the VPN connection and notifications. Android grants network access automatically, and it is also used to download the lists.</li>

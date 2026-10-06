@@ -15,7 +15,7 @@ Appen bruger Androids VPN-funktion, men kun som en lokal tunnel, der ender inde 
 
 <b>Privatliv</b>
 <ul>
-<li>Appen sender ingen oplysninger om dig til nogen. Ingen konto, ingen statistik, ingen reklamer, og vi driver ingen server.</li>
+<li>Appen indsamler ingen oplysninger om dig. Ingen konto, ingen statistik, ingen reklamer, og vi driver ingen server.</li>
 <li>Opslag, der ikke blokeres, går til netværkets egen DNS-server, ligesom før du installerede appen.</li>
 <li>Adresselisterne hentes direkte fra udgiverne til telefonen, normalt en gang i døgnet og kun mens beskyttelsen kører. Som ved ethvert besøg på en hjemmeside kan udgiverne se din IP-adresse.</li>
 <li>Du giver kun to tilladelser: VPN-forbindelsen og notifikationer. Netværksadgang giver Android automatisk, og den bruges også til at hente listerne.</li>
