@@ -355,4 +355,4 @@ alert; font size at maximum with nothing clipped.
 A boot receiver of our own (Android's Always-on VPN setting is honoured, see above), list updates
 or downloads, an allowlist screen, per-site alerts, blocking DoH
 endpoints, a history of lookups, TCP DNS (dropped), IPv6 transport inside the tunnel, the
-owner-chosen upstream resolver (spec 02), battery-optimisation guidance, Google Play.
+owner-chosen upstream resolver (a later spec), battery-optimisation guidance, Google Play.

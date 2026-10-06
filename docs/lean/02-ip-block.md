@@ -148,37 +148,42 @@ None added. `INTERNET` (spec 01) already covers the downloads; no storage permis
 
 ```kotlin
 val blockedAddressCount: Int = 0,         // since the current start; reset to 0 on each start
-val addressLists: AddressLists = AddressLists.NotYet,
+val addressLists: List<ListStatus> = emptyList(),  // one per list, in AddressList order
 
-sealed interface AddressLists {
-    data object NotYet : AddressLists                     // no list stored yet
-    data class Active(val ranges: Int, val oldestFetch: Long) : AddressLists  // epoch ms
-    data class TooOld(val newestFetch: Long) : AddressLists  // stored, but every list is over 7 days old
+enum class AddressList(val source: String) {        // `source` is shown as is, in both languages
+    DropV4("Spamhaus DROP (IPv4)"), DropV6("Spamhaus DROP (IPv6)"), Feodo("abuse.ch Feodo Tracker"),
 }
+enum class ListState { NotYet, Active, TooOld }
+data class StoredList(val fetched: Long, val entries: Int)   // epoch ms; entries kept after filtering
+data class ListStatus(val list: AddressList, val state: ListState, val entries: Int, val fetched: Long?)
 ```
 
-`Active.ranges` is the size of the route set; `oldestFetch` is the oldest fetch time among the
-lists in use. A list over 7 days old is left out of `Active`; when every stored list is too old, the
-state is `TooOld`. A pure function decides this from the stored lists' fetch times and `now`:
+Each list has its own state, because downloads fail independently: `NotYet` when no copy is
+stored (`entries` 0, `fetched` null), `Active` when the stored copy is at most 7 days old, `TooOld`
+when it is older (it is left out of the route set; `entries` 0, `fetched` its fetch time). Only
+`Active` lists feed the route set. A pure function decides this from the stored lists and `now`,
+always returning the three lists in `AddressList` order:
 
 ```kotlin
-fun addressLists(fetchTimes: Map<String, Long>, ranges: Int, now: Long): AddressLists
+fun addressLists(stored: Map<AddressList, StoredList>, now: Long): List<ListStatus>
 ```
 
 ## The screen
 
 Spec 01's journey is unchanged except in the **Protected** row, whose counter block now reads, in
 this order: the names counter (spec 01), `counter_addresses`, the name list line (spec 01), and one
-address-list line chosen by `addressLists`:
+address-list part: first `address_blocking_off` if no list is `Active`, then one line per list, in
+`AddressList` order, so the owner sees exactly which coverage is missing:
 
-| `AddressLists` | Line |
+| `ListState` | Line |
 |---|---|
-| NotYet | `address_lists_not_yet` |
-| Active | `address_lists_line` with the range count (locale grouping) and the date of `oldestFetch` (`DateFormat.getDateInstance(DateFormat.MEDIUM)`) |
-| TooOld | `address_lists_too_old` with the date of `newestFetch` |
+| NotYet | `address_list_not_yet` with `source` |
+| Active | `address_list_active` with `source`, `entries` (locale grouping) and the date of `fetched` (`DateFormat.getDateInstance(DateFormat.MEDIUM)`) |
+| TooOld | `address_list_too_old` with `source` and the date of `fetched` |
 
-`HomeUi` gains `val addressLine: AddressLine?` (an enum `NotYet, Active, TooOld`; null in every row
-but Protected) so the mapping is unit-tested; `HomeScreen` formats the numbers and dates.
+`HomeUi` gains `val addressLists: List<ListStatus>` (empty in every row but Protected) and
+`val addressBlockingOff: Boolean` (true in Protected when no list is `Active`), so the mapping is
+unit-tested; `HomeScreen` formats the numbers and dates.
 
 ### Accessibility — required
 
@@ -194,10 +199,19 @@ but Protected) so the mapping is unit-tested; `HomeScreen` formats the numbers a
 | Key | Danish | English |
 |---|---|---|
 | counter_addresses | Blokerede adresser siden start: %1$d | Blocked addresses since start: %1$d |
-| address_lists_not_yet | Blokering af adresser er ikke aktiv endnu. Listerne hentes, når telefonen er på nettet. | Address blocking isn't active yet. The lists are downloaded when the phone is online. |
-| address_lists_line | Adresselister: Spamhaus DROP og abuse.ch Feodo Tracker, %1$s områder, hentet %2$s | Address lists: Spamhaus DROP and abuse.ch Feodo Tracker, %1$s ranges, downloaded %2$s |
-| address_lists_too_old | Blokering af adresser er sat på pause: listerne blev sidst hentet %1$s, og gamle lister kan blokere adresser, som nu bruges af andre. Appen henter nye, når telefonen er på nettet. | Address blocking is paused: the lists were last downloaded %1$s, and old lists can block addresses that others use now. The app downloads new ones when the phone is online. |
+| address_blocking_off | Blokering af adresser er ikke aktiv. Appen henter listerne, når telefonen er på nettet. | Address blocking isn't active. The app downloads the lists when the phone is online. |
+| address_list_active | %1$s: %2$s på listen, hentet %3$s | %1$s: %2$s on the list, downloaded %3$s |
+| address_list_too_old | %1$s: sat på pause, sidst hentet %2$s. Gamle lister kan blokere adresser, som nu bruges af andre. | %1$s: paused, last downloaded %2$s. Old lists can block addresses that others use now. |
+| address_list_not_yet | %1$s: ikke hentet endnu | %1$s: not downloaded yet |
 | channel_blocked_addresses | Blokerede adresser | Blocked addresses |
+
+Two spec 01 strings change, because traffic to listed addresses now enters the tunnel too (the old
+words said only DNS does). Replace them in both languages:
+
+| Key | Danish | English |
+|---|---|---|
+| closing_line | Kun DNS-opslag og forbindelser til kendte farlige adresser går gennem appen. Ingen server, ingen konto. Apps med deres egen sikre DNS går uden om navnefilteret. | Only DNS lookups and connections to known-bad addresses pass through the app. No server, no account. Apps with their own secure DNS bypass the name filter. |
+| card_lockdown_body | "Bloker forbindelser uden VPN" er slået til. Appen sender kun DNS-opslag og forbindelser til kendte farlige adresser gennem sin tunnel, så med den indstilling kan telefonen slet ikke komme på nettet. Slå indstillingen fra under VPN-indstillinger, og start igen. | "Block connections without VPN" is on. The app sends only DNS lookups and connections to known-bad addresses through its tunnel, so with that setting the phone can't reach the internet at all. Turn the setting off in VPN settings, then start again. |
 | notif_address_title | Farlig adresse blokeret | Dangerous address blocked |
 | notif_address_text | En app prøvede at forbinde til %1$s, som står på listen %2$s. Forbindelsen blev afvist. | An app tried to connect to %1$s, which is on the %2$s list. The connection was refused. |
 
@@ -230,7 +244,8 @@ Android-free logic in plain Kotlin, unit-tested on the JVM. Every code file unde
 - `iplist/RouteSet.kt` — `class RouteSet(lists: Map<String, List<Cidr>>)` with `val routes:
   List<Cidr>` (merged across lists), `val size: Int` and `fun listFor(ip: ByteArray): String?` (the
   id of a list that holds the address, for the notification).
-- `iplist/AddressLists.kt` — the `AddressLists` type and `addressLists(...)`.
+- `iplist/AddressLists.kt` — `AddressList`, `ListState`, `StoredList`, `ListStatus` and
+  `addressLists(...)`.
 - `iplist/RecentFlows.kt` — `class RecentFlows(capacity: Int)` with `fun firstTime(key: Any):
   Boolean` (true the first time a key is seen; forgets the oldest past `capacity`).
 - `vpn/AddressListStore.kt` (Android) — reads and writes `filesDir/iplists/`, downloads with
@@ -265,9 +280,10 @@ hand-written strings in the tests, never copies of the real lists.
     `addressOutsideIsNull`, `ipv6Lookup`, `routesMergeAcrossLists` (a Feodo `/32` inside a DROP
     range adds no route), `sizeCountsMergedRoutes`.
 - `iplist/AddressListsTest`
-  - `nothingStoredIsNotYet`, `freshListsAreActive` (oldest fetch reported), `oneOldListIsLeftOut`,
-    `allOldIsTooOld` (newest fetch reported), `sevenDaysIsTheEdge` (exactly 7 days is still used,
-    7 days + 1 ms is not).
+  - `nothingStoredIsAllNotYet` (three lists, in order), `freshListIsActive` (entries and fetch
+    time reported), `oldListIsTooOld` (fetch time reported, entries 0), `listsAreIndependent`
+    (DROP IPv4 fresh, DROP IPv6 old, Feodo missing → Active, TooOld, NotYet), `sevenDaysIsTheEdge`
+    (exactly 7 days is still Active, 7 days + 1 ms is TooOld).
 - `iplist/RecentFlowsTest`
   - `firstTimeOnly`, `forgetsOldestPastCapacity`.
 - `net/IpPacketTest`
@@ -282,21 +298,21 @@ hand-written strings in the tests, never copies of the real lists.
     `ipv6Code1` (type 1, code 1, pseudo-header checksum verifies), `ipv6ReplyFitsIn1280` (a
     1,500-byte original gives a 1,280-byte reply).
 - `ui/HomeUiTest` (extend)
-  - `protectedShowsAddressLine` (one test per `AddressLists` value → the matching `AddressLine`),
-    `addressLineOnlyWhenProtected`.
+  - `protectedShowsEveryList` (the three `ListStatus` values, in order), `offLineWhenNoListActive`
+    (true with none Active, false with one), `addressListsOnlyWhenProtected`.
 - `net/Ipv4UdpTest` and every spec 01 test still pass unchanged after the checksum move.
 
 The existing `ContrastTest` must still pass. `./gradlew buildSmoke --no-daemon` is the gate.
 
 ## Checked by hand on the owner's phone (not part of the gate)
 
-With TalkBack on: start protection on mobile data and hear the "not active yet" line change to the
-list line after the first download; in a browser, open `http://<an address from the Feodo list>/`
+With TalkBack on: start protection on mobile data and hear "not active" and the three "not
+downloaded yet" lines change to three list lines after the first download; in a browser, open `http://<an address from the Feodo list>/`
 and see it fail at once, then get one notification naming the address and list; open the same
 address again and see the counter rise without a second notification; open a normal site by its
 IP address (for example the one `example.com` resolves to) and see it load; confirm ads are still
 blocked by name; with about 1,730 routes, starting still reaches "Beskyttet" within 2 seconds;
-set the phone's date 8 days ahead and see the "paused" line,
+set the phone's date 8 days ahead and see "not active" and three "paused" lines,
 then set it back; font size at maximum with nothing clipped.
 
 ## Out of scope
