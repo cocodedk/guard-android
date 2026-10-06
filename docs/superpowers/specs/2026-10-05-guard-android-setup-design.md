@@ -23,7 +23,7 @@ contact, and spec 01 is written and handed to the loop.
 | Repository | Public `cocodedk/guard-android`, GPL-3.0 |
 | Price | Free software, free of charge for everyone; no paid tier, no box required (owner, 2026-10-05) |
 | App id | `dk.cocode.guard` |
-| Stack | Kotlin + Jetpack Compose, one `app` module, minSdk 26, compile/target 36 |
+| Stack | Kotlin + Jetpack Compose, one `app` module, minSdk 29 (raised from 26 by spec 01, for `DnsResolver` and the Always-on/lockdown checks), compile 37, target 36 |
 | Distribution | F-Droid + GitHub releases; no Google libraries; Play later, if ever |
 | Website | Own GitHub Pages site in this repo at `android.guard.cocode.dk` |
 | Languages | Danish (default) + English, for both the app and the site |
@@ -87,8 +87,8 @@ no VPN server and no account; only DNS lookups enter it.
   name gets `0.0.0.0` for A and `::` for AAAA (other types: an empty NOERROR answer) → any other
   name is forwarded to the upstream and its reply is wrapped back into the tunnel.
 - **Upstream:** the current Wi-Fi or mobile network's DNS, reached through Android's own
-  `DnsResolver.rawQuery` on API 29+ (it encrypts the lookup when Private DNS is on, so the
-  filter never downgrades it to plaintext), and by UDP to the network's DNS server on API 26–28.
+  `DnsResolver.rawQuery` (it encrypts the lookup when Private DNS is on, so the filter never
+  downgrades it to plaintext).
 - **Block list:** a snapshot of the AdGuard DNS filter committed in `app/src/main/assets/`.
   Nothing is fetched at build time or run time. Only `||domain^` block rules and `@@||domain^`
   exceptions are used; a rule matches the domain and all its subdomains; an exception wins over a

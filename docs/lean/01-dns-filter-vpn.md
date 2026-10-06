@@ -34,20 +34,22 @@ Accessibility). Read `CLAUDE.md` first; its rules apply.
      wait at most 5 s, set the reply's first two bytes back to the query's id, and write the reply
      in a UDP/IPv4 packet with source and destination swapped. On timeout or error, send nothing
      (the asking app retries).
-  4. If there is no way to forward (no network, or no DNS server known on API 26–28), answer
-     `SERVFAIL` at once.
+  4. If the phone has no network (the default-network callback reports none), answer `SERVFAIL`
+     at once.
 - **Writes** to the tunnel `FileOutputStream` are serialized (one lock).
-- **Forwarding — "Upstream":**
-  - **API 29+:** `DnsResolver.getInstance().rawQuery(null, payload, DnsResolver.FLAG_EMPTY,
-    executor, cancellationSignal, callback)`. `null` means the app's default network, which is the
-    real network because the app is excluded from its own tunnel. Android's resolver then talks to
-    the network's DNS server and encrypts the lookup itself whenever Private DNS is on, so the
-    filter never turns an encrypted lookup into a plaintext one. Cancel the signal at 5 s.
-  - **API 26–28** (no `DnsResolver`; Private DNS exists only from API 28 and cannot be honoured
-    here): send the payload byte-for-byte on UDP port 53 from a new `DatagramSocket` to the first
-    DNS server in the default network's `LinkProperties`. No `protect()` is needed.
-  - `ConnectivityManager.registerDefaultNetworkCallback` keeps the current `LinkProperties`
-    (DNS servers for API 26–28, and `privateDnsStrict`, below). Unregister when protection stops.
+- **Forwarding — "Upstream":** `DnsResolver.getInstance().rawQuery(null, payload,
+  DnsResolver.FLAG_EMPTY, executor, cancellationSignal, callback)`. `null` means the app's default
+  network, which is the real network because the app is excluded from its own tunnel. Android's
+  resolver then talks to the network's DNS server and encrypts the lookup itself whenever Private
+  DNS is on, so the filter never turns an encrypted lookup into a plaintext one. Cancel the signal
+  at 5 s. There is no other forwarding path.
+- `ConnectivityManager.registerDefaultNetworkCallback` tracks whether a network exists and its
+  `LinkProperties` (for `privateDnsStrict`, below). Unregister when protection stops.
+- **minSdk 29.** This spec raises `minSdk` in `app/build.gradle.kts` from 26 to 29 (Android 10).
+  `DnsResolver`, `VpnService.isAlwaysOn()` and `isLockdownEnabled()` all arrive in API 29; below it
+  the app could neither keep encrypted lookups encrypted nor tell when Always-on or lockdown is on,
+  so it would offer a Stop Android ignores, or say "protected" while lockdown cuts the internet.
+  With 29 there are no version branches for these in the code.
 - **Block list:** `app/src/main/assets/adguard-dns-filter.txt` (already in the repository, about
   177,700 usable rules). Load it on `Dispatchers.IO` **before** `establish()`, so DNS never enters
   a tunnel that cannot answer yet. Load it once per process and keep the `BlockList` for later
@@ -89,15 +91,15 @@ Accessibility). Read `CLAUDE.md` first; its rules apply.
   - `onRevoke()` → `Revoked`. Android calls it when another VPN app takes over and when the VPN is
     turned off in Android's settings; the app cannot tell which, so the words name both.
   - An exception in the read loop or in `establish()`, or `establish()` returning null → `Error`.
-  - **Lockdown** → `Lockdown`: on API 29+, before `establish()`, if `isLockdownEnabled()` is true,
+  - **Lockdown** → `Lockdown`: at each start, before `establish()`, if `isLockdownEnabled()` is true,
     do not establish. Android's "Block connections without VPN" lets no traffic past the tunnel,
     and this tunnel carries only DNS, so the phone would have no internet.
 - **Always-on VPN:** whenever the system starts the service (Android's own "Always-on VPN"
-  setting does this, also after boot), it starts protection. On API 29+ the service records
+  setting does this, also after boot), it starts protection. The service records
   `isAlwaysOn()` in the state at each start. While it is true the app offers no Stop: Android would
   restart the service, so the screen sends the owner to Android's VPN settings instead (see the
   journey). The app adds nothing of its own for boot: no boot receiver, no
-  `RECEIVE_BOOT_COMPLETED`. Below API 29 neither flag can be read; both stay false.
+  `RECEIVE_BOOT_COMPLETED`.
 
 ## Permissions (exactly these; nothing else is added)
 
@@ -128,12 +130,12 @@ data class ProtectionState(
     val blockedCount: Int = 0,      // since the current start; reset to 0 on each start
     val listSize: Int = 0,          // usable block rules loaded
     val privateDnsStrict: Boolean = false,
-    val alwaysOn: Boolean = false,  // VpnService.isAlwaysOn() at the last start, API 29+
+    val alwaysOn: Boolean = false,  // VpnService.isAlwaysOn() at the last start
 )
 ```
 
-`privateDnsStrict` is `LinkProperties.privateDnsServerName != null` on API 28+, read from the same
-default-network callback (and once when the app opens), `false` below API 28. This is the
+`privateDnsStrict` is `LinkProperties.privateDnsServerName != null`, read from the same
+default-network callback (and once when the app opens). This is the
 criterion; not `isPrivateDnsActive`. Only strict mode (a host name set) bypasses the filter.
 Android's "Automatic" mode still sends other apps' lookups to the tunnel's DNS address (its
 encrypted attempt on port 853 is dropped by the tunnel, and Android falls back to port 53), and
