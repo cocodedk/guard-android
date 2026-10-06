@@ -28,7 +28,7 @@ contact, and spec 01 is written and handed to the loop.
 | Website | Own GitHub Pages site in this repo at `android.guard.cocode.dk` |
 | Languages | Danish (default) + English, for both the app and the site |
 | Visual style | The box site's tokens (`../network-defence/website/styles.css`), not the naval theme |
-| Upstream DNS | The current network's DNS in spec 01; an owner-chosen resolver (network DNS by default) in spec 02 |
+| Upstream DNS | The current network's DNS in spec 01; an owner-chosen resolver (network DNS by default) in a later spec |
 | Session scope | Infrastructure + graph-loop setup + spec 01 |
 | Accessibility | Blind-friendly is a hard requirement: TalkBack-first app, WCAG 2.2 AA site |
 | Driving | The owner handed every decision, including app UI/UX, to Claude (2026-10-05) |
@@ -66,7 +66,8 @@ Blind and low-vision people must be able to use the app and the site without sig
 - **Website:** `website/` deployed by `deploy-pages.yml`, `CNAME` = `android.guard.cocode.dk`.
   Danish at `/`, English at `/en/`, hreflang, `robots.txt`, `sitemap.xml`, favicon. Privacy pages
   at `/privacy/` and `/en/privacy/`, stating that the app collects nothing, sends lookups only to
-  the chosen DNS resolver and has no server. Styled with the box site's tokens (night `#0f1e36`,
+  the network's DNS server (or, once a later spec adds the choice, the resolver the owner picks) and
+  has no server. Styled with the box site's tokens (night `#0f1e36`,
   Schibsted Grotesk, ok/notice/urgent colors). The link from guard.cocode.dk is a separate change
   in `network-defence`, not part of this work.
 - **App theme:** Compose color scheme and type built from the same tokens.
