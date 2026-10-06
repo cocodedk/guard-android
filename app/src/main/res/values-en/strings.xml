@@ -14,13 +14,18 @@
 
     <string name="counter">Blocked since start: %1$d</string>
     <string name="list_line">Block list: AdGuard DNS filter, %1$s names</string>
+    <string name="counter_addresses">Blocked addresses since start: %1$d</string>
+    <string name="address_blocking_off">Address blocking isn\'t active. The app downloads the lists when the phone is online.</string>
+    <string name="address_list_active">%1$s: %2$s on the list, downloaded %3$s</string>
+    <string name="address_list_too_old">%1$s: paused, last downloaded %2$s. Old lists can block addresses that others use now.</string>
+    <string name="address_list_not_yet">%1$s: not downloaded yet</string>
 
     <string name="card_refused_title">Permission was refused</string>
     <string name="card_refused_body">The app needs Android\'s VPN permission to see DNS lookups. It is used only on the phone, and there is no Cocode server: lookups that are not blocked go to the network\'s own DNS server, as before.</string>
     <string name="card_revoked_title">Protection has stopped</string>
     <string name="card_revoked_body">Android stopped protection, for example because another VPN app took over or the VPN was turned off in settings. DNS lookups are no longer filtered.</string>
     <string name="card_lockdown_title">Protection can\'t run</string>
-    <string name="card_lockdown_body">\"Block connections without VPN\" is on. The app sends only DNS lookups through its tunnel, so with that setting the phone can\'t reach the internet at all. Turn the setting off in VPN settings, then start again.</string>
+    <string name="card_lockdown_body">\"Block connections without VPN\" is on. The app sends only DNS lookups and connections to known-bad addresses through its tunnel, so with that setting the phone can\'t reach the internet at all. Turn the setting off in VPN settings, then start again.</string>
     <string name="card_error_title">Protection has stopped</string>
     <string name="card_error_body">Something went wrong. DNS lookups are no longer filtered.</string>
     <string name="card_always_on_title">Always-on VPN is on</string>
@@ -33,10 +38,15 @@
     <string name="card_notifications_body">The app can\'t tell you if protection stops.</string>
     <string name="card_notifications_action">Open notification settings</string>
 
-    <string name="closing_line">Only DNS lookups pass through the app. No server, no account. Apps with their own secure DNS bypass the filter.</string>
+    <string name="closing_line">Only DNS lookups and connections to known-bad addresses pass through the app. No server, no account. Apps with their own secure DNS bypass the name filter.</string>
 
     <string name="channel_protection">Protection</string>
     <string name="channel_alerts">Alerts</string>
+    <string name="channel_blocked_addresses">Blocked addresses</string>
+    <string name="notif_address_title">Dangerous address blocked</string>
+    <string name="notif_address_text">An app tried to connect to %1$s, which is on the %2$s list. The connection was refused.</string>
+    <string name="notif_address_text_app">%1$s tried to connect to %2$s, which is on the %3$s list. The connection was refused.</string>
+    <string name="app_android_system">Android system</string>
     <string name="notif_protected_title">Protected</string>
     <string name="notif_protected_text">Dangerous sites and ads are blocked.</string>
     <string name="notif_action_stop">Stop</string>

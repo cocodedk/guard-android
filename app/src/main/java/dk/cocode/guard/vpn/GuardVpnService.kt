@@ -1,20 +1,17 @@
 package dk.cocode.guard.vpn
 
-import android.app.PendingIntent
 import android.content.Context
 import android.content.Intent
-import android.content.pm.ServiceInfo
 import android.net.VpnService
-import android.os.Build
 import android.os.ParcelFileDescriptor
-import android.system.OsConstants
-import dk.cocode.guard.MainActivity
-import dk.cocode.guard.R
-import dk.cocode.guard.notify.ONGOING_ID
+import dk.cocode.guard.blocklist.BlockList
+import dk.cocode.guard.iplist.AddressList
+import dk.cocode.guard.iplist.RouteSet
 import dk.cocode.guard.notify.clearStoppedAlert
-import dk.cocode.guard.notify.ongoingNotification
+import dk.cocode.guard.notify.postAddressNotice
 import dk.cocode.guard.notify.postStoppedAlert
 import dk.cocode.guard.notify.updateOngoing
+import java.io.File
 import java.io.FileInputStream
 import java.io.FileOutputStream
 import kotlinx.coroutines.CancellationException
@@ -27,13 +24,17 @@ import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 
-/** A local tunnel that ends inside the app: its only route is the fake DNS address. */
+/** A local tunnel that ends inside the app: its routes are the fake DNS address and the bad-address ranges. */
 class GuardVpnService : VpnService() {
     private val scope = CoroutineScope(SupervisorJob() + Dispatchers.Main.immediate)
     private var startJob: Job? = null
     private var tunnel: ParcelFileDescriptor? = null
     private var loop: PacketLoop? = null
     private var upstream: Upstream? = null
+    private var names: BlockList? = null
+    private var routes = RouteSet(emptyMap())
+    private var refusals = Refusals()
+    private val updates by lazy { AddressListUpdates(AddressListStore(File(filesDir, "iplists"))) }
 
     // True from the first start until protection ends, however it ends.
     private var active = false
@@ -56,7 +57,13 @@ class GuardVpnService : VpnService() {
     private fun start() {
         active = true
         ProtectionRepository.update {
-            it.copy(status = ProtectionStatus.Starting, blockedCount = 0, alwaysOn = isAlwaysOn)
+            it.copy(
+                status = ProtectionStatus.Starting, blockedCount = 0, blockedAddressCount = 0,
+                addressLists = emptyList(), alwaysOn = isAlwaysOn,
+            )
+        }
+        refusals = Refusals { address, listId, number, app ->
+            postAddressNotice(this, number, address, AddressList.entries.first { it.id == listId }.title, app)
         }
         showForeground()
         cannotRunReason()?.let { return stopForOther(it) }
@@ -64,13 +71,13 @@ class GuardVpnService : VpnService() {
         // revocation is also posted to the main thread, so it cannot interleave with startup.
         startJob = scope.launch {
             try {
-                // The list loads before establish(), so DNS never enters a tunnel that cannot answer yet.
-                val list = withContext(Dispatchers.IO) { ProtectionRepository.blockList(this@GuardVpnService) }
-                val fd = establishTunnel()
-                if (fd == null) {
-                    stopForOther(StopReason.Error)
-                    return@launch
+                // The lists load before establish(), so DNS never enters a tunnel that cannot answer yet.
+                val (list, stored) = withContext(Dispatchers.IO) {
+                    ProtectionRepository.blockList(this@GuardVpnService) to updates.load()
                 }
+                names = list
+                routes = stored.routes
+                val fd = establishTunnel(routes) ?: return@launch stopForOther(StopReason.Error)
                 tunnel = fd
                 val up = Upstream(this@GuardVpnService) {
                     // Called on a network thread; the main thread orders it against stop cleanup.
@@ -78,15 +85,16 @@ class GuardVpnService : VpnService() {
                 }
                 upstream = up
                 up.start()
-                val packets = PacketLoop(
-                    FileInputStream(fd.fileDescriptor), FileOutputStream(fd.fileDescriptor), list, up,
-                ) { scope.launch { stopForOther(StopReason.Error) } }
+                val packets = newLoop(fd, routes)
                 loop = packets
-                ProtectionRepository.update { it.copy(status = ProtectionStatus.Protected, listSize = list.size) }
+                ProtectionRepository.update {
+                    it.copy(status = ProtectionStatus.Protected, listSize = list.size, addressLists = stored.statuses)
+                }
                 updateOngoing(this@GuardVpnService, ProtectionRepository.state.value)
                 // An alert from an earlier stop no longer holds, and left alone it would silence the next one.
                 clearStoppedAlert(this@GuardVpnService)
                 packets.start()
+                launch { updates.watch({ routes }, this@GuardVpnService::swapTunnel) { stopForOther(StopReason.Error) } }
                 // Android need not restart the service when lockdown or Always-on change, so look again.
                 while (true) {
                     delay(RECHECK_MS)
@@ -113,31 +121,20 @@ class GuardVpnService : VpnService() {
         }
     }
 
-    private fun establishTunnel(): ParcelFileDescriptor? = Builder()
-        .addAddress("10.111.222.1", 32)
-        .addDnsServer(DNS_ADDRESS)
-        .addRoute(DNS_ADDRESS, 32)
-        .allowFamily(OsConstants.AF_INET)
-        .allowFamily(OsConstants.AF_INET6)
-        .addDisallowedApplication(packageName)
-        .setMtu(1500)
-        // Android counts a VPN as metered unless told otherwise, which would make Wi-Fi look metered
-        // to every app; unmetered, the tunnel takes its meteredness from the real network.
-        .setMetered(false)
-        .setSession(getString(R.string.app_name))
-        .setConfigureIntent(
-            PendingIntent.getActivity(this, 0, Intent(this, MainActivity::class.java), PendingIntent.FLAG_IMMUTABLE),
-        )
-        .setBlocking(true)
-        .establish()
+    private fun newLoop(fd: ParcelFileDescriptor, routes: RouteSet) = PacketLoop(
+        FileInputStream(fd.fileDescriptor), FileOutputStream(fd.fileDescriptor), checkNotNull(names),
+        checkNotNull(upstream), routes, refusals, { p, src, sp, dst, dp -> appOwning(p, src, sp, dst, dp) },
+    ) { scope.launch { stopForOther(StopReason.Error) } }
 
-    private fun showForeground() {
-        val notification = ongoingNotification(this, ProtectionRepository.state.value)
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.UPSIDE_DOWN_CAKE) {
-            startForeground(ONGOING_ID, notification, ServiceInfo.FOREGROUND_SERVICE_TYPE_SYSTEM_EXEMPTED)
-        } else {
-            startForeground(ONGOING_ID, notification)
-        }
+    /** Brings up a tunnel with the new routes, then retires the old one (see [replaceTunnel]). */
+    private fun swapTunnel(next: RouteSet) {
+        if (!active) return
+        val (fd, packets) = replaceTunnel(tunnel, loop, { establishTunnel(next) }, { newLoop(it, next).apply { start() } }) {
+            it.stop()
+        } ?: return stopForOther(StopReason.Error)
+        tunnel = fd
+        loop = packets
+        routes = next
     }
 
     private fun stopByOwner() {
@@ -161,6 +158,7 @@ class GuardVpnService : VpnService() {
         loop?.stop()
         upstream?.stop()
         tunnel?.close()
+        updates.cancel()
         startJob = null
         loop = null
         upstream = null

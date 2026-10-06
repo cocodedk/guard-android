@@ -131,8 +131,17 @@ The read loop now parses the IP version first:
 - A third channel, `blocked_addresses` ("Blokerede adresser" / "Blocked addresses"), importance
   DEFAULT, created with the other two.
 - The first time a given address is refused in a start, post one notification on that channel:
-  title `notif_address_title`, text `notif_address_text` with the address and the list's screen
-  name. Tapping opens the app. Each address gets its own notification id within the start.
+  title `notif_address_title`, text `notif_address_text_app` with the name of the app that tried,
+  the address and the list's screen name, or `notif_address_text` (no app) when Android cannot
+  tell. Tapping opens the app. Each address gets its own notification id within the start.
+- **Which app:** before the refusal is sent (while the app's socket still exists), the service
+  asks `ConnectivityManager.getConnectionOwnerUid(protocol, source, destination)`, which Android
+  answers for connections through the asking app's own VPN, and names the UID's apps with
+  `PackageManager` (two names joined by " / " for a shared UID; `app_android_system` for a UID
+  below `Process.FIRST_APPLICATION_UID` with no visible package; otherwise no name). It is asked
+  only for a notification that is actually posted, at most 20 times a start. Android shows this
+  app only apps with a launcher icon, through the manifest's `<queries>` (below); an app without
+  one is not named.
 - At most **20** such notifications per start; after that, refusals are still counted on the screen
   but no more are posted, so a busy piece of malware cannot flood the shade.
 - The ongoing and alert notifications of spec 01 are unchanged.
@@ -140,7 +149,9 @@ The read loop now parses the IP version first:
 ## Permissions
 
 None added. `INTERNET` (spec 01) already covers the downloads; no storage permission is needed for
-`filesDir`; no alarm, boot or work-scheduling permission is used.
+`filesDir`; no alarm, boot or work-scheduling permission is used. The manifest gains a `<queries>`
+element for `MAIN`/`LAUNCHER` intents, so apps with a launcher icon can be named; it is not a
+permission, and `QUERY_ALL_PACKAGES` is not used.
 
 ## State
 
@@ -213,6 +224,8 @@ words said only DNS does). Replace them in both languages:
 | closing_line | Kun DNS-opslag og forbindelser til kendte farlige adresser går gennem appen. Ingen server, ingen konto. Apps med deres egen sikre DNS går uden om navnefilteret. | Only DNS lookups and connections to known-bad addresses pass through the app. No server, no account. Apps with their own secure DNS bypass the name filter. |
 | card_lockdown_body | "Bloker forbindelser uden VPN" er slået til. Appen sender kun DNS-opslag og forbindelser til kendte farlige adresser gennem sin tunnel, så med den indstilling kan telefonen slet ikke komme på nettet. Slå indstillingen fra under VPN-indstillinger, og start igen. | "Block connections without VPN" is on. The app sends only DNS lookups and connections to known-bad addresses through its tunnel, so with that setting the phone can't reach the internet at all. Turn the setting off in VPN settings, then start again. |
 | notif_address_title | Farlig adresse blokeret | Dangerous address blocked |
+| notif_address_text_app | %1$s prøvede at forbinde til %2$s, som står på listen %3$s. Forbindelsen blev afvist. | %1$s tried to connect to %2$s, which is on the %3$s list. The connection was refused. |
+| app_android_system | Android-systemet | Android system |
 | notif_address_text | En app prøvede at forbinde til %1$s, som står på listen %2$s. Forbindelsen blev afvist. | An app tried to connect to %1$s, which is on the %2$s list. The connection was refused. |
 
 `%2$s` in `notif_address_text` is the list's screen name from the table under **The lists**
@@ -285,7 +298,16 @@ hand-written strings in the tests, never copies of the real lists.
     (DROP IPv4 fresh, DROP IPv6 old, Feodo missing → Active, TooOld, NotYet), `sevenDaysIsTheEdge`
     (exactly 7 days is still Active, 7 days + 1 ms is TooOld).
 - `iplist/RecentFlowsTest`
-  - `firstTimeOnly`, `forgetsOldestPastCapacity`.
+  - `firstTimeOnly`, `seenAgainIsKeptLongest` (forgotten by recency, not insertion order),
+    `forgetsOldestPastCapacity`.
+- `vpn/RefusalsTest` (in-memory tunnel): among others `noticeNamesTheAppAskedOncePerAddress` and
+  `stoppedLoopLeavesTheFlowToTheNextLoop` (a loop retired by a tunnel swap neither counts nor
+  remembers a flow, so the new loop counts and announces it).
+- `vpn/TunnelSwapTest`: `newTunnelComesUpBeforeOldCloses`, `failedEstablishLeavesOldAlone`,
+  `failedLoopStartClosesNewTunnel`.
+- `vpn/AddressListDownloadTest` (a fake `HttpURLConnection`, no sockets): `okBodyIsStored`,
+  `redirectIsNotFollowedAndStoresNothing`, `errorStatusStoresNothing`, `oversizeBodyIsRejected`,
+  `cancelDropsDownloadInFlight`.
 - `net/IpPacketTest`
   - `parsesIpv4WithOptions`, `parsesIpv6Tcp`, `rejectsIpv6ExtensionHeader`, `rejectsTruncated`,
     `rejectsIpv4Fragment`.

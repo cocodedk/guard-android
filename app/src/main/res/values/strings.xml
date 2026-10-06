@@ -16,13 +16,18 @@
 
     <string name="counter">Blokeret siden start: %1$d</string>
     <string name="list_line">Blokeringsliste: AdGuard DNS filter, %1$s navne</string>
+    <string name="counter_addresses">Blokerede adresser siden start: %1$d</string>
+    <string name="address_blocking_off">Blokering af adresser er ikke aktiv. Appen henter listerne, når telefonen er på nettet.</string>
+    <string name="address_list_active">%1$s: %2$s på listen, hentet %3$s</string>
+    <string name="address_list_too_old">%1$s: sat på pause, sidst hentet %2$s. Gamle lister kan blokere adresser, som nu bruges af andre.</string>
+    <string name="address_list_not_yet">%1$s: ikke hentet endnu</string>
 
     <string name="card_refused_title">Tilladelsen blev afvist</string>
     <string name="card_refused_body">Appen skal have Androids VPN-tilladelse for at se DNS-opslag. Den bruges kun på telefonen, og der er ingen Cocode-server: opslag, der ikke blokeres, går til netværkets egen DNS-server som før.</string>
     <string name="card_revoked_title">Beskyttelsen er stoppet</string>
     <string name="card_revoked_body">Android stoppede beskyttelsen, for eksempel fordi en anden VPN-app tog over, eller fordi VPN blev slået fra i indstillingerne. DNS-opslag bliver ikke længere filtreret.</string>
     <string name="card_lockdown_title">Beskyttelsen kan ikke køre</string>
-    <string name="card_lockdown_body">\"Bloker forbindelser uden VPN\" er slået til. Appen sender kun DNS-opslag gennem sin tunnel, så med den indstilling kan telefonen slet ikke komme på nettet. Slå indstillingen fra under VPN-indstillinger, og start igen.</string>
+    <string name="card_lockdown_body">\"Bloker forbindelser uden VPN\" er slået til. Appen sender kun DNS-opslag og forbindelser til kendte farlige adresser gennem sin tunnel, så med den indstilling kan telefonen slet ikke komme på nettet. Slå indstillingen fra under VPN-indstillinger, og start igen.</string>
     <string name="card_error_title">Beskyttelsen er stoppet</string>
     <string name="card_error_body">Der skete en fejl. DNS-opslag bliver ikke længere filtreret.</string>
     <string name="card_always_on_title">Altid aktiveret VPN er slået til</string>
@@ -35,10 +40,15 @@
     <string name="card_notifications_body">Appen kan ikke sige til, hvis beskyttelsen stopper.</string>
     <string name="card_notifications_action">Åbn notifikationsindstillinger</string>
 
-    <string name="closing_line">Kun DNS-opslag går gennem appen. Ingen server, ingen konto. Apps med deres egen sikre DNS går uden om filteret.</string>
+    <string name="closing_line">Kun DNS-opslag og forbindelser til kendte farlige adresser går gennem appen. Ingen server, ingen konto. Apps med deres egen sikre DNS går uden om navnefilteret.</string>
 
     <string name="channel_protection">Beskyttelse</string>
     <string name="channel_alerts">Advarsler</string>
+    <string name="channel_blocked_addresses">Blokerede adresser</string>
+    <string name="notif_address_title">Farlig adresse blokeret</string>
+    <string name="notif_address_text">En app prøvede at forbinde til %1$s, som står på listen %2$s. Forbindelsen blev afvist.</string>
+    <string name="notif_address_text_app">%1$s prøvede at forbinde til %2$s, som står på listen %3$s. Forbindelsen blev afvist.</string>
+    <string name="app_android_system">Android-systemet</string>
     <string name="notif_protected_title">Beskyttet</string>
     <string name="notif_protected_text">Farlige sider og reklamer blokeres.</string>
     <string name="notif_action_stop">Stop</string>

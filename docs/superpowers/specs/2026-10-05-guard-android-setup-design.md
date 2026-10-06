@@ -116,7 +116,7 @@ ever relayed.
   real sockets or name lookups in tests. Device behaviour is checked by hand on the owner's phone.
 - **Out of scope:** a boot receiver of our own (Android's Always-on VPN setting starts the
   service and is honoured), list updates, allowlist UI, per-site alerts, DoH
-  blocking, a history of blocked lookups, the owner-chosen upstream (spec 02).
+  blocking, a history of blocked lookups, the owner-chosen upstream (a later spec).
 
 ## Part 3 — graph-loop
 

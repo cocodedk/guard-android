@@ -1,6 +1,8 @@
 package dk.cocode.guard.ui
 
 import dk.cocode.guard.R
+import dk.cocode.guard.iplist.ListState
+import dk.cocode.guard.iplist.ListStatus
 import dk.cocode.guard.vpn.ProtectionState
 import dk.cocode.guard.vpn.ProtectionStatus
 import dk.cocode.guard.vpn.StopReason
@@ -20,6 +22,8 @@ data class HomeUi(
     val cards: List<HomeCard>,
     val primaryAction: HomeAction,
     val showCounter: Boolean,
+    val addressLists: List<ListStatus> = emptyList(), // only in Protected
+    val addressBlockingOff: Boolean = false, // Protected with no list Active
 )
 
 /** What the screen shows for a state: the whole journey in one pure function. */
@@ -42,6 +46,8 @@ fun homeUi(state: ProtectionState, notificationsAllowed: Boolean): HomeUi {
             cards = listOfNotNull(HomeCard.AlwaysOn.takeIf { state.alwaysOn }) + notificationsCard,
             primaryAction = if (state.alwaysOn) HomeAction.None else HomeAction.Stop,
             showCounter = true,
+            addressLists = state.addressLists,
+            addressBlockingOff = state.addressLists.none { it.state == ListState.Active },
         )
         is ProtectionStatus.Stopped -> HomeUi(
             R.string.status_off, Tone.Urgent, null, listOf(stoppedCard(status.reason)), HomeAction.StartAgain, false,

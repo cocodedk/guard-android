@@ -5,9 +5,15 @@ import dk.cocode.guard.dns.blockedAnswer
 import dk.cocode.guard.dns.formerr
 import dk.cocode.guard.dns.parseQuery
 import dk.cocode.guard.dns.servfail
+import dk.cocode.guard.iplist.RouteSet
+import dk.cocode.guard.iplist.ipText
+import dk.cocode.guard.net.IpPacket
+import dk.cocode.guard.net.PROTOCOL_UDP
 import dk.cocode.guard.net.UdpPacket
 import dk.cocode.guard.net.buildIpv4Udp
+import dk.cocode.guard.net.parseIpPacket
 import dk.cocode.guard.net.parseIpv4Udp
+import dk.cocode.guard.net.u16
 import java.io.IOException
 import java.io.InputStream
 import java.io.OutputStream
@@ -30,7 +36,8 @@ internal const val MAX_PENDING = 64
 
 /**
  * Reads packets from the tunnel on one dedicated thread and answers each DNS query on its own
- * coroutine, so a slow upstream reply never holds up the read loop. [onFailure] runs on that
+ * coroutine, so a slow upstream reply never holds up the read loop. A connection to an address in
+ * [routes] is refused on the read thread and counted through [refusals]. [onFailure] runs on that
  * thread if reading fails while the loop is meant to be running.
  */
 @OptIn(ExperimentalCoroutinesApi::class)
@@ -39,6 +46,10 @@ class PacketLoop(
     private val output: OutputStream,
     private val blockList: BlockList,
     private val upstream: DnsUpstream,
+    private val routes: RouteSet = RouteSet(emptyMap()),
+    private val refusals: Refusals = Refusals(),
+    // Names the app owning a connection: protocol, source address and port, destination address and port.
+    private val appOf: (Int, ByteArray, Int, ByteArray, Int) -> String? = { _, _, _, _, _ -> null },
     private val onFailure: (Throwable) -> Unit,
 ) {
     // Limited so slow upstream replies cannot exhaust the shared IO pool.
@@ -65,14 +76,27 @@ class PacketLoop(
         if (running) ProtectionRepository.update { it.copy(blockedCount = it.blockedCount + 1) }
     }
 
+    // The flow is remembered only while running: a loop stopped by a tunnel swap must not mark it seen,
+    // or the new loop, which shares [refusals], would never count or announce it.
+    private fun countAddress(buf: ByteArray, ip: IpPacket, listId: String) = synchronized(countLock) {
+        if (running && refusals.firstTime(buf, ip)) {
+            ProtectionRepository.update { it.copy(blockedAddressCount = it.blockedAddressCount + 1) }
+            val h = ip.headerLength
+            refusals.announce(ipText(ip.dstIp), listId) { appOf(ip.protocol, ip.srcIp, buf.u16(h), ip.dstIp, buf.u16(h + 2)) }
+        }
+    }
+
     private fun readLoop() {
         val buf = ByteArray(MAX_PACKET)
         try {
             while (running) {
                 val n = input.read(buf)
                 if (n < 0) throw IOException("tunnel closed")
-                val packet = parseIpv4Udp(buf, n) ?: continue
-                if (packet.dstIp.contentEquals(DNS_ADDRESS_BYTES) && packet.dstPort == DNS_PORT) {
+                val ip = parseIpPacket(buf, n) ?: continue
+                val packet = if (ip.version == 4 && ip.protocol == PROTOCOL_UDP) parseIpv4Udp(buf, n) else null
+                if (packet == null) {
+                    refuse(buf, ip)
+                } else if (packet.dstIp.contentEquals(DNS_ADDRESS_BYTES) && packet.dstPort == DNS_PORT) {
                     // limitedParallelism caps threads, not suspended queries, so cap those here.
                     if (pending.incrementAndGet() > MAX_PENDING) {
                         pending.decrementAndGet()
@@ -85,9 +109,28 @@ class PacketLoop(
                             pending.decrementAndGet()
                         }
                     }
+                } else {
+                    refuse(buf, ip)
                 }
             }
         } catch (e: Exception) {
+            if (running) onFailure(e)
+        }
+    }
+
+    /** A packet to a listed address is refused and counted; anything else is dropped without a reply. */
+    private fun refuse(buf: ByteArray, ip: IpPacket) {
+        val listId = routes.listFor(ip.dstIp) ?: return
+        val reply = refusalFor(buf, ip) ?: return
+        countAddress(buf, ip, listId)
+        write(reply)
+    }
+
+    private fun write(packet: ByteArray) {
+        try {
+            synchronized(writeLock) { output.write(packet) }
+        } catch (e: IOException) {
+            // A failed write while running means replies no longer reach apps: report it, never hide it.
             if (running) onFailure(e)
         }
     }
@@ -105,13 +148,7 @@ class PacketLoop(
             !upstream.hasNetwork -> servfail(query, q)
             else -> forward(query)
         } ?: return
-        val packet = UdpPacket(p.dstIp, p.srcIp, p.dstPort, p.srcPort, reply)
-        try {
-            synchronized(writeLock) { output.write(buildIpv4Udp(packet)) }
-        } catch (e: IOException) {
-            // A failed write while running means replies no longer reach apps: report it, never hide it.
-            if (running) onFailure(e)
-        }
+        write(buildIpv4Udp(UdpPacket(p.dstIp, p.srcIp, p.dstPort, p.srcPort, reply)))
     }
 
     private suspend fun forward(query: ByteArray): ByteArray? {
