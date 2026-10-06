@@ -36,7 +36,7 @@
   <div class="wrap">
     <h1>Privatlivspolitik</h1>
     <p class="lede">Guard for Android indsamler ingen personoplysninger.</p>
-    <p class="meta">Gældende fra <time datetime="2026-10-05">5. oktober 2026</time>. Opdateret <time datetime="2026-10-06">6. oktober 2026</time>. Den første version med beskyttelse er under udvikling; politikken beskriver, hvordan den håndterer dine data.</p>
+    <p class="meta">Gældende fra <time datetime="2026-10-05">5. oktober 2026</time>. Opdateret <time datetime="2026-10-06">6. oktober 2026</time>. Den første version med beskyttelse er stadig under udvikling. Politikken beskriver, hvordan den version håndterer dine data.</p>
   </div>
 </section>
 
@@ -44,7 +44,7 @@
   <div class="wrap">
     <div class="prose">
       <h2>Kort fortalt</h2>
-      <p>Appen indsamler ingen personoplysninger. Den har ingen konto, ingen statistik og ingen reklamer, og vi driver ingen server. Dine DNS-opslag går kun til den DNS-server, appen bruger, og som standard er det det aktuelle netværks egen. Mens beskyttelsen kører, henter appen lister over kendte farlige adresser direkte fra de organisationer, der udgiver dem. Appen sender ingen oplysninger om dig til udgiverne; afsnittet om adresselister forklarer, hvad de alligevel kan se.</p>
+      <p>Appen indsamler ingen personoplysninger. Den har ingen konto, ingen statistik og ingen reklamer, og vi driver ingen server. Dine DNS-opslag (de spørgsmål, telefonen stiller for at finde en sides adresse) går kun til den DNS-server, appen bruger, og det er det aktuelle netværks egen. Mens beskyttelsen kører, henter appen lister over kendte farlige adresser direkte fra de organisationer, der udgiver dem. Appen sender ingen oplysninger om dig til udgiverne; afsnittet om adresselister forklarer, hvad de alligevel kan se.</p>
 
       <h2>Hvem er ansvarlig</h2>
       <p>Dataansvarlig er Cocode (Babak Bandpey), <a href="mailto:bb@cocode.dk">bb@cocode.dk</a>. Fordi appen ikke indsamler personoplysninger, har vi i praksis ingen oplysninger om dig. Spørgsmål om appen eller om denne politik kan du sende til samme adresse.</p>
@@ -58,12 +58,12 @@
       </ul>
 
       <h2>DNS-opslag</h2>
-      <p>For at kunne filtrere skal appen se de opslag, telefonen laver, når en app vil åbne en side. Opslagene behandles inde i telefonen. Står et navn på blokeringslisten, får appen et tomt svar. Alle andre opslag sendes videre til den DNS-server, appen bruger.</p>
-      <p>Som standard er det det aktuelle netværks egen DNS-server, for eksempel din internetudbyders eller wifi-netværkets. Senere kommer der mulighed for selv at vælge en anden. Den, der driver DNS-serveren, kan se opslagene efter sine egne regler, ligesom før du installerede appen. Appen sender dem ikke til Cocode eller andre.</p>
-      <p>Der er ingen VPN-server. Den lokale tunnel starter og slutter inde i appen. Kun DNS-opslag og forbindelser til adresser på listerne nedenfor går gennem appen. Resten af din trafik går ikke gennem appen.</p>
+      <p>Et DNS-opslag er det spørgsmål, telefonen stiller for at finde en sides adresse, for eksempel "hvor ligger example.com?". For at kunne filtrere skal appen se disse opslag. De behandles inde i telefonen. Står et navn på blokeringslisten, får appen et tomt svar, og siden hentes ikke. Alle andre opslag sendes videre til den DNS-server, appen bruger.</p>
+      <p>Det er det aktuelle netværks egen DNS-server, for eksempel din internetudbyders eller wifi-netværkets. I dag har appen ingen indstilling til at vælge en anden. Får en senere version en, bliver denne politik rettet, så det fremgår. Den, der driver DNS-serveren, kan se opslagene efter sine egne regler, ligesom før du installerede appen. Appen sender dem ikke til Cocode eller til andre end den DNS-server.</p>
+      <p>Android kalder appen en VPN, fordi den bruger Androids VPN-funktion. En VPN sender normalt din trafik til en server, som en anden driver. Det gør denne app ikke. Der er ingen VPN-server, og den lokale tunnel starter og slutter inde i appen, på telefonen. Kun DNS-opslag og forbindelser til adresser på listerne nedenfor går gennem appen. Resten af din trafik går ikke gennem appen. Mens beskyttelsen kører, viser Android en nøgle i statuslinjen. Det er Androids eget tegn på apps, der bruger dens VPN-funktion. Det betyder ikke, at din trafik går til en VPN-server.</p>
 
       <h2>Lister over farlige adresser</h2>
-      <p>Nogle apps og noget skadeligt software går direkte til en adresse (en IP-adresse) i stedet for at slå et navn op. Det kan navnelisten ikke stoppe. Derfor henter appen lister over kendte farlige adresser. Mens beskyttelsen kører, afviser appen med det samme forbindelser fra alle apps til adresser på listerne. Forbindelsen forlader aldrig telefonen, og appen sender intet videre til internettet. Appen tæller de afviste forbindelser, og en notifikation fortæller, hvilken app der prøvede, hvilken adresse det var, og hvilken liste den stod på.</p>
+      <p>Nogle apps og noget skadeligt software går direkte til en adresse (en IP-adresse, det tal, der identificerer en computer på internettet) i stedet for at slå et navn op. Det kan navnelisten ikke stoppe. Derfor henter appen lister over kendte farlige adresser. Mens beskyttelsen kører, afviser appen med det samme forbindelser fra alle apps til adresser på listerne. Forbindelsen forlader aldrig telefonen, og appen sender intet videre til internettet. Appen tæller de afviste forbindelser, og en notifikation fortæller, hvilken app der prøvede (når Android kan oplyse det), hvilken adresse det var, og hvilken liste den stod på.</p>
 
       <h3>Hvilke lister</h3>
       <ul>
@@ -73,14 +73,14 @@
       <p>Appen henter ikke andet fra dem end disse tre filer. Listerne er data. Appen henter aldrig programkode og kører intet af det, den henter.</p>
 
       <h3>Hvordan og hvor ofte</h3>
-      <p>Appen henter listerne selv, direkte fra udgiverne, over HTTPS. Der er ingen server hos os imellem. Den henter kun, mens beskyttelsen kører. Når alle tre lister er hentet, venter den normalt mindst 24 timer. Fejler en hentning, prøver appen igen senere, tidligst efter en time, og henter da alle tre lister igen.</p>
+      <p>Appen henter listerne selv, direkte fra udgiverne, over HTTPS. Der er ingen server hos os imellem. Den henter kun, mens beskyttelsen kører. Når alle tre lister er hentet, venter den normalt mindst 24 timer, før den henter igen. Fejler en hentning, prøver appen igen senere, tidligst efter en time. Hver gang henter den alle tre lister.</p>
 
       <h3>Hvad udgiverne kan se</h3>
-      <p>Som ved ethvert besøg på en hjemmeside kan udgiveren se din IP-adresse, tidspunktet og de almindelige oplysninger i en netværksforespørgsel, for eksempel Androids standardtekst om, hvilken Android-version og hvilken telefon der spørger. Appen sender ingen konto, intet id og ingen oplysninger om dig eller om, hvad den har blokeret. Hvad udgiverne gør med det, de selv kan se, bestemmer de. Vi ser det ikke.</p>
+      <p>Som ved ethvert besøg på en hjemmeside kan udgiveren se din IP-adresse, tidspunktet og de almindelige oplysninger i en netværksforespørgsel, for eksempel Androids standardtekst (brugeragenten) om, hvilken Android-version og hvilken telefon der spørger. Appen sender ingen konto, intet id og ingen oplysninger om dig eller om, hvad den har blokeret. Hvad udgiverne gør med det, de selv kan se, bestemmer de. Vi ser det ikke.</p>
       <p>Telefonen slår udgivernes navne op på almindelig vis. Derfor kan netværkets DNS-server og din internetudbyder se, at telefonen henter listerne, ligesom ved enhver anden hjemmeside.</p>
 
       <h3>Hvilken app der prøvede</h3>
-      <p>For at nævne appen spørger appen Android, hvilken app der står bag et blokeret opslag eller en blokeret forbindelse. Det sker på telefonen. Appen kan kun se de apps, der har et ikon på startskærmen. Navnet vises i notifikationen om en blokeret adresse og på listen "Seneste blokeringer" på appens skærm. Listen findes kun i telefonens hukommelse, mens beskyttelsen kører, slettes hver gang beskyttelsen starter eller stopper, og bliver aldrig gemt eller sendt nogen steder. Notifikationen er Androids, så Android kan selv gemme den, for eksempel i notifikationshistorikken.</p>
+      <p>For at nævne appen spørger appen Android, hvilken app der står bag et blokeret opslag eller en blokeret forbindelse. Det sker på telefonen. Appen kan kun se de apps, der har et ikon på startskærmen. Kan Android ikke sige, hvilken app det var, står der kun "en app" i notifikationen og "En ukendt app" på listen "Seneste blokeringer". Navnet vises i notifikationen om en blokeret adresse og på listen "Seneste blokeringer" på appens skærm. For hver app viser listen, hvor mange opslag og forbindelser der er blokeret, og de seneste navne eller adresser, den prøvede at nå. Listen findes kun i telefonens hukommelse, mens beskyttelsen kører, slettes hver gang beskyttelsen starter eller stopper, og bliver aldrig gemt eller sendt nogen steder. Notifikationen er Androids, så Android kan selv gemme den, for eksempel i notifikationshistorikken.</p>
 
       <h2>Det, der bliver på telefonen</h2>
       <p>Appen tæller, hvor mange opslag og forbindelser den har blokeret. Tallene og appens indstillinger bliver på telefonen og sendes ikke nogen steder. Appen skriver ikke en historik over blokerede navne, adresser eller apps. Den husker kun i hukommelsen, mens beskyttelsen kører, hvilke adresser den allerede har givet besked om.</p>
@@ -89,9 +89,9 @@
 
       <h2>Tilladelser</h2>
       <h3>VPN</h3>
-      <p>Nødvendig for at appen kan se DNS-opslag og afvise forbindelser til farlige adresser. Android spørger dig, før appen starter første gang. Se afsnittet om DNS-opslag for, hvad tunnelen gør, og hvad den ikke gør.</p>
+      <p>Nødvendig for at appen kan se DNS-opslag og afvise forbindelser til farlige adresser. Android spørger om din tilladelse, første gang du trykker på Start beskyttelse. Uden den kan appen ikke beskytte telefonen. Se afsnittet om DNS-opslag for, hvad tunnelen gør, og hvad den ikke gør.</p>
       <h3>Notifikationer</h3>
-      <p>Bruges til at give dig besked, hvis beskyttelsen stopper, og når en forbindelse til en farlig adresse er afvist.</p>
+      <p>Bruges til at give dig besked, hvis beskyttelsen stopper, og når en forbindelse til en farlig adresse er afvist. Slår du notifikationer fra, kan appen ikke give dig besked, når beskyttelsen stopper, og skærmen minder dig om det.</p>
       <h3>Alt andet</h3>
       <p>Appen bruger ingen andre tilladelser. Den har ikke adgang til dine kontakter, din placering, dine filer eller Androids tilgængelighedsfunktioner. Appen bruger Androids almindelige netværksadgang, som Android giver automatisk, så den kan sende opslag videre og hente adresselisterne.</p>
 
@@ -105,7 +105,7 @@
       <p>Efter databeskyttelsesforordningen (GDPR) har du ret til indsigt, rettelse og sletning. Da vi ikke har oplysninger om dig, er der intet at give indsigt i eller slette. Skriv til <a href="mailto:bb@cocode.dk">bb@cocode.dk</a>, hvis du alligevel er i tvivl. Du kan også klage til <a href="https://www.datatilsynet.dk">Datatilsynet</a>.</p>
 
       <h2>Denne hjemmeside</h2>
-      <p>Hjemmesiden bruger ingen cookies, ingen statistik og ingen JavaScript. Skrifttypen ligger på selve siden, så ingen tredjepart ser dit besøg.Som alle webservere kan den server, siden ligger på, føre almindelige adgangslogs.</p>
+      <p>Hjemmesiden bruger ingen cookies, ingen statistik og ingen JavaScript. Skrifttypen ligger på selve siden, så ingen tredjepart ser dit besøg. Som alle webservere kan den server, siden ligger på, føre almindelige adgangslogs.</p>
 
       <h2>Ændringer</h2>
       <p>Ændrer vi politikken, ændrer vi datoen øverst og skriver, hvad der er nyt. Ældre udgaver kan ses i projektets historik på <a href="https://github.com/cocodedk/guard-android">GitHub</a>.</p>

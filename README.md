@@ -1,6 +1,6 @@
 # Guard for Android
 
-Blocks dangerous sites and ads for every app on the phone, on any network: at home, on mobile data,
+Blocks dangerous sites and ads for every app on your phone, on any network: at home, on mobile data,
 on café Wi-Fi, abroad. The [Cocode Guard box](https://guard.cocode.dk) protects the house; this app
 protects the phone when it leaves the house. It works on its own, without the box.
 
@@ -18,20 +18,35 @@ Status: early. The first version with protection is being built.
 - GitHub: <https://github.com/cocodedk/guard-android/releases/latest/download/GuardAndroid.apk>
 - F-Droid: planned.
 
+After installing, open the app and tap **Start protection** (*Start beskyttelse* in Danish). Android
+asks for your permission to set up the VPN connection and to send notifications. The screen always
+says whether the phone is protected. You stop protection with **Stop protection**.
+
 ## How it works
 
-Android lets one app see the phone's DNS lookups through its VPN feature (`VpnService`). Guard for Android
-uses that feature **only as a local tunnel that ends inside the app**. There is no VPN server.
+Whenever an app opens a site, the phone first asks a DNS server where that site is. That question is
+a DNS lookup. Android lets one app see these lookups through its VPN feature (`VpnService`). Guard
+for Android uses that feature **only as a local tunnel that ends inside the app**. There is no VPN
+server, and your traffic is not sent on to anyone.
 
-1. The tunnel's routes are a fake DNS address and the ranges on public lists of known-bad IP
-   addresses, so only DNS lookups and connections to those addresses enter it. Web pages, video and
-   app data go out exactly as before.
-2. Each lookup is checked against the block list (the AdGuard DNS filter, shipped inside the app).
-3. A blocked name gets an empty answer (`0.0.0.0`). Every other lookup goes to the network's own DNS
-   server, and the answer comes back through the tunnel.
-4. A connection from any app to a listed address is refused inside the app (a TCP reset, or an ICMP
-   "administratively prohibited" reply for UDP). Nothing is relayed to the internet. The app counts
-   it, and a notification names the app Android says made it, the address and the list.
+1. Only two kinds of traffic enter the tunnel: DNS lookups, and connections to addresses on public
+   lists of known dangerous IP addresses. (An IP address is the number that identifies a computer on
+   the internet. Technically, the tunnel's routes are a made-up DNS address and the address ranges
+   from those lists.) Web pages, video and app data go out exactly as before.
+2. Each lookup is checked against the block list: the AdGuard DNS filter, which ships inside the app.
+3. A blocked name gets an empty answer (`0.0.0.0`), so the site or ad does not load. Every other
+   lookup goes to the network's own DNS server, and the answer comes back through the tunnel.
+4. A connection from any app to a listed address is refused on the spot, inside the app (technically
+   a TCP reset, or an ICMP "administratively prohibited" reply for UDP). Nothing is relayed to the
+   internet. The app counts it, and a notification names the app Android says made it, the address
+   and the list. If Android can't say which app it was, the notification says only "an app".
+5. The home screen shows how many names and addresses were blocked since start, and a "Recent
+   blocks" list: which apps were blocked, how many times, and what they tried to reach. A "Good to
+   know" block repeats the promises on this page, and an About page gives the version, the license,
+   links and credits.
+
+While the app protects the phone, Android shows a key icon in the status bar. That icon is Android's
+own sign for apps that use its VPN feature. It does not mean your traffic goes to a remote VPN.
 
 ### Address lists
 
@@ -40,44 +55,50 @@ stop them. While protection runs, the app downloads these lists **on the phone, 
 publishers, over HTTPS**: Spamhaus DROP (`drop_v4.json`, `drop_v6.json`) and the abuse.ch Feodo
 Tracker recommended IP blocklist. There is no Cocode server in between. Details:
 
-- Only those three files are fetched. They are data, parsed and never run.
+- Only those three files are fetched. They are data: the app reads them and never runs them.
 - Normally once a day. A failed download is retried after at least an hour.
 - Each list is stored in the app's private files. A list older than 7 days is paused, and the screen
-  says so: old lists can block addresses that others use now.
+  says so, because old lists can block addresses that others use now.
 - Each publisher sees what any web server sees: the phone's IP address, the time and the ordinary
   details of a request (Android's default user agent). The app sends no account, identifier or data
   about the user or about what was blocked.
-- The name of the app that made a blocked connection comes from Android, on the phone. It appears
-  only in the notification; the app writes nothing about blocked connections to disk and sends nothing anywhere.
-
-Android shows its VPN key icon while the app protects the phone. That icon is Android's, not a sign
-of a remote VPN.
+- The name of the app that made a blocked lookup or connection comes from Android, on the phone. It
+  appears in the notification for a blocked address and in the Recent blocks list on the screen. That
+  list lives only in the phone's memory and is cleared whenever protection starts or stops. The app
+  saves no record of blocked names, addresses or apps, and sends none to anyone. Android may keep
+  the notification in its own notification history.
 
 ### Limits, said plainly
 
-- Android's **Private DNS** set to a specific server can't be used with the app: protection stops
-  and says so. "Automatic" works as normal.
-- Apps with **their own secure DNS** (for example a browser's DoH setting) bypass it too.
-- Android allows **one VPN at a time**, so the app can't run alongside a work VPN.
-- If protection stops, a notification says so: DNS lookups are no longer filtered.
-- Android's "Block connections without VPN" can't be used with the app: its tunnel carries only DNS
-  lookups and connections to listed addresses, so with that setting the phone can't reach the internet.
+- Android's **Private DNS** set to a specific server can't be used with the app. The phone would
+  have no internet, so protection stops and says so. "Automatic" works as normal.
+- Android's "Block connections without VPN" can't be used with the app either. The tunnel carries
+  only DNS lookups and connections to listed addresses, so with that setting the phone can't reach
+  the internet. Protection can't run, and the screen says so.
+- Apps with **their own secure DNS** (for example a browser's DoH setting) bypass the name filter.
+- Android allows **one VPN at a time**, so the app can't run alongside a work VPN or another VPN
+  app.
+- If protection stops without your asking, a notification says so: DNS lookups are no longer
+  filtered. If you stop it yourself, the screen says so. If you turn off the app's notifications, the
+  app can't tell you when protection stops, and the screen reminds you of that.
 - Address blocking needs downloaded lists. A list that is missing, or older than 7 days, is not used,
   and the screen says so. The name filter works regardless. No list catches everything.
 
 ## Accessibility
 
-Built for blind and low-vision people from the start: every control has a spoken TalkBack label,
-status changes are announced, text scales to 200%, and a unit test holds every color pair to WCAG
-AA contrast.
+Built for blind and low-vision people from the start: every control has a spoken label for TalkBack
+(Android's screen reader), status changes are announced, text scales to 200%, and a unit test holds
+every color pair to WCAG AA contrast.
 
 ## Permissions
 
-You grant only the VPN connection and notifications. Network access (to pass lookups on and to
-download the address lists) is an install-time permission Android grants automatically. No contacts,
-location, storage or accessibility access. The manifest also declares `<queries>` for apps with a
-launcher icon, so a notification can name the app that tried to connect; it is not a permission, and
-`QUERY_ALL_PACKAGES` is not used.
+You grant only the VPN connection and notifications. The VPN permission lets the app see DNS
+lookups and refuse connections to dangerous addresses. Notifications let it tell you when protection
+stops or a connection is refused. Network access (to pass lookups on and to download the address
+lists) is an install-time permission Android grants automatically. No contacts, location, storage or
+accessibility access. The manifest also declares `<queries>` for apps with a launcher icon, so a
+notification can name the app that tried to connect (an app without a launcher icon is not named); it
+is not a permission, and `QUERY_ALL_PACKAGES` is not used.
 
 ## Build from source
 
