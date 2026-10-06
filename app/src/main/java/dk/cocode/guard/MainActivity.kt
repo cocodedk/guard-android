@@ -4,6 +4,7 @@ import android.Manifest
 import android.content.ActivityNotFoundException
 import android.content.Intent
 import android.content.pm.PackageManager
+import android.net.Uri
 import android.net.VpnService
 import android.os.Build
 import android.os.Bundle
@@ -12,10 +13,17 @@ import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
 import androidx.activity.result.contract.ActivityResultContracts
+import androidx.activity.compose.BackHandler
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.saveable.rememberSaveable
+import androidx.compose.runtime.setValue
 import dk.cocode.guard.notify.alertsAllowed
+import dk.cocode.guard.ui.AboutLink
+import dk.cocode.guard.ui.AboutScreen
+import dk.cocode.guard.ui.aboutUrl
+import dk.cocode.guard.ui.versionLine
 import dk.cocode.guard.ui.HomeAction
 import dk.cocode.guard.ui.HomeCard
 import dk.cocode.guard.ui.HomeScreen
@@ -23,6 +31,7 @@ import dk.cocode.guard.ui.theme.GuardTheme
 import dk.cocode.guard.vpn.GuardVpnService
 import dk.cocode.guard.vpn.ProtectionRepository
 import dk.cocode.guard.vpn.ProtectionStatus
+import java.util.Locale
 
 class MainActivity : ComponentActivity() {
     private val notificationsAllowed = mutableStateOf(true)
@@ -42,12 +51,27 @@ class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
+        val version = packageManager.getPackageInfo(packageName, 0).let { versionLine(it.versionName.orEmpty(), it.longVersionCode) }
         setContent {
             val state by ProtectionRepository.state.collectAsState()
+            var showAbout by rememberSaveable { mutableStateOf(false) }
+            BackHandler(enabled = showAbout) { showAbout = false }
             GuardTheme {
-                HomeScreen(state, notificationsAllowed.value, ::onAction, ::onCardAction)
+                if (showAbout) {
+                    AboutScreen(version, ::openLink) { showAbout = false }
+                } else {
+                    HomeScreen(state, notificationsAllowed.value, ::onAction, ::onCardAction) { showAbout = true }
+                }
             }
         }
+    }
+
+    /** False when no app can open the link. */
+    private fun openLink(link: AboutLink): Boolean = try {
+        startActivity(Intent(Intent.ACTION_VIEW, Uri.parse(aboutUrl(link, Locale.getDefault().language))))
+        true
+    } catch (e: ActivityNotFoundException) {
+        false
     }
 
     override fun onResume() {
