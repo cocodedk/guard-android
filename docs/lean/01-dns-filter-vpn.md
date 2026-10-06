@@ -16,12 +16,13 @@ Accessibility). Read `CLAUDE.md` first; its rules apply.
 
 - **Tunnel:** `Builder().addAddress("10.111.222.1", 32).addDnsServer("10.111.222.2")
   .addRoute("10.111.222.2", 32).allowFamily(OsConstants.AF_INET).allowFamily(OsConstants.AF_INET6)
-  .addDisallowedApplication(packageName).setMtu(1500).setSession(app_name)
+  .addDisallowedApplication(packageName).setMtu(1500).setMetered(false).setSession(app_name)
   .setConfigureIntent(<PendingIntent to MainActivity>).setBlocking(true)`.
   The only route is the fake DNS address, so only DNS enters the tunnel. `allowFamily` for both
   families keeps all other IPv4 and IPv6 traffic on the real network (without it, a tunnel with no
   IPv6 address blocks IPv6). The app excludes itself, so its own upstream sockets use the real
-  network.
+  network. `setMetered(false)`: Android otherwise marks a VPN metered whatever network lies under
+  it, so on Wi-Fi every app would see a metered connection and hold back updates and backups.
 - **Read loop** (one dedicated thread): read a packet from the tunnel `FileInputStream`. Keep only
   IPv4 + UDP + destination `10.111.222.2:53`; drop everything else silently (including TCP).
 - **Each query** (handled on `Dispatchers.IO.limitedParallelism(16)`, so slow upstream replies

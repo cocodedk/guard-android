@@ -105,6 +105,9 @@ class GuardVpnService : VpnService() {
         .allowFamily(OsConstants.AF_INET6)
         .addDisallowedApplication(packageName)
         .setMtu(1500)
+        // Android counts a VPN as metered unless told otherwise, which would make Wi-Fi look metered
+        // to every app; unmetered, the tunnel takes its meteredness from the real network.
+        .setMetered(false)
         .setSession(getString(R.string.app_name))
         .setConfigureIntent(
             PendingIntent.getActivity(this, 0, Intent(this, MainActivity::class.java), PendingIntent.FLAG_IMMUTABLE),
