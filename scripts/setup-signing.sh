@@ -8,8 +8,10 @@ restore_tty() { stty echo 2>/dev/null || true; }
 trap restore_tty EXIT INT TERM
 
 REPO=$(gh repo view --json nameWithOwner -q .nameWithOwner)
-KEYSTORE="${KEYSTORE_FILE:-$HOME/release.keystore}"  # override: KEYSTORE_FILE=/path/to/key.jks ./scripts/setup-signing.sh
-ALIAS="${KEYSTORE_ALIAS:-android}"                   # override: KEYSTORE_ALIAS=mykey ./scripts/setup-signing.sh
+# This app's own release key. F-Droid pins its fingerprint (4c33dbed...), so never point this at
+# another app's key. Override: KEYSTORE_FILE=/path/to/key KEYSTORE_ALIAS=name ./scripts/setup-signing.sh
+KEYSTORE="${KEYSTORE_FILE:-$HOME/keystores/guard-android.keystore}"
+ALIAS="${KEYSTORE_ALIAS:-guard}"
 
 echo ""
 echo "=== Cocode Guard Release Signing Setup ==="
