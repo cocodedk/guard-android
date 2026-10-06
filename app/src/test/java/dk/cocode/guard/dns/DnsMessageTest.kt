@@ -40,6 +40,12 @@ class DnsMessageTest {
     }
 
     @Test
+    fun backslashInLabelIsEscaped() {
+        // Wire labels `a\`, `example`, `com`: the backslash is doubled so the next dot stays a boundary.
+        assertEquals("a\\\\.example.com", parsed(query(name = "a\\.example.com")).name)
+    }
+
+    @Test
     fun rejectsResponse() {
         assertNull(parseQuery(query(flags = 0x8180)))
     }

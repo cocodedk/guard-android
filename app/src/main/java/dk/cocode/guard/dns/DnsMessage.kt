@@ -29,9 +29,9 @@ fun parseQuery(payload: ByteArray): DnsQuestion? {
         if (len == 0) break
         // 0xC0 bits are a compression pointer (or a reserved form): not valid in a plain question.
         if (len and 0xC0 != 0 || pos + 1 + len > payload.size) return null
-        // A literal dot inside a label is a valid name but not a label boundary: escape it, so the
-        // joined name can never equal a different dotted name and is never matched by a rule.
-        labels += String(payload, pos + 1, len, Charsets.ISO_8859_1).replace(".", "\\.")
+        // A literal dot inside a label is a valid name but not a label boundary: escape it (and the
+        // backslash itself), so the joined name can never equal a different dotted name.
+        labels += String(payload, pos + 1, len, Charsets.ISO_8859_1).replace("\\", "\\\\").replace(".", "\\.")
         pos += 1 + len
     }
     val typeAt = pos + 1

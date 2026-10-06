@@ -16,9 +16,24 @@ class BlockList(private val blocked: Set<String>, private val allowed: Set<Strin
             val suffix = n.substring(start)
             if (suffix in allowed) return false
             if (suffix in blocked) hit = true
-            start = n.indexOf('.', start) + 1
-            if (start == 0) break
+            start = nextBoundary(n, start)
+            if (start < 0) break
         }
         return hit
+    }
+
+    // A suffix starts only after a dot that is not escaped (preceded by an odd number of backslashes).
+    // A suffix that still holds an escaped dot matches no rule, since rule domains never contain one.
+    private fun nextBoundary(n: String, from: Int): Int {
+        var i = from
+        while (i < n.length) {
+            if (n[i] == '.') {
+                var slashes = 0
+                while (i - 1 - slashes >= 0 && n[i - 1 - slashes] == '\\') slashes++
+                if (slashes % 2 == 0) return i + 1
+            }
+            i++
+        }
+        return -1
     }
 }
