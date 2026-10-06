@@ -47,7 +47,7 @@ private fun DrawScope.drawNight() {
     }
 }
 
-/** Faint diagonal rain, one slow fall in about nine seconds. Only drawn when motion is allowed. */
+/** Faint diagonal rain in the top band only (see [rainAlphaAt]), one slow fall in nine seconds. Only drawn when motion is allowed. */
 @Composable
 private fun Rain() {
     val phase = rememberInfiniteTransition(label = "rain").animateFloat(
@@ -57,6 +57,14 @@ private fun Rain() {
         label = "rain",
     )
     Canvas(Modifier.fillMaxSize()) {
+        // One vertical gradient in screen coordinates masks every pixel: it is clamped to
+        // transparent below the fade end, so a stroke crossing the line is cut there too.
+        val mask = Brush.verticalGradient(
+            0f to GuardColors.Cyan.copy(alpha = rainAlphaAt(0f, size.height)),
+            1f to Color.Transparent,
+            startY = 0f,
+            endY = rainFadeEnd(size.height),
+        )
         val step = 36.dp.toPx()
         val length = 48.dp.toPx()
         val slant = 0.3f
@@ -65,8 +73,8 @@ private fun Rain() {
             val y = ((phase.value + i * 0.618f) % 1f) * (size.height + length) - length
             val x = i * step - size.height * slant + y * slant
             drawLine(
-                GuardColors.Cyan, Offset(x, y), Offset(x + length * slant, y + length),
-                strokeWidth = 1.dp.toPx(), alpha = 0.22f,
+                mask, Offset(x, y), Offset(x + length * slant, y + length),
+                strokeWidth = 1.dp.toPx(),
             )
         }
     }

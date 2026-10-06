@@ -16,6 +16,15 @@ import androidx.compose.ui.platform.LocalContext
 /** Android's "Remove animations" sets the animator duration scale to 0. */
 fun motionAllowed(animatorScale: Float): Boolean = animatorScale > 0f
 
+/** The y from which no rain is visible: 30% of the screen height. */
+fun rainFadeEnd(height: Float): Float = height * 0.3f
+
+/** Rain is faint at the top and gone from 30% of the screen height down, so it never crosses body text. */
+fun rainAlphaAt(y: Float, height: Float, peak: Float = 0.15f): Float {
+    val fadeEnd = rainFadeEnd(height)
+    return if (fadeEnd <= 0f) 0f else peak * (1f - y / fadeEnd).coerceIn(0f, 1f)
+}
+
 /** Whether the screen may move; [NeonScreen] provides it, and a screen outside it stays still. */
 val LocalMotion = compositionLocalOf { false }
 

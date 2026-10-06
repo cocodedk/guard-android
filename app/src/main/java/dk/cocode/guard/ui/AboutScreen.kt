@@ -1,11 +1,9 @@
 package dk.cocode.guard.ui
 
 import androidx.annotation.StringRes
-import androidx.compose.foundation.layout.heightIn
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
-import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -57,13 +55,7 @@ fun AboutScreen(version: String, openLink: (AboutLink) -> Boolean, onBack: () ->
     var noBrowser by rememberSaveable { mutableStateOf(false) }
     val open = { link: AboutLink -> noBrowser = !openLink(link) }
     NeonScreen {
-        TextButton(onClick = onBack, modifier = Modifier.heightIn(min = 48.dp)) {
-            CondensedText(
-                stringResource(R.string.action_back),
-                style = MaterialTheme.typography.titleMedium,
-                color = GuardColors.Cyan,
-            )
-        }
+        OutlinedAction(R.string.action_back, onBack)
         CondensedText(
             text = stringResource(R.string.about_title),
             style = MaterialTheme.typography.headlineMedium,

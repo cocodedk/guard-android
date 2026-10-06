@@ -1,7 +1,7 @@
 package dk.cocode.guard.ui
 
 import androidx.annotation.StringRes
-import androidx.compose.animation.core.FastOutSlowInEasing
+import androidx.compose.animation.core.LinearOutSlowInEasing
 import androidx.compose.animation.core.animateIntAsState
 import androidx.compose.animation.core.tween
 import androidx.compose.foundation.background
@@ -98,7 +98,7 @@ private fun StatTile(
     modifier: Modifier,
 ) {
     val shown = if (LocalMotion.current) {
-        animateIntAsState(value, tween(600, easing = FastOutSlowInEasing), label = "count").value
+        animateIntAsState(value, tween(600, easing = LinearOutSlowInEasing), label = "count").value
     } else {
         value
     }
