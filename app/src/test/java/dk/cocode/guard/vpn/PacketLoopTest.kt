@@ -5,12 +5,8 @@ import dk.cocode.guard.net.UdpPacket
 import dk.cocode.guard.net.buildIpv4Udp
 import dk.cocode.guard.net.parseIpv4Udp
 import java.io.IOException
-import java.io.InputStream
 import java.io.OutputStream
-import java.util.concurrent.LinkedBlockingQueue
 import java.util.concurrent.TimeUnit
-import java.util.concurrent.atomic.AtomicInteger
-import kotlinx.coroutines.CompletableDeferred
 import org.junit.After
 import org.junit.Assert.assertEquals
 import org.junit.Assert.assertNotNull
@@ -19,47 +15,8 @@ import org.junit.Assert.assertTrue
 import org.junit.Before
 import org.junit.Test
 
-/** The tunnel is a pair of in-memory queues and the network is a fake; no sockets, no Android. */
+/** The tunnel and the network are fakes (PacketLoopFakes.kt); no sockets, no Android. */
 class PacketLoopTest {
-    private class FakeTunnel : InputStream() {
-        val incoming = LinkedBlockingQueue<ByteArray>()
-        val written = LinkedBlockingQueue<ByteArray>()
-        val out = object : OutputStream() {
-            override fun write(b: Int) = throw UnsupportedOperationException()
-            override fun write(b: ByteArray) {
-                written.put(b.copyOf())
-            }
-        }
-
-        override fun read() = throw UnsupportedOperationException()
-        override fun read(b: ByteArray): Int {
-            val p = incoming.take()
-            if (p.isEmpty()) return -1
-            p.copyInto(b)
-            return p.size
-        }
-    }
-
-    private class FakeUpstream(override var hasNetwork: Boolean = true, val reply: ByteArray? = null) : DnsUpstream {
-        val queries = LinkedBlockingQueue<ByteArray>()
-        override suspend fun query(payload: ByteArray): ByteArray? {
-            queries.put(payload)
-            return reply?.copyOf()
-        }
-    }
-
-    /** Never answers until released, like a resolver that has stopped replying. */
-    private class StuckUpstream : DnsUpstream {
-        override val hasNetwork = true
-        val asked = AtomicInteger()
-        val release = CompletableDeferred<Unit>()
-        override suspend fun query(payload: ByteArray): ByteArray? {
-            asked.incrementAndGet()
-            release.await()
-            return null
-        }
-    }
-
     private val tunnel = FakeTunnel()
     private val client = byteArrayOf(10, 111, 1, 1)
     private val dns = byteArrayOf(10, 111, 222.toByte(), 2)
