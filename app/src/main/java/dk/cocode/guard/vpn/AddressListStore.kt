@@ -58,7 +58,7 @@ class AddressListStore(
         val info = HashMap<AddressList, StoredList>()
         for (list in AddressList.entries) {
             val f = file(list).takeIf { it.isFile } ?: continue
-            val cidrs = f.readLines().mapNotNull { parseCidr(it) }
+            val cidrs = f.readLines().filterNot { it.startsWith("#") }.mapNotNull { parseCidr(it) }
             stored[list] = cidrs
             info[list] = StoredList(f.lastModified(), cidrs.size)
         }
@@ -88,13 +88,19 @@ class AddressListStore(
                 val cidrs = acceptList(list.id, parsed) ?: continue
                 if (!active()) return
                 val temp = File(dir, "${list.id}.tmp")
-                temp.writeText(cidrs.joinToString("\n"))
+                temp.writeText(sourceHeader(list, body) + cidrs.joinToString("\n"))
                 Files.move(temp.toPath(), file(list).toPath(), StandardCopyOption.ATOMIC_MOVE)
             } catch (e: Exception) {
                 // Network, disk or parse trouble: this list keeps its last good copy, the others go on.
             }
         }
     }
+
+    // Spamhaus asks that "the date and © text should remain with the file and data": its metadata
+    // line (timestamp, copyright, terms) is kept as a `#` comment at the top of the stored list.
+    private fun sourceHeader(list: AddressList, body: String): String =
+        if (list == AddressList.Feodo) "" else
+            body.lineSequence().map { it.trim() }.lastOrNull { it.isNotEmpty() }?.let { "# $it\n" }.orEmpty()
 
     // Redirects are not followed: only the three listed URLs are ever fetched. Null unless 200 and small enough.
     private fun download(url: String): String? {

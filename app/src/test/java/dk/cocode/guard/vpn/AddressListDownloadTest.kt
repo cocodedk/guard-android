@@ -60,6 +60,19 @@ class AddressListDownloadTest {
     }
 
     @Test
+    fun spamhausDateAndCopyrightStayWithTheFile() {
+        // Spamhaus asks that "the date and © text should remain with the file and data".
+        val meta = """{"type":"metadata","timestamp":1791254642,"copyright":"(c) 2026 The Spamhaus Project SLU"}"""
+        val ranges = (0 until 40 step 2).joinToString("\n") { """{"cidr":"2a10:${it.toString(16)}::/32"}""" }
+        val s = store { if (it == AddressList.DropV6.url) text("$ranges\n$meta\n") else text("garbage") }
+        s.refresh()
+        val stored = File(folder.root, "drop_v6.txt").readLines()
+        assertEquals("# $meta", stored.first())
+        val loaded = s.load(System.currentTimeMillis()).statuses.single { it.list == AddressList.DropV6 }
+        assertEquals(20, loaded.entries) // the header line is not read as a range
+    }
+
+    @Test
     fun redirectIsNotFollowedAndStoresNothing() {
         store(code = 301) { text("203.0.113.7\n") }.refresh()
         assertFalse(feodo.exists())
