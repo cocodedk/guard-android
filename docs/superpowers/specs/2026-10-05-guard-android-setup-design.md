@@ -39,7 +39,8 @@ Blind and low-vision people must be able to use the app and the site without sig
 
 - **App:** every control has a spoken label that says what it does ("Start beskyttelse"), not
   what it looks like; the status is announced by TalkBack when it changes (polite live region);
-  the screen title is a heading; the warning card and its action read as one unit; meaning never
+  the screen title is a heading; a card's title and body read as one unit and its button is its
+  own stop; meaning never
   rests on color alone (each state has words and an icon); touch targets are at least 48dp; text
   scales with the system font size up to 200% without clipping; reading order follows the visual
   order; notifications carry the same plain words as the screen.
@@ -94,11 +95,12 @@ no VPN server and no account; only DNS lookups enter it.
   block. Other rule types are skipped.
 - **UI (one screen):** status in plain words ("Beskyttet" / "Ikke beskyttet" and English
   equivalents), a Start/Stop button, the number of blocked lookups since start, and a warning card
-  when Android's Private DNS is on (it bypasses the filter), read from
-  `LinkProperties.isPrivateDnsActive`.
+  when Android's Private DNS is set to a specific server (strict mode bypasses the filter), read
+  from `LinkProperties.privateDnsServerName`. Automatic mode needs no warning (spec 01 explains).
 - **Stop means stop:** a foreground notification while protecting. If the tunnel is revoked
-  (`onRevoke`, for example another VPN app took over) or the service fails, a notification says
-  that protection stopped and the phone now uses normal DNS without blocking.
+  (`onRevoke`: another VPN app took over, or the VPN was turned off in settings), cannot run
+  (Android's "Block connections without VPN"), or the service fails, a notification says that
+  protection stopped and DNS lookups are no longer filtered. Spec 01 holds the full journey.
 - **Permissions:** `BIND_VPN_SERVICE` on the service, `INTERNET` and `ACCESS_NETWORK_STATE`
   (install-time, for the upstream socket and the network callback), `POST_NOTIFICATIONS`,
   `FOREGROUND_SERVICE` and `FOREGROUND_SERVICE_SYSTEM_EXEMPTED` (service

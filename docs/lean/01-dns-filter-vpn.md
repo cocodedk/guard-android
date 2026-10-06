@@ -15,10 +15,13 @@ Accessibility). Read `CLAUDE.md` first; its rules apply.
 `VpnService` is used only as a **local tunnel that ends inside the app**. There is no server.
 
 - **Tunnel:** `Builder().addAddress("10.111.222.1", 32).addDnsServer("10.111.222.2")
-  .addRoute("10.111.222.2", 32).addDisallowedApplication(packageName).setMtu(1500)
-  .setSession(app_name).setConfigureIntent(<PendingIntent to MainActivity>).setBlocking(true)`.
-  The only route is the fake DNS address, so only DNS enters the tunnel. The app excludes itself,
-  so its own upstream sockets use the real network.
+  .addRoute("10.111.222.2", 32).allowFamily(OsConstants.AF_INET).allowFamily(OsConstants.AF_INET6)
+  .addDisallowedApplication(packageName).setMtu(1500).setSession(app_name)
+  .setConfigureIntent(<PendingIntent to MainActivity>).setBlocking(true)`.
+  The only route is the fake DNS address, so only DNS enters the tunnel. `allowFamily` for both
+  families keeps all other IPv4 and IPv6 traffic on the real network (without it, a tunnel with no
+  IPv6 address blocks IPv6). The app excludes itself, so its own upstream sockets use the real
+  network.
 - **Read loop** (one dedicated thread): read a packet from the tunnel `FileInputStream`. Keep only
   IPv4 + UDP + destination `10.111.222.2:53`; drop everything else silently (including TCP).
 - **Each query** (handled on `Dispatchers.IO.limitedParallelism(16)`, so slow upstream replies
@@ -70,19 +73,31 @@ Accessibility). Read `CLAUDE.md` first; its rules apply.
   `startForeground` with `ServiceInfo.FOREGROUND_SERVICE_TYPE_SYSTEM_EXEMPTED`; below 34 without
   a type.
 - Two notification channels, created on first use:
-  - `protection` ("Beskyttelse" / "Protection"), importance LOW: the ongoing notification
-    "Beskyttet" / "Protected", text "Farlige sider og reklamer blokeres." / "Dangerous sites and
-    ads are blocked.", tap opens the app, action "Stop" / "Stop" stops protection.
+  - `protection` ("Beskyttelse" / "Protection"), importance LOW: the ongoing notification. Tap
+    opens the app. While filtering works: title `notif_protected_title`, text
+    `notif_protected_text`, action `notif_action_stop` (stops protection). While strict Private DNS
+    bypasses the filter: title `status_bypassed`, text `card_private_dns_title`. When Always-on VPN
+    holds protection on, the Stop action is left out. The notification updates whenever the state
+    changes.
   - `alerts` ("Advarsler" / "Alerts"), importance HIGH: the stop notification (below).
 - **Stop by the owner** (button or notification action): close the tunnel, stop the thread,
-  unregister the callback, `stopForeground(STOP_FOREGROUND_REMOVE)`, `stopSelf()`. No alert.
-- **Stop for any other reason** (`onRevoke()`, typically another VPN app took over; or an
-  exception in the read loop or in `establish()`): do the same cleanup, then post the alert
-  notification "Beskyttelsen er stoppet" / "Protection has stopped" with the reason text from the
-  strings table below, and set the state to `Stopped(reason)`. Never fail silently.
-- Whenever the system starts the service (Android's own "Always-on VPN" setting does this), it
-  starts protection. The app adds nothing of its own for boot: no boot receiver, no
-  `RECEIVE_BOOT_COMPLETED`.
+  unregister the callback, `stopForeground(STOP_FOREGROUND_REMOVE)`, `stopSelf()`, state `Off`.
+  No alert: the owner asked for it and the screen already says "Ikke beskyttet". This is the only
+  path that ends protection without an alert.
+- **Stop for any other reason**, with the same cleanup, then the alert notification
+  `notif_stopped_title` with the reason's body text, and state `Stopped(reason)`. Never silently:
+  - `onRevoke()` → `Revoked`. Android calls it when another VPN app takes over and when the VPN is
+    turned off in Android's settings; the app cannot tell which, so the words name both.
+  - An exception in the read loop or in `establish()`, or `establish()` returning null → `Error`.
+  - **Lockdown** → `Lockdown`: on API 29+, before `establish()`, if `isLockdownEnabled()` is true,
+    do not establish. Android's "Block connections without VPN" lets no traffic past the tunnel,
+    and this tunnel carries only DNS, so the phone would have no internet.
+- **Always-on VPN:** whenever the system starts the service (Android's own "Always-on VPN"
+  setting does this, also after boot), it starts protection. On API 29+ the service records
+  `isAlwaysOn()` in the state at each start. While it is true the app offers no Stop: Android would
+  restart the service, so the screen sends the owner to Android's VPN settings instead (see the
+  journey). The app adds nothing of its own for boot: no boot receiver, no
+  `RECEIVE_BOOT_COMPLETED`. Below API 29 neither flag can be read; both stay false.
 
 ## Permissions (exactly these; nothing else is added)
 
@@ -107,18 +122,22 @@ sealed interface ProtectionStatus {
     data object PermissionRefused : ProtectionStatus
     data class Stopped(val reason: StopReason) : ProtectionStatus
 }
-enum class StopReason { OtherVpn, Error }
+enum class StopReason { Revoked, Lockdown, Error }
 data class ProtectionState(
     val status: ProtectionStatus = ProtectionStatus.Off,
     val blockedCount: Int = 0,      // since the current start; reset to 0 on each start
     val listSize: Int = 0,          // usable block rules loaded
     val privateDnsStrict: Boolean = false,
+    val alwaysOn: Boolean = false,  // VpnService.isAlwaysOn() at the last start, API 29+
 )
 ```
 
 `privateDnsStrict` is `LinkProperties.privateDnsServerName != null` on API 28+, read from the same
-default-network callback (and once when the app opens), `false` below API 28. Only strict mode (a
-host name set) bypasses the filter; Android's "Automatic" mode falls back to the tunnel's DNS.
+default-network callback (and once when the app opens), `false` below API 28. This is the
+criterion; not `isPrivateDnsActive`. Only strict mode (a host name set) bypasses the filter.
+Android's "Automatic" mode still sends other apps' lookups to the tunnel's DNS address (its
+encrypted attempt on port 853 is dropped by the tunnel, and Android falls back to port 53), and
+the app's own forwarding stays encrypted through `DnsResolver`, so Automatic needs no warning.
 
 A pure function maps state to what the screen shows, so the journey is unit-tested:
 
@@ -132,8 +151,10 @@ data class HomeUi(
     val showCounter: Boolean,
 )
 enum class Tone { Ok, Notice, Urgent }
-enum class HomeCard { PermissionRefused, StoppedOtherVpn, StoppedError, PrivateDns, NotificationsOff }
-enum class HomeAction { Start, Starting, Stop, StartAgain, TryAgain }
+enum class HomeCard {
+    PermissionRefused, StoppedRevoked, StoppedLockdown, StoppedError, PrivateDns, AlwaysOn, NotificationsOff,
+}
+enum class HomeAction { Start, Starting, Stop, StartAgain, TryAgain, None }
 fun homeUi(state: ProtectionState, notificationsAllowed: Boolean): HomeUi
 ```
 
@@ -149,11 +170,16 @@ column scrolls (`verticalScroll`) and respects `safeDrawingPadding`; nothing has
 | Android's VPN dialog showing | unchanged | | | |
 | PermissionRefused | Ikke beskyttet (Notice) | — | PermissionRefused | Prøv igen |
 | Starting | Starter … (Notice) | — | | Starter beskyttelse (disabled) |
-| Protected | Beskyttet (Ok, filled shield with check) | `detail_protected` | PrivateDns if strict; NotificationsOff if refused | Stop beskyttelse |
-| Stopped(OtherVpn) | Ikke beskyttet (Urgent, shield with slash) | — | StoppedOtherVpn | Start igen |
+| Protected | Beskyttet (Ok, filled shield with check) | `detail_protected` | AlwaysOn if always-on; NotificationsOff if refused | Stop beskyttelse, or none if always-on |
+| Protected + strict Private DNS | Filteret bliver omgået (Urgent, warning) | — | PrivateDns; AlwaysOn if always-on; NotificationsOff if refused | Stop beskyttelse, or none if always-on |
+| Stopped(Revoked) | Ikke beskyttet (Urgent, shield with slash) | — | StoppedRevoked | Start igen |
+| Stopped(Lockdown) | Ikke beskyttet (Urgent, shield with slash) | — | StoppedLockdown | Start igen |
 | Stopped(Error) | Ikke beskyttet (Urgent, shield with slash) | — | StoppedError | Start igen |
 
-- The counter and list line show only while Protected.
+- "Protected + strict Private DNS" is `Protected` with `privateDnsStrict = true`. The status never
+  says "Beskyttet" while the filter is bypassed, so screen, TalkBack and notification agree.
+- The counter and list line show in both Protected rows.
+- "None" means no primary button: the AlwaysOn card's own button is the way out.
 - Start: on API 33+, if notifications are not granted, first ask for `POST_NOTIFICATIONS` (the
   answer does not block starting). Then `VpnService.prepare(context)`: a non-null intent is
   launched with `ActivityResultContracts.StartActivityForResult`; `RESULT_OK` starts the service,
@@ -162,6 +188,9 @@ column scrolls (`verticalScroll`) and respects `safeDrawingPadding`; nothing has
   `Settings.ACTION_SETTINGS` if no activity handles it.
 - The NotificationsOff card's button opens the app's notification settings
   (`Settings.ACTION_APP_NOTIFICATION_SETTINGS` with `EXTRA_APP_PACKAGE`).
+- The AlwaysOn and StoppedLockdown cards' button opens `Settings.ACTION_VPN_SETTINGS`.
+- The PermissionRefused, StoppedRevoked and StoppedError cards have no button of their own; the
+  primary button is their action.
 - Icons are drawn as vector drawables in `res/drawable/` (no icon library is added): `ic_shield_off`
   (outline), `ic_shield_on` (filled with check), `ic_shield_stopped` (with slash), `ic_warning`.
 
@@ -171,8 +200,10 @@ column scrolls (`verticalScroll`) and respects `safeDrawingPadding`; nothing has
 - Status block: icon is decorative (`contentDescription = null`); the status text has
   `liveRegion = LiveRegionMode.Polite`, so every status change is spoken. The counter is **not** a
   live region (it would talk over everything).
-- Each card is one TalkBack stop for its text (`semantics(mergeDescendants = true)` on the text
-  part) and its button is a separate stop with its own label; the card's title is a `heading()`.
+- Each card's title and body are one TalkBack stop (`semantics(mergeDescendants = true)` on the
+  text part) and its button, if it has one, is a separate stop with its own label; the card's title
+  is a `heading()`. The button stays separate so it can be found and activated on its own; this
+  is what CLAUDE.md and the design mean by a card reading as one unit.
 - Counter: visible "Blokeret siden start: 12"; spoken the same, as one unit.
 - Buttons: full-width, at least 48dp tall, labels are the action ("Start beskyttelse", never
   "Start"). The disabled Starting button keeps its label and is announced as disabled.
@@ -188,6 +219,7 @@ column scrolls (`verticalScroll`) and respects `safeDrawingPadding`; nothing has
 | status_off | Ikke beskyttet | Not protected |
 | status_starting | Starter … | Starting … |
 | status_protected | Beskyttet | Protected |
+| status_bypassed | Filteret bliver omgået | The filter is bypassed |
 | detail_off | Tryk på Start beskyttelse for at blokere farlige sider og reklamer for alle apps, på ethvert netværk. | Tap Start protection to block dangerous sites and ads for every app, on any network. |
 | detail_protected | Farlige sider og reklamer blokeres for alle apps. | Dangerous sites and ads are blocked for every app. |
 | action_start | Start beskyttelse | Start protection |
@@ -199,10 +231,15 @@ column scrolls (`verticalScroll`) and respects `safeDrawingPadding`; nothing has
 | list_line | Blokeringsliste: AdGuard DNS filter, %1$s navne | Block list: AdGuard DNS filter, %1$s names |
 | card_refused_title | Tilladelsen blev afvist | Permission was refused |
 | card_refused_body | Appen skal have Androids VPN-tilladelse for at se DNS-opslag. Den bruges kun på telefonen, og der er ingen Cocode-server: opslag, der ikke blokeres, går til netværkets egen DNS-server som før. | The app needs Android's VPN permission to see DNS lookups. It is used only on the phone, and there is no Cocode server: lookups that are not blocked go to the network's own DNS server, as before. |
-| card_other_vpn_title | Beskyttelsen er stoppet | Protection has stopped |
-| card_other_vpn_body | En anden VPN-app tog over. Telefonen bruger nu almindelig DNS uden blokering. | Another VPN app took over. The phone now uses normal DNS without blocking. |
+| card_revoked_title | Beskyttelsen er stoppet | Protection has stopped |
+| card_revoked_body | Android stoppede beskyttelsen, for eksempel fordi en anden VPN-app tog over, eller fordi VPN blev slået fra i indstillingerne. DNS-opslag bliver ikke længere filtreret. | Android stopped protection, for example because another VPN app took over or the VPN was turned off in settings. DNS lookups are no longer filtered. |
+| card_lockdown_title | Beskyttelsen kan ikke køre | Protection can't run |
+| card_lockdown_body | "Bloker forbindelser uden VPN" er slået til. Appen sender kun DNS-opslag gennem sin tunnel, så med den indstilling kan telefonen slet ikke komme på nettet. Slå indstillingen fra under VPN-indstillinger, og start igen. | "Block connections without VPN" is on. The app sends only DNS lookups through its tunnel, so with that setting the phone can't reach the internet at all. Turn the setting off in VPN settings, then start again. |
 | card_error_title | Beskyttelsen er stoppet | Protection has stopped |
-| card_error_body | Der skete en fejl. Telefonen bruger nu almindelig DNS uden blokering. | Something went wrong. The phone now uses normal DNS without blocking. |
+| card_error_body | Der skete en fejl. DNS-opslag bliver ikke længere filtreret. | Something went wrong. DNS lookups are no longer filtered. |
+| card_always_on_title | Altid aktiveret VPN er slået til | Always-on VPN is on |
+| card_always_on_body | Android holder beskyttelsen tændt. Slå Altid aktiveret VPN fra under VPN-indstillinger for at kunne stoppe den. | Android keeps protection on. Turn off Always-on VPN in VPN settings to be able to stop it. |
+| card_vpn_settings_action | Åbn VPN-indstillinger | Open VPN settings |
 | card_private_dns_title | Privat DNS går uden om filteret | Private DNS bypasses the filter |
 | card_private_dns_body | Privat DNS er slået til med en bestemt server, så intet bliver blokeret. Slå det fra eller vælg Automatisk under Netværk og internet. | Private DNS is set to a specific server, so nothing is blocked. Turn it off or choose Automatic under Network and internet. |
 | card_private_dns_action | Åbn netværksindstillinger | Open network settings |
@@ -217,7 +254,7 @@ column scrolls (`verticalScroll`) and respects `safeDrawingPadding`; nothing has
 | notif_action_stop | Stop | Stop |
 | notif_stopped_title | Beskyttelsen er stoppet | Protection has stopped |
 
-The alert notification's text is `card_other_vpn_body` or `card_error_body`. `list_line` formats
+The alert notification's text is `card_revoked_body`, `card_lockdown_body` or `card_error_body`. `list_line` formats
 the count with the locale's grouping (`NumberFormat.getIntegerInstance()`). The shell strings
 `status_not_built` and `home_explain` are removed.
 
@@ -274,17 +311,20 @@ No real sockets, no name lookups, no Android framework in these tests.
     (type 65: ANCOUNT 0, RCODE 0), `servfailHasRcode2`.
 - `ui/HomeUiTest`
   - One test per row of the journey table (Off, PermissionRefused, Starting, Protected,
-    Stopped(OtherVpn), Stopped(Error)) asserting status text, tone, cards in order, action and
-    `showCounter`; plus `privateDnsCardOnlyWhenProtectedAndStrict` and
-    `notificationsCardWhenRefused`.
+    Protected with strict Private DNS, Stopped(Revoked), Stopped(Lockdown), Stopped(Error))
+    asserting status text, tone, cards in order, action and `showCounter`; plus
+    `privateDnsCardOnlyWhenProtectedAndStrict`, `bypassedNeverSaysProtected`,
+    `alwaysOnHidesStopAndShowsCard` and `notificationsCardWhenRefused`.
 
 The existing `ContrastTest` must still pass. `./gradlew buildSmoke --no-daemon` is the gate.
 
 ## Checked by hand on the owner's phone (not part of the gate)
 
 With TalkBack on: start, confirm Android's dialog, hear "Beskyttet"; open a known ad host in a
-browser and see it fail; turn on a second VPN app and get the alert; set Private DNS to a host
-name and see the card; font size at maximum with nothing clipped.
+browser and see it fail; load an IPv6-only site and see it work; turn on a second VPN app and get
+the alert; set Private DNS to a host name and hear "Filteret bliver omgået"; turn on Always-on VPN
+and see the card instead of Stop; turn on "Block connections without VPN" and get the lockdown
+alert; font size at maximum with nothing clipped.
 
 ## Out of scope
 

@@ -37,7 +37,8 @@ of a remote VPN.
 - Android's **Private DNS** setting bypasses the filter. The app warns when it is on.
 - Apps with **their own secure DNS** (for example a browser's DoH setting) bypass it too.
 - Android allows **one VPN at a time**, so the app can't run alongside a work VPN.
-- If protection stops, a notification says so and the phone uses normal DNS without blocking.
+- If protection stops, a notification says so: DNS lookups are no longer filtered.
+- Android's "Block connections without VPN" can't be used with the app: its tunnel carries only DNS.
 
 ## Accessibility
 
