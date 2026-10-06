@@ -1,0 +1,127 @@
+<!doctype html>
+<html lang="da">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Guard dashboard mock</title>
+<style>
+  :root {
+    --night: #070B14; --panel: #0E1424; --on: #EEF3FF; --quiet: #A9B4CC;
+    --ok: #35C47C; --notice: #F0A43A; --urgent: #F07478;
+    --cyan: #24E5F2; --magenta: #FF3D8B; --amber: #FFB347;
+  }
+  * { box-sizing: border-box; }
+  body { margin: 0; min-height: 100vh; display: grid; place-items: center; gap: 24px; background: #02040a;
+    font-family: "Roboto Condensed", "Arial Narrow", Roboto, system-ui, sans-serif; color: var(--on); padding: 24px 0; }
+  .note { max-width: 412px; color: #8fa0b8; font: 14px/1.5 Roboto, system-ui, sans-serif; text-align: center; margin: 0; }
+  .phone { width: 412px; min-height: 860px; border-radius: 36px; padding: 28px 22px 32px; position: relative; overflow: hidden;
+    background:
+      radial-gradient(80% 45% at 85% -5%, rgba(255,61,139,.22), transparent 60%),
+      radial-gradient(70% 40% at 0% 15%, rgba(36,229,242,.16), transparent 60%),
+      radial-gradient(90% 45% at 50% 115%, rgba(255,179,71,.12), transparent 60%),
+      linear-gradient(180deg, #0a0f1e, var(--night) 40%, #05070d);
+    box-shadow: 0 0 0 10px #0b0f1a, 0 30px 90px rgba(255,61,139,.15), 0 0 120px rgba(36,229,242,.08); }
+  .phone::before { content: ""; position: absolute; inset: -40% 0 0; pointer-events: none; opacity: .22;
+    background-image: repeating-linear-gradient(100deg, transparent 0 14px, rgba(169,180,204,.35) 14px 15px, transparent 15px 38px);
+    animation: rain 1.4s linear infinite; mask-image: linear-gradient(to bottom, black, transparent 70%); }
+  .phone::after { content: ""; position: absolute; inset: 0; pointer-events: none; opacity: .10;
+    background: repeating-linear-gradient(0deg, rgba(0,0,0,.9) 0 1px, transparent 1px 3px); }
+  .kicker { position: relative; z-index: 1; font-size: 12px; letter-spacing: 4px; text-transform: uppercase; color: var(--cyan);
+    text-shadow: 0 0 10px rgba(36,229,242,.6); margin-bottom: 4px; }
+  h1 { position: relative; z-index: 1; font-size: 30px; font-weight: 600; margin: 0 0 20px; letter-spacing: 1px; text-transform: uppercase;
+    text-shadow: 0 0 14px rgba(255,61,139,.35); }
+  .status { display: flex; align-items: center; gap: 16px; margin-bottom: 22px; position: relative; z-index: 1; }
+  .orb { width: 64px; height: 64px; border-radius: 50%; position: relative; flex: none;
+    background: radial-gradient(circle, rgba(53,196,124,.35), rgba(7,11,20,.2) 70%);
+    box-shadow: 0 0 26px rgba(53,196,124,.55), inset 0 0 14px rgba(53,196,124,.6); }
+  .orb::after { content: ""; position: absolute; inset: -6px; border-radius: 50%;
+    border: 2px solid rgba(53,196,124,.6); animation: ping 3.2s ease-out infinite; }
+  .orb svg { position: absolute; inset: 14px; }
+  .sweep { position: absolute; inset: 0; border-radius: 50%;
+    background: conic-gradient(from 0deg, transparent, rgba(36,229,242,.45) 40deg, transparent 60deg);
+    animation: spin 4s linear infinite; }
+  .status b { font-size: 26px; font-weight: 700; letter-spacing: 2px; text-transform: uppercase; color: var(--ok);
+    text-shadow: 0 0 14px rgba(53,196,124,.6); }
+  .status small { display: block; color: var(--quiet); font: 14px/1.4 Roboto, system-ui, sans-serif; margin-top: 2px; }
+  .tiles { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-bottom: 18px; position: relative; z-index: 1; }
+  .tile { position: relative; padding: 18px 14px 14px;
+    background: linear-gradient(165deg, rgba(14,20,36,.96), rgba(7,11,20,.96));
+    border: 1px solid rgba(36,229,242,.5);
+    box-shadow: 0 0 18px rgba(36,229,242,.18), inset 0 0 22px rgba(36,229,242,.06);
+    clip-path: polygon(0 0, calc(100% - 16px) 0, 100% 16px, 100% 100%, 16px 100%, 0 calc(100% - 16px)); }
+  .tile.mag { border-color: rgba(255,61,139,.6); box-shadow: 0 0 18px rgba(255,61,139,.2), inset 0 0 22px rgba(255,61,139,.06); }
+  .tag { font-size: 11px; letter-spacing: 3px; color: var(--cyan); text-transform: uppercase; }
+  .tile.mag .tag { color: var(--magenta); }
+  .value { font-size: 48px; font-weight: 600; line-height: 1.05; margin-top: 6px; color: var(--on);
+    text-shadow: 0 0 16px rgba(36,229,242,.35); }
+  .tile.mag .value { text-shadow: 0 0 16px rgba(255,61,139,.35); }
+  .label { margin-top: 6px; font: 14px/1.35 Roboto, system-ui, sans-serif; color: var(--quiet); }
+  .panel { padding: 6px 14px; background: rgba(14,20,36,.9); position: relative; z-index: 1;
+    border: 1px solid rgba(255,179,71,.4); box-shadow: 0 0 16px rgba(255,179,71,.10); margin-bottom: 18px;
+    clip-path: polygon(0 0, 100% 0, 100% calc(100% - 14px), calc(100% - 14px) 100%, 0 100%); }
+  .panel h2 { font-size: 12px; font-weight: 600; color: var(--amber); margin: 12px 0 4px; text-transform: uppercase; letter-spacing: 4px;
+    text-shadow: 0 0 10px rgba(255,179,71,.5); }
+  .row { display: grid; grid-template-columns: 22px 1fr auto; gap: 10px; align-items: center;
+    padding: 12px 0; border-top: 1px solid rgba(169,180,204,.10); font-family: Roboto, system-ui, sans-serif; }
+  .row:first-of-type { border-top: 0; }
+  .dot { width: 10px; height: 10px; margin: 0 6px; transform: rotate(45deg); }
+  .ok .dot { background: var(--ok); box-shadow: 0 0 10px var(--ok); }
+  .pause .dot { background: var(--notice); box-shadow: 0 0 10px var(--notice); }
+  .none .dot { border: 2px solid var(--quiet); }
+  .name { font-size: 15px; } .state { font-size: 14px; text-align: right; }
+  .ok .state { color: var(--ok); } .pause .state { color: var(--notice); } .none .state { color: var(--quiet); }
+  .btn { position: relative; z-index: 1; display: block; width: 100%; border: 1px solid var(--magenta); border-radius: 4px; padding: 16px;
+    font: 600 16px "Roboto Condensed", Roboto, sans-serif; letter-spacing: 3px; text-transform: uppercase;
+    color: var(--on); background: rgba(255,61,139,.14); box-shadow: 0 0 22px rgba(255,61,139,.35), inset 0 0 14px rgba(255,61,139,.2); }
+  @keyframes ping { 0% { transform: scale(.85); opacity: .9; } 100% { transform: scale(1.5); opacity: 0; } }
+  @keyframes spin { to { transform: rotate(360deg); } }
+  @keyframes rain { to { transform: translateY(38%); } }
+  @media (prefers-reduced-motion: reduce) { .orb::after, .sweep, .phone::before { animation: none; } .sweep { display: none; } }
+</style>
+</head>
+<body>
+<p class="note">Mock of the Guard for Android dashboard, Blade Runner style. Numbers count up once when the screen opens; rain and the sonar sweep move slowly. With "reduce motion" on, all movement stops. Numbers stay white for contrast; status always has a word, not just a color.</p>
+<main class="phone" aria-label="Mock af appens skærm">
+  <h1>Guard for Android</h1>
+  <div class="status" role="status">
+    <div class="orb" aria-hidden="true">
+      <div class="sweep"></div>
+      <svg viewBox="0 0 24 24" fill="none"><path d="M12 2.5 20 5.5v6.2c0 4.9-3.4 8.4-8 9.8-4.6-1.4-8-4.9-8-9.8V5.5z" fill="#35C47C"/><path d="m8.4 12.2 2.6 2.6 4.8-5.4" stroke="#070B14" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+    </div>
+    <div><b>Beskyttet</b><small>Farlige sider og reklamer blokeres i alle apps.</small></div>
+  </div>
+  <section class="tiles" aria-label="Siden beskyttelsen startede">
+    <div class="tile" role="group" aria-label="1.284 blokerede DNS-opslag, siden beskyttelsen startede">
+      <div class="tag">Opslag</div>
+      <div class="value" data-to="1284">0</div>
+      <div class="label">blokeret siden start</div>
+    </div>
+    <div class="tile mag" role="group" aria-label="37 blokerede forbindelser til farlige adresser, siden beskyttelsen startede">
+      <div class="tag">Forbindelser</div>
+      <div class="value" data-to="37">0</div>
+      <div class="label">farlige adresser afvist</div>
+    </div>
+  </section>
+  <section class="panel" aria-labelledby="lists-h">
+    <h2 id="lists-h">Lister</h2>
+    <div class="row ok"><span class="dot" aria-hidden="true"></span><span class="name">AdGuard DNS filter</span><span class="state">177.735 navne</span></div>
+    <div class="row ok"><span class="dot" aria-hidden="true"></span><span class="name">Spamhaus DROP</span><span class="state">1.641 · i dag</span></div>
+    <div class="row pause"><span class="dot" aria-hidden="true"></span><span class="name">abuse.ch Feodo</span><span class="state">Pause · for gammel</span></div>
+    <div class="row none"><span class="dot" aria-hidden="true"></span><span class="name">Spamhaus DROPv6</span><span class="state">Ikke hentet endnu</span></div>
+  </section>
+  <button class="btn" type="button">Stop beskyttelse</button>
+</main>
+<script>
+  const reduce = matchMedia('(prefers-reduced-motion: reduce)').matches;
+  const fmt = new Intl.NumberFormat('da-DK');
+  document.querySelectorAll('.value').forEach(el => {
+    const to = +el.dataset.to;
+    if (reduce) { el.textContent = fmt.format(to); return; }
+    const t0 = performance.now(), dur = 900;
+    const step = t => { const p = Math.min(1, (t - t0) / dur), e = 1 - Math.pow(1 - p, 3);
+      el.textContent = fmt.format(Math.round(to * e)); if (p < 1) requestAnimationFrame(step); };
+    requestAnimationFrame(step);
+  });
+</script>
+</body>
+</html>
