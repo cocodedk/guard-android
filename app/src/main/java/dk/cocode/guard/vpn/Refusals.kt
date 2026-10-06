@@ -6,6 +6,8 @@ import dk.cocode.guard.net.IpPacket
 import dk.cocode.guard.net.icmpUnreachableFor
 import dk.cocode.guard.net.tcpResetFor
 import dk.cocode.guard.net.u16
+import dk.cocode.guard.recent.BlockEvent
+import dk.cocode.guard.recent.BlockKind
 
 private const val MAX_FLOWS = 1_024
 private const val UDP_HEADER = 8
@@ -34,13 +36,22 @@ class Refusals(private val onNewAddress: (String, String, Int, String?) -> Unit 
         return flows.firstTime(flow)
     }
 
-    /** Posts one notification the first time [address] is refused, up to [MAX_ADDRESS_NOTICES] a start. */
+    /**
+     * Records a new flow to [address] with the app [owner] names, then announces it. [owner] asks
+     * Android, so it runs once per flow, and the notification reuses its answer.
+     */
     @Synchronized
-    internal fun announce(address: String, listId: String, app: () -> String? = { null }) {
-        // [app] asks Android, so it is asked only for a notification that is actually posted.
-        if (noticed.size < MAX_ADDRESS_NOTICES && noticed.add(address)) onNewAddress(address, listId, noticed.size, app())
+    internal fun record(address: String, listId: String, owner: () -> String?) {
+        val app = owner()
+        ProtectionRepository.record(BlockEvent(BlockKind.Address, address, app))
+        announce(address, listId, app)
     }
 
+    /** Posts one notification the first time [address] is refused, up to [MAX_ADDRESS_NOTICES] a start. */
+    @Synchronized
+    internal fun announce(address: String, listId: String, app: String? = null) {
+        if (noticed.size < MAX_ADDRESS_NOTICES && noticed.add(address)) onNewAddress(address, listId, noticed.size, app)
+    }
 }
 
 /** The reply that refuses [p]: a TCP reset for a SYN, ICMP "prohibited" for UDP. Null means drop without a reply. */

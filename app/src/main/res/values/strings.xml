@@ -22,6 +22,12 @@
     <string name="address_list_too_old">%1$s: sat på pause, sidst hentet %2$s. Gamle lister kan blokere adresser, som nu bruges af andre.</string>
     <string name="address_list_not_yet">%1$s: ikke hentet endnu</string>
 
+    <string name="recent_title">Seneste blokeringer</string>
+    <string name="recent_group">%1$s: %2$d blokeret, senest %3$s</string>
+    <string name="recent_unknown_app">En ukendt app</string>
+    <string name="recent_none">Intet er blokeret endnu siden start.</string>
+    <string name="recent_note">Listen findes kun på telefonen og slettes, når beskyttelsen starter eller stopper.</string>
+
     <string name="card_refused_title">Tilladelsen blev afvist</string>
     <string name="card_refused_body">Appen skal have Androids VPN-tilladelse for at se DNS-opslag. Den bruges kun på telefonen, og der er ingen Cocode-server: opslag, der ikke blokeres, går til netværkets egen DNS-server som før.</string>
     <string name="card_revoked_title">Beskyttelsen er stoppet</string>

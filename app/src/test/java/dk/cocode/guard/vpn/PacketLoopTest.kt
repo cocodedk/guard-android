@@ -33,16 +33,7 @@ class PacketLoopTest {
         tunnel.incoming.put(ByteArray(0))
     }
 
-    private fun query(name: String, type: Int = 1, id: Int = 0x1234): ByteArray {
-        val q = ArrayList<Byte>()
-        listOf(id shr 8, id, 0x01, 0x00, 0, 1, 0, 0, 0, 0, 0, 0).forEach { q.add(it.toByte()) }
-        name.split('.').forEach { l ->
-            q.add(l.length.toByte())
-            l.forEach { q.add(it.code.toByte()) }
-        }
-        listOf(0, type shr 8, type, 0, 1).forEach { q.add(it.toByte()) }
-        return q.toByteArray()
-    }
+    private fun query(name: String, type: Int = 1, id: Int = 0x1234) = dnsQuery(name, type, id)
 
     private fun send(payload: ByteArray, to: ByteArray = dns, port: Int = 53) =
         tunnel.incoming.put(buildIpv4Udp(UdpPacket(client, to, 40000, port, payload)))

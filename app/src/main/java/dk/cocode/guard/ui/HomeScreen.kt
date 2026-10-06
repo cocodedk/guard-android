@@ -138,6 +138,7 @@ fun HomeScreen(
                     ui.addressLists.forEach { AddressLine(addressListText(it)) }
                 }
             }
+            if (ui.showRecent) RecentBlocksSection(state.recentBlocks)
             actionLabel(ui.primaryAction)?.let { label ->
                 Button(
                     onClick = { onAction(ui.primaryAction) },

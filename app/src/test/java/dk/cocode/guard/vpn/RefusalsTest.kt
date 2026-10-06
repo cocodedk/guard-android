@@ -9,6 +9,7 @@ import dk.cocode.guard.net.addr
 import dk.cocode.guard.net.tcpSegment
 import dk.cocode.guard.net.udpDatagram
 import dk.cocode.guard.net.v4Packet
+import dk.cocode.guard.recent.AppBlocks
 import java.io.InputStream
 import java.io.OutputStream
 import java.util.concurrent.CopyOnWriteArrayList
@@ -55,7 +56,9 @@ class RefusalsTest {
     private var loop: PacketLoop? = null
 
     @Before
-    fun resetState() = ProtectionRepository.update { ProtectionState() }
+    fun resetState() {
+        ProtectionRepository.starting(alwaysOn = false)
+    }
 
     @After
     fun stopLoop() {
@@ -63,8 +66,10 @@ class RefusalsTest {
         incoming.put(ByteArray(0))
     }
 
+    private fun routes() = RouteSet(mapOf("feodo" to listOf(parseCidr("203.0.113.0/24")!!)))
+
     private fun start() {
-        val routes = RouteSet(mapOf("feodo" to listOf(parseCidr("203.0.113.0/24")!!)))
+        val routes = routes()
         val refusals = Refusals { address, list, number, app -> notices.add(Triple(address, list, number)); apps.add(app) }
         loop = PacketLoop(input, output, parseRules(emptySequence()), noDns, routes, refusals) {}
         loop!!.start()
@@ -141,12 +146,33 @@ class RefusalsTest {
         }) {}
         loop!!.start()
         syn(40000)
-        syn(40001) // a second flow to the same address: counted, but no second notice and no second lookup
+        syn(40001) // a second flow to the same address: counted and looked up, but no second notice
         reply()
         reply()
         assertEquals(listOf("Chrome"), apps.toList())
-        assertEquals(listOf(40000), asked.toList())
+        assertEquals(listOf(40000, 40001), asked.toList())
         assertEquals(2, ProtectionRepository.state.value.blockedAddressCount)
+    }
+
+    @Test
+    fun newFlowIsRecordedOnce() {
+        loop = PacketLoop(input, output, parseRules(emptySequence()), noDns, routes(), Refusals(), { _, _, _, _, _ -> "Chrome" }) {}
+        loop!!.start()
+        syn(40000)
+        syn(40000) // a retransmit: neither recorded nor asked about
+        syn(40001) // a new flow
+        repeat(3) { reply() }
+        val group = ProtectionRepository.state.value.recentBlocks.single()
+        assertEquals(AppBlocks("Chrome", 2, listOf("203.0.113.7")), group)
+    }
+
+    @Test
+    fun notificationReusesTheRecordedName() {
+        var lookups = 0
+        Refusals { _, _, _, app -> apps.add(app) }.record("203.0.113.7", "feodo") { lookups++; "Chrome" }
+        assertEquals(1, lookups)
+        assertEquals(listOf("Chrome"), apps.toList())
+        assertEquals(listOf(AppBlocks("Chrome", 1, listOf("203.0.113.7"))), ProtectionRepository.state.value.recentBlocks)
     }
 
     @Test

@@ -4,6 +4,7 @@ import android.content.Context
 import android.content.Intent
 import android.net.VpnService
 import android.os.ParcelFileDescriptor
+import android.system.OsConstants
 import dk.cocode.guard.blocklist.BlockList
 import dk.cocode.guard.iplist.AddressList
 import dk.cocode.guard.iplist.RouteSet
@@ -56,12 +57,7 @@ class GuardVpnService : VpnService() {
 
     private fun start() {
         active = true
-        ProtectionRepository.update {
-            it.copy(
-                status = ProtectionStatus.Starting, blockedCount = 0, blockedAddressCount = 0,
-                addressLists = emptyList(), alwaysOn = isAlwaysOn,
-            )
-        }
+        ProtectionRepository.starting(isAlwaysOn)
         refusals = Refusals { address, listId, number, app ->
             postAddressNotice(this, number, address, AddressList.entries.first { it.id == listId }.title, app)
         }
@@ -123,7 +119,9 @@ class GuardVpnService : VpnService() {
 
     private fun newLoop(fd: ParcelFileDescriptor, routes: RouteSet) = PacketLoop(
         FileInputStream(fd.fileDescriptor), FileOutputStream(fd.fileDescriptor), checkNotNull(names),
-        checkNotNull(upstream), routes, refusals, { p, src, sp, dst, dp -> appOwning(p, src, sp, dst, dp) },
+        checkNotNull(upstream), routes, refusals,
+        appOf = { p, src, sp, dst, dp -> appOwning(p, src, sp, dst, dp) },
+        ownerOf = { q -> appOwning(OsConstants.IPPROTO_UDP, q.srcIp, q.srcPort, q.dstIp, q.dstPort) },
     ) { scope.launch { stopForOther(StopReason.Error) } }
 
     /** Brings up a tunnel with the new routes, then retires the old one (see [replaceTunnel]). */
@@ -139,7 +137,7 @@ class GuardVpnService : VpnService() {
 
     private fun stopByOwner() {
         release()
-        ProtectionRepository.update { it.copy(status = ProtectionStatus.Off) }
+        ProtectionRepository.ended(ProtectionStatus.Off)
         stopSelf()
     }
 
@@ -147,7 +145,7 @@ class GuardVpnService : VpnService() {
         if (!active) return
         release()
         postStoppedAlert(this, reason)
-        ProtectionRepository.update { it.copy(status = ProtectionStatus.Stopped(reason)) }
+        ProtectionRepository.ended(ProtectionStatus.Stopped(reason))
         stopSelf()
     }
 
