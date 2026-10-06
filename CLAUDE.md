@@ -1,4 +1,4 @@
-# CLAUDE.md — Cocode Guard for Android
+# CLAUDE.md — Guard for Android
 
 An Android app that blocks dangerous sites and ads for every app on the phone by filtering DNS on
 the phone. Free software (GPL-3.0), free of charge. Sister project: `../network-defence` (the box).

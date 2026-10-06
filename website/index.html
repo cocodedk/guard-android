@@ -3,17 +3,17 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Cocode Guard til Android: blokerer farlige sider og reklamer i alle apps</title>
-<meta name="description" content="Gratis app, der blokerer farlige sider, farlige adresser og reklamer i alle apps på Android, på alle netværk. Det sker i telefonen. Ingen konto og ingen server, som vi driver.">
+<title>Guard for Android: blokerer farlige sider og reklamer i alle apps</title>
+<meta name="description" content="Gratis app, der blokerer farlige sider, farlige adresser og reklamer i alle apps på Android, på alle netværk. Den virker på telefonen, uden konto og uden en server, som vi driver. Download kommer snart.">
 <meta name="theme-color" content="#0f1e36">
 <link rel="canonical" href="https://android.guard.cocode.dk/">
 <link rel="alternate" hreflang="da" href="https://android.guard.cocode.dk/">
 <link rel="alternate" hreflang="en" href="https://android.guard.cocode.dk/en/">
 <link rel="alternate" hreflang="x-default" href="https://android.guard.cocode.dk/">
 <meta property="og:type" content="website">
-<meta property="og:site_name" content="Cocode Guard til Android">
-<meta property="og:title" content="Cocode Guard til Android: blokerer farlige sider og reklamer i alle apps">
-<meta property="og:description" content="Gratis app, der blokerer farlige sider, farlige adresser og reklamer i alle apps på Android, på alle netværk. Det sker i telefonen. Ingen konto og ingen server, som vi driver.">
+<meta property="og:site_name" content="Guard for Android">
+<meta property="og:title" content="Guard for Android: blokerer farlige sider og reklamer i alle apps">
+<meta property="og:description" content="Gratis app, der blokerer farlige sider, farlige adresser og reklamer i alle apps på Android, på alle netværk. Den virker på telefonen, uden konto og uden en server, som vi driver. Download kommer snart.">
 <meta property="og:url" content="https://android.guard.cocode.dk/">
 <meta property="og:locale" content="da_DK">
 <meta property="og:locale:alternate" content="en_GB">
@@ -24,8 +24,8 @@
 {
  "@context": "https://schema.org",
  "@type": "MobileApplication",
- "name": "Cocode Guard til Android",
- "description": "Gratis app, der blokerer farlige sider, farlige adresser og reklamer i alle apps på Android, på alle netværk. Det sker i telefonen. Ingen konto og ingen server, som vi driver.",
+ "name": "Guard for Android",
+ "description": "Gratis app, der blokerer farlige sider, farlige adresser og reklamer i alle apps på Android, på alle netværk. Den virker på telefonen, uden konto og uden en server, som vi driver. Download kommer snart.",
  "url": "https://android.guard.cocode.dk/",
  "operatingSystem": "Android",
  "applicationCategory": "SecurityApplication",
@@ -49,7 +49,7 @@
 <a class="skip" href="#main">Spring til indhold</a>
 <header class="night">
   <div class="wrap bar">
-    <a class="brand" href="/"><img src="/favicon.svg" alt="" width="30" height="30"><span>Cocode Guard til Android</span></a>
+    <a class="brand" href="/"><img src="/favicon.svg" alt="" width="30" height="30"><span>Guard for Android</span></a>
     <nav class="menu" aria-label="Hovedmenu"><ul><li><a href="/#how">Sådan virker det</a></li><li><a href="/#get">Hent appen</a></li><li><a href="/privacy/">Privatliv</a></li></ul></nav>
     <nav class="lang" aria-label="Sprog"><ul><li><a href="/" hreflang="da" lang="da" aria-current="page">Dansk</a></li><li><a href="/en/" hreflang="en" lang="en">English</a></li></ul></nav>
   </div>
@@ -58,87 +58,90 @@
 <section class="night hero">
   <div class="wrap hero-grid">
     <div>
-      <p class="eyebrow">Gratis. Ingen konto. Åben kildekode.</p>
+      <p class="eyebrow">Gratis. Ingen konto. Sender ingen oplysninger om dig.</p>
       <h1>Farlige sider og reklamer stoppes inde i din telefon.</h1>
-      <p class="lede">Cocode Guard til Android blokerer farlige sider og reklamer i alle apps, på alle netværk: hjemme, på mobildata og på caféens wifi. Det sker i telefonen. Der er ingen konto og ingen server, som vi driver. Appen afviser også forbindelser til kendte farlige adresser.</p>
-      <p class="status"><strong>Tidlig version.</strong> Den første udgave er under udvikling, og download kommer snart. Siden her beskriver, hvordan appen er lavet til at virke.</p>
+      <p class="lede">Guard for Android blokerer kendte farlige sider og reklamer i alle apps på telefonen, på alle netværk: hjemme, på mobildata og på caféens wifi. Filtreringen sker på selve telefonen. Appen afviser også forbindelser til kendte farlige adresser på internettet (IP-adresser). Den er gratis og kræver ingen konto.</p>
+      <p class="status"><strong>Tidlig version.</strong> Den første udgave er under udvikling, så du kan endnu ikke hente appen. Download kommer snart. Siden her beskriver, hvordan appen er lavet til at virke.</p>
       <div class="actions">
         <a class="btn" href="#get">Sådan får du appen</a>
         <a class="more" href="https://github.com/cocodedk/guard-android">Følg arbejdet på GitHub</a>
       </div>
     </div>
     <figure class="log">
-      <figcaption>Et eksempel: tre opslag</figcaption>
+      <figcaption>Et eksempel: tre DNS-opslag, hvor telefonen spørger om en sides adresse</figcaption>
       <ul role="list">
-        <li><div class="row"><code>nyheder.example</code><span class="tag">Sluppet igennem</span></div><small>Sendt videre til netværkets DNS-server.</small></li>
-        <li><div class="row"><code>reklame.example</code><span class="tag block">Blokeret</span></div><small>Tomt svar. Reklamen bliver aldrig hentet.</small></li>
-        <li><div class="row"><code>svindel.example</code><span class="tag block">Blokeret</span></div><small>Tomt svar. Siden åbner ikke.</small></li>
+        <li><div class="row"><code>nyheder.example</code><span class="tag">Sluppet igennem</span></div><small>Sendt videre til netværkets DNS-server, som finder adressen. Siden åbner som normalt.</small></li>
+        <li><div class="row"><code>reklame.example</code><span class="tag block">Blokeret</span></div><small>Appen giver et tomt svar. Reklamen bliver aldrig hentet.</small></li>
+        <li><div class="row"><code>svindel.example</code><span class="tag block">Blokeret</span></div><small>Appen giver et tomt svar. Siden åbner ikke.</small></li>
       </ul>
     </figure>
   </div>
 </section>
 
-<section class="day" id="what" aria-labelledby="h-what">
-  <div class="wrap">
-    <h2 id="h-what">Hvad den gør</h2>
-    <p class="intro">Appen blokerer kendte farlige sider, reklameservere og farlige adresser for alle apps på telefonen.</p>
-    <ul class="cards" role="list">
-      <li><h3>Alle apps</h3><p>Spil, nyhedsapps og browsere bliver filtreret på samme måde. Du skal ikke sætte noget op i hver enkelt app.</p></li>
-      <li><h3>Alle netværk</h3><p>Hjemme, på mobildata eller på hotellets wifi. Filteret følger med telefonen.</p></li>
-      <li><h3>Farlige adresser</h3><p>Nogle apps og noget skadeligt software går direkte til en adresse uden at slå et navn op. Appen afviser forbindelser til adresser på offentlige lister over kendte farlige adresser og fortæller dig, hvilken app der prøvede.</p></li>
-      <li><h3>Gratis og uden konto</h3><p>Ingen betaling, intet login og ingen server, som vi driver. Koden er åben under GPL-3.0.</p></li>
-      <li><h3>En kendt navneliste</h3><p>Navnene kommer fra AdGuards DNS-filter. Den liste følger med i appen.</p></li>
-      <li><h3>Offentlige adresselister</h3><p>Adresserne kommer fra offentlige lister, som appen selv henter til telefonen, direkte fra dem, der udgiver dem. <a href="/privacy/">Læs om det i privatlivspolitikken.</a></p></li>
-    </ul>
-  </div>
-</section>
-
-<section class="day mist" id="how" aria-labelledby="h-how">
-  <div class="wrap">
-    <h2 id="h-how">Sådan virker det</h2>
-    <p class="intro">Her er det i almindelige ord.</p>
-    <ol class="steps" role="list">
-      <li><h3>Telefonen slår et navn op</h3><p>Før en app kan åbne en side, skal telefonen finde ud af, hvor siden ligger. Den spørger en DNS-server, lidt som at slå et nummer op i en telefonbog.</p></li>
-      <li><h3>Appen lytter med</h3><p>Opslaget går først gennem appen, inde i telefonen. Står navnet på blokeringslisten, svarer appen med ingenting. Så ved telefonen ikke, hvor siden er, og den åbner aldrig.</p></li>
-      <li><h3>Resten sendes videre</h3><p>Alle andre opslag går videre til netværkets egen DNS-server, og siden åbner som normalt. Senere kommer der mulighed for selv at vælge en anden DNS-server.</p></li>
-    </ol>
-    <div class="why">
-      <h3>Og farlige adresser?</h3>
-      <p>Nogle apps og noget skadeligt software spørger ikke efter et navn, men går direkte til en adresse. Derfor henter appen lister over kendte farlige adresser, mens beskyttelsen kører. En forbindelse til en adresse på listerne bliver afvist inde i telefonen med det samme. En notifikation fortæller, hvilken app der prøvede, og hvilken adresse det var. Alle andre forbindelser går uden om appen.</p>
-    </div>
-    <div class="why">
-      <h3>Hvorfor beder appen om VPN-tilladelse?</h3>
-      <p>Androids VPN-funktion er den måde, en almindelig app kan se DNS-opslag på. Appen bruger den kun som en lokal tunnel, der starter og slutter inde i selve appen. Der er ingen VPN-server. Kun DNS-opslag og forbindelser til adresser på listerne går gennem appen, og resten af din trafik gør ikke. Appen sender ikke noget til os. DNS-opslagene går kun til netværkets egen DNS-server, ligesom før, og adresselisterne hentes direkte fra dem, der udgiver dem.</p>
-    </div>
-  </div>
-</section>
-
 <section class="day" id="privacy-short" aria-labelledby="h-privacy">
   <div class="wrap">
-    <h2 id="h-privacy">Privatliv i korte træk</h2>
+    <h2 id="h-privacy">Godt at vide</h2>
     <ul class="checks" role="list">
-      <li>Ingen konto og ingen server, som vi driver.</li>
-      <li>Ingen sporing, ingen statistik og ingen reklamer i appen.</li>
-      <li>Dine DNS-opslag går kun til den DNS-server, appen bruger. Som standard er det netværkets egen.</li>
-      <li>Appen henter lister over farlige adresser direkte fra udgiverne, normalt en gang i døgnet. Som ved ethvert besøg på en hjemmeside kan udgiverne se din IP-adresse, men appen sender ingen oplysninger om dig.</li>
-      <li>Tællere over blokerede sider og adresser bliver på telefonen. Navnet på en app, der prøvede at forbinde til en farlig adresse, vises kun i en notifikation og bliver ikke gemt eller sendt.</li>
-      <li>Du skal kun give to tilladelser: VPN-tilladelsen og notifikationer. Netværksadgang giver Android automatisk, og den bruges også til at hente adresselisterne. Ingen adgang til kontakter, placering, filer eller Androids tilgængelighedsfunktioner.</li>
+      <li><strong>Appen sender ingen oplysninger om dig til nogen.</strong> Ingen konto, ingen sporing, ingen statistik, og appen viser ingen reklamer.</li>
+      <li>Filtreringen sker på telefonen. Der er ingen Cocode-server, og appen sender ikke din trafik gennem en VPN-server, som en almindelig VPN gør.</li>
+      <li>Kun DNS-opslag og forbindelser til kendte farlige adresser går gennem appen. Et DNS-opslag er, når telefonen spørger, hvor en side ligger. Resten af din trafik, for eksempel sider, video og appdata, går ud som før.</li>
+      <li>DNS-opslag, der ikke blokeres, går kun til netværkets egen DNS-server, som før.</li>
+      <li>Lister over farlige adresser hentes direkte fra udgiverne. De kan se telefonens IP-adresse, som en hjemmeside kan, når du besøger den. En IP-adresse er det nummer, din forbindelse har på internettet.</li>
+      <li>Du giver kun to tilladelser: at bruge Androids VPN-funktion og at vise notifikationer. Appen har ikke adgang til kontakter, placering eller filer.</li>
+      <li>Gratis og fri software under licensen GPL-3.0. Alle kan læse, ændre og dele koden.</li>
+      <li>Lavet til TalkBack, Androids skærmlæser, og til stor skrift.</li>
     </ul>
     <p class="after"><a href="/privacy/">Læs hele privatlivspolitikken</a></p>
   </div>
 </section>
 
+<section class="day mist" id="what" aria-labelledby="h-what">
+  <div class="wrap">
+    <h2 id="h-what">Hvad den gør</h2>
+    <p class="intro">Appen blokerer på to måder for alle apps på telefonen. Navnefilteret stopper kendte farlige sider og reklamer. Adresseblokeringen afviser forbindelser til kendte farlige adresser.</p>
+    <ul class="cards" role="list">
+      <li><h3>Alle apps</h3><p>Spil, nyhedsapps og browsere filtreres på samme måde. Du skal ikke sætte noget op i hver enkelt app.</p></li>
+      <li><h3>Alle netværk</h3><p>Hjemme, på mobildata eller på hotellets wifi. Beskyttelsen følger med telefonen.</p></li>
+      <li><h3>Farlige adresser</h3><p>Nogle apps og noget skadeligt software går direkte til en adresse uden at slå et navn op, så navnefilteret kan ikke stoppe dem. Appen afviser forbindelser til adresser på offentlige lister over kendte farlige adresser. Når det sker, fortæller en notifikation dig, hvilken app der prøvede.</p></li>
+      <li><h3>Gratis og uden konto</h3><p>Ingen betaling og intet login. Koden er åben under GPL-3.0, så alle kan læse den.</p></li>
+      <li><h3>Navneliste fra AdGuard</h3><p>Navnene kommer fra AdGuards DNS-filter, en liste over sider, der skal blokeres. Listen ligger i selve appen. Appen henter den ikke fra nettet.</p></li>
+      <li><h3>Offentlige adresselister</h3><p>Adresserne kommer fra offentlige lister over kendte farlige adresser. Appen henter dem selv til telefonen, direkte fra udgiverne, cirka en gang i døgnet, mens beskyttelsen kører. Udgiverne kan se telefonens IP-adresse. <a href="/privacy/">Læs om det i privatlivspolitikken.</a></p></li>
+    </ul>
+  </div>
+</section>
+
+<section class="day" id="how" aria-labelledby="h-how">
+  <div class="wrap">
+    <h2 id="h-how">Sådan virker det</h2>
+    <p class="intro">Her er, hvad der sker, når du åbner en side.</p>
+    <ol class="steps" role="list">
+      <li><h3>Telefonen slår en sides adresse op</h3><p>Hver side har et navn, for eksempel nyheder.example. Computere bruger adresser, som er tal (IP-adresser). Før en app kan åbne siden, skal telefonen finde adressen til navnet. Det hedder et DNS-opslag. Telefonen spørger en DNS-server, lidt som at slå et nummer op i en telefonbog.</p></li>
+      <li><h3>Appen ser opslaget først</h3><p>Opslaget går først gennem appen, inde i telefonen. Står navnet på blokeringslisten, giver appen et tomt svar. Så ved telefonen ikke, hvor siden ligger, og siden åbner ikke.</p></li>
+      <li><h3>Resten sendes videre</h3><p>Alle andre opslag går videre til netværkets egen DNS-server, og siden åbner som normalt.</p></li>
+    </ol>
+    <div class="why">
+      <h3>Og farlige adresser?</h3>
+      <p>Nogle apps og noget skadeligt software spørger ikke efter et navn, men går direkte til en adresse. Derfor henter appen lister over kendte farlige adresser, mens beskyttelsen kører. Prøver en app at forbinde til en adresse på listerne, afviser appen forbindelsen med det samme, inde i telefonen. Der sendes ikke noget til adressen. En notifikation fortæller, hvilken app der prøvede, og hvilken adresse det var. Alle andre forbindelser går uden om appen.</p>
+    </div>
+    <div class="why">
+      <h3>Hvorfor beder appen om VPN-tilladelse?</h3>
+      <p>Androids VPN-funktion er den måde, en almindelig app kan se DNS-opslag på. En almindelig VPN sender din trafik til en server et andet sted. Det gør denne app ikke. Den bruger kun funktionen som en lokal tunnel, der starter og slutter inde i selve appen, og der er ingen VPN-server. Kun DNS-opslag og forbindelser til adresser på listerne går gennem tunnelen. Resten af din trafik gør ikke. Første gang du trykker på Start beskyttelse, spørger Android, om appen må bruge VPN-funktionen. Siger du nej, kan appen ikke starte beskyttelsen. Mens beskyttelsen kører, viser Android et nøgleikon. Det er Androids eget ikon og betyder ikke, at der er en VPN-server.</p>
+    </div>
+  </div>
+</section>
+
+
 <section class="day mist" id="limits" aria-labelledby="h-limits">
   <div class="wrap">
     <h2 id="h-limits">Det kan appen ikke</h2>
-    <p class="intro">Det er bedst at vide på forhånd.</p>
+    <p class="intro">Her er begrænsningerne, så du kan vurdere, om appen passer til dig.</p>
     <ul class="cards" role="list">
-      <li><h3>Privat DNS skal være Automatisk eller Fra</h3><p>Er Androids Privat DNS sat til Automatisk, virker appen som den skal, og du skal ikke gøre noget. Er Privat DNS sat til en bestemt server (et værtsnavn), kan det ikke fungere sammen med appen. Telefonen ville ikke kunne komme på internettet, mens beskyttelsen kører, så appen stopper beskyttelsen og fortæller det. Vil du bruge appen, så vælg Automatisk eller Fra.</p></li>
-      <li><h3>Apps med egen sikker DNS går uden om filteret</h3><p>Nogle apps og browsere slår selv sider op på en krypteret måde. De opslag kan appen ikke se.</p></li>
-      <li><h3>Kun én VPN ad gangen</h3><p>Android tillader kun én VPN-app ad gangen. En arbejds-VPN kan derfor ikke køre samtidig med Cocode Guard.</p></li>
+      <li><h3>Privat DNS skal være Automatisk eller Fra</h3><p>Privat DNS er en indstilling i Android. Hvor den ligger, afhænger af telefonen; på Samsung finder du den under Forbindelser. Står den på Automatisk eller Fra, virker appen, og du skal ikke gøre noget. Er den sat til en bestemt server (et værtsnavn), kan appen ikke bruges. Telefonen ville ikke kunne komme på internettet, mens beskyttelsen kører. Derfor stopper appen beskyttelsen og siger det med en notifikation. Appens skærm har så en knap, Åbn netværksindstillinger, hvor du kan ændre indstillingen. Tryk bagefter på Start igen.</p></li>
+      <li><h3>Apps med egen sikker DNS går uden om navnefilteret</h3><p>Nogle apps og browsere slår selv sider op på en krypteret måde, for eksempel en browsers indstilling for sikker DNS (DoH). De opslag kan appen ikke se, så den kan ikke blokere dem.</p></li>
+      <li><h3>Kun én VPN ad gangen</h3><p>Android tillader kun én VPN-app ad gangen. En arbejds-VPN kan derfor ikke køre samtidig med Guard for Android. Androids indstilling “Bloker forbindelser uden VPN” kan heller ikke bruges sammen med appen. Appen sender kun DNS-opslag og forbindelser til farlige adresser gennem sin tunnel, så telefonen ikke ville kunne komme på nettet. Er indstillingen slået til, kan beskyttelsen ikke køre, og appen siger det.</p></li>
       <li><h3>Ingen liste fanger alt</h3><p>Appen blokerer det, der står på listerne. En ny farlig side eller adresse kan slippe igennem, og en harmløs side kan blive blokeret ved en fejl.</p></li>
-      <li><h3>Adresseblokering kræver friske lister</h3><p>Appen henter adresselisterne, når telefonen er på nettet. Mangler en liste, eller er den mere end 7 dage gammel, bruger appen den ikke, og skærmen siger det. Navnefilteret virker uanset.</p></li>
-      <li><h3>Stopper beskyttelsen, får du besked</h3><p>Hvis beskyttelsen stopper, siger appen det med en notifikation. Den stopper aldrig i stilhed.</p></li>
+      <li><h3>Adresseblokering kræver friske lister</h3><p>Appen henter adresselisterne, når telefonen er på nettet. Mangler en liste, eller er den mere end 7 dage gammel, bruger appen den ikke, fordi gamle lister kan blokere adresser, som andre bruger nu. Skærmen siger det. Lige efter første start begynder adresseblokeringen, når listerne er hentet. Navnefilteret virker uanset.</p></li>
+      <li><h3>Stopper beskyttelsen, får du besked</h3><p>Stopper beskyttelsen, uden at du har bedt om det, sender appen en notifikation om, at DNS-opslag ikke længere filtreres. Det kræver, at notifikationer fra appen er slået til. Ellers viser skærmen en advarsel om det. Stopper du selv beskyttelsen med Stop beskyttelse, siger skærmen, at den er stoppet.</p></li>
     </ul>
   </div>
 </section>
@@ -147,10 +150,10 @@
   <div class="wrap">
     <h2 id="h-get">Hent appen</h2>
     <!-- When the first release is out: change the intro, and drop the "virker først" sentence. -->
-    <p class="intro"><strong>Download kommer snart.</strong> Den første version er endnu ikke udgivet. Appen er gratis.</p>
+    <p class="intro"><strong>Download kommer snart.</strong> Den første version er endnu ikke udgivet, så der er ikke noget at hente i dag. Appen er gratis.</p>
     <ul class="cards three" role="list">
       <li><h3>GitHub</h3><p><a href="https://github.com/cocodedk/guard-android/releases/latest/download/GuardAndroid.apk">Hent GuardAndroid.apk, installationsfilen til Android</a>. Linket virker først, når den første version er udgivet.</p></li>
-      <li><h3>F-Droid</h3><p>Kommer snart. Der er endnu ingen side på F-Droid.</p></li>
+      <li><h3>F-Droid</h3><p>Planlagt. F-Droid er en app-butik for fri software. Appen er der endnu ikke.</p></li>
       <li><h3>Kildekode</h3><p><a href="https://github.com/cocodedk/guard-android">Læs kildekoden på GitHub</a>. Appen er fri software under GPL-3.0.</p></li>
     </ul>
   </div>
@@ -159,7 +162,7 @@
 <section class="day mist" id="box" aria-labelledby="h-box">
   <div class="wrap">
     <h2 id="h-box">Cocode Guard-boksen</h2>
-    <p class="box-text">Appen er telefonens følgesvend til Cocode Guard-boksen, den lille boks ved routeren, der holder vagt over hele hjemmet og skriver til dig på Telegram. Boksen passer på huset. Appen passer på telefonen, når den forlader huset. Appen virker også helt uden boksen.</p>
+    <p class="box-text">Cocode Guard-boksen er en lille boks ved routeren, der beskytter hele hjemmet og skriver til dig på Telegram. Guard for Android er dens følgesvend: Boksen beskytter huset, og appen beskytter telefonen, når den forlader huset. Du behøver ikke boksen for at bruge appen.</p>
     <p class="box-link"><a class="btn dark" href="https://guard.cocode.dk/">Læs om Cocode Guard-boksen</a></p>
   </div>
 </section>
@@ -167,7 +170,7 @@
 
 <footer class="night">
   <div class="wrap foot">
-    <p>Cocode Guard til Android er fri software under <a href="https://www.gnu.org/licenses/gpl-3.0.html">GNU General Public License version 3 (GPL-3.0)</a>.</p>
+    <p>Guard for Android er fri software under <a href="https://www.gnu.org/licenses/gpl-3.0.html">GNU General Public License version 3 (GPL-3.0)</a>.</p>
     <ul>
       <li><a href="https://github.com/cocodedk/guard-android">Kildekode på GitHub</a></li>
       <li><a href="/privacy/">Privatlivspolitik</a></li>

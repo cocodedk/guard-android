@@ -3,17 +3,17 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Cocode Guard for Android: blocks dangerous sites and ads in every app</title>
-<meta name="description" content="A free app that blocks dangerous sites, dangerous addresses and ads in every Android app, on any network. It happens inside the phone. No account and no server run by us.">
+<title>Guard for Android: blocks dangerous sites and ads in every app</title>
+<meta name="description" content="A free app that blocks dangerous sites, dangerous addresses and ads in every Android app, on any network. It works on the phone, with no account and no server run by us. The download is coming soon.">
 <meta name="theme-color" content="#0f1e36">
 <link rel="canonical" href="https://android.guard.cocode.dk/en/">
 <link rel="alternate" hreflang="da" href="https://android.guard.cocode.dk/">
 <link rel="alternate" hreflang="en" href="https://android.guard.cocode.dk/en/">
 <link rel="alternate" hreflang="x-default" href="https://android.guard.cocode.dk/">
 <meta property="og:type" content="website">
-<meta property="og:site_name" content="Cocode Guard for Android">
-<meta property="og:title" content="Cocode Guard for Android: blocks dangerous sites and ads in every app">
-<meta property="og:description" content="A free app that blocks dangerous sites, dangerous addresses and ads in every Android app, on any network. It happens inside the phone. No account and no server run by us.">
+<meta property="og:site_name" content="Guard for Android">
+<meta property="og:title" content="Guard for Android: blocks dangerous sites and ads in every app">
+<meta property="og:description" content="A free app that blocks dangerous sites, dangerous addresses and ads in every Android app, on any network. It works on the phone, with no account and no server run by us. The download is coming soon.">
 <meta property="og:url" content="https://android.guard.cocode.dk/en/">
 <meta property="og:locale" content="en_GB">
 <meta property="og:locale:alternate" content="da_DK">
@@ -24,8 +24,8 @@
 {
  "@context": "https://schema.org",
  "@type": "MobileApplication",
- "name": "Cocode Guard for Android",
- "description": "A free app that blocks dangerous sites, dangerous addresses and ads in every Android app, on any network. It happens inside the phone. No account and no server run by us.",
+ "name": "Guard for Android",
+ "description": "A free app that blocks dangerous sites, dangerous addresses and ads in every Android app, on any network. It works on the phone, with no account and no server run by us. The download is coming soon.",
  "url": "https://android.guard.cocode.dk/en/",
  "operatingSystem": "Android",
  "applicationCategory": "SecurityApplication",
@@ -49,7 +49,7 @@
 <a class="skip" href="#main">Skip to content</a>
 <header class="night">
   <div class="wrap bar">
-    <a class="brand" href="/en/"><img src="/favicon.svg" alt="" width="30" height="30"><span>Cocode Guard for Android</span></a>
+    <a class="brand" href="/en/"><img src="/favicon.svg" alt="" width="30" height="30"><span>Guard for Android</span></a>
     <nav class="menu" aria-label="Main menu"><ul><li><a href="/en/#how">How it works</a></li><li><a href="/en/#get">Get the app</a></li><li><a href="/en/privacy/">Privacy</a></li></ul></nav>
     <nav class="lang" aria-label="Language"><ul><li><a href="/" hreflang="da" lang="da">Dansk</a></li><li><a href="/en/" hreflang="en" lang="en" aria-current="page">English</a></li></ul></nav>
   </div>
@@ -58,87 +58,90 @@
 <section class="night hero">
   <div class="wrap hero-grid">
     <div>
-      <p class="eyebrow">Free. No account. Open source.</p>
+      <p class="eyebrow">Free. No account. Sends no information about you.</p>
       <h1>Dangerous sites and ads are stopped inside your phone.</h1>
-      <p class="lede">Cocode Guard for Android blocks dangerous sites and ads in every app, on any network: at home, on mobile data and on café Wi-Fi. It happens inside the phone. There is no account and no server run by us. The app also refuses connections to known dangerous addresses.</p>
-      <p class="status"><strong>Early version.</strong> The first release is still being built, and the download is coming soon. This page describes how the app is meant to work.</p>
+      <p class="lede">Guard for Android blocks known dangerous sites and ads in every app on your phone, on any network: at home, on mobile data and on café Wi-Fi. The filtering happens on the phone itself. The app also refuses connections to known dangerous addresses on the internet (IP addresses). It is free and needs no account.</p>
+      <p class="status"><strong>Early version.</strong> The first release is still being built, so you cannot download the app yet. The download is coming soon. This page describes how the app is designed to work.</p>
       <div class="actions">
         <a class="btn" href="#get">How to get the app</a>
         <a class="more" href="https://github.com/cocodedk/guard-android">Follow the work on GitHub</a>
       </div>
     </div>
     <figure class="log">
-      <figcaption>An example: three lookups</figcaption>
+      <figcaption>An example: three DNS lookups, where the phone asks for a site's address</figcaption>
       <ul role="list">
-        <li><div class="row"><code>nyheder.example</code><span class="tag">Let through</span></div><small>Passed on to the network's DNS server.</small></li>
-        <li><div class="row"><code>reklame.example</code><span class="tag block">Blocked</span></div><small>Empty answer. The ad is never loaded.</small></li>
-        <li><div class="row"><code>svindel.example</code><span class="tag block">Blocked</span></div><small>Empty answer. The site does not open.</small></li>
+        <li><div class="row"><code>nyheder.example</code><span class="tag">Let through</span></div><small>Passed on to the network's DNS server, which finds the address. The site opens as normal.</small></li>
+        <li><div class="row"><code>reklame.example</code><span class="tag block">Blocked</span></div><small>The app gives an empty answer. The ad is never loaded.</small></li>
+        <li><div class="row"><code>svindel.example</code><span class="tag block">Blocked</span></div><small>The app gives an empty answer. The site does not open.</small></li>
       </ul>
     </figure>
   </div>
 </section>
 
-<section class="day" id="what" aria-labelledby="h-what">
-  <div class="wrap">
-    <h2 id="h-what">What it does</h2>
-    <p class="intro">The app blocks known dangerous sites, ad servers and dangerous addresses for every app on the phone.</p>
-    <ul class="cards" role="list">
-      <li><h3>Every app</h3><p>Games, news apps and browsers are filtered the same way. You don't set anything up app by app.</p></li>
-      <li><h3>Any network</h3><p>At home, on mobile data or on hotel Wi-Fi. The filter travels with the phone.</p></li>
-      <li><h3>Dangerous addresses</h3><p>Some apps and some malicious software go straight to an address without looking up a name. The app refuses connections to addresses on public lists of known dangerous addresses, and tells you which app tried.</p></li>
-      <li><h3>Free, with no account</h3><p>No payment, no login and no server run by us. The code is open under the GPL-3.0.</p></li>
-      <li><h3>A well-known name list</h3><p>The names come from AdGuard's DNS filter. That list comes bundled in the app.</p></li>
-      <li><h3>Public address lists</h3><p>The addresses come from public lists that the app downloads to the phone itself, straight from the people who publish them. <a href="/en/privacy/">Read about it in the privacy policy.</a></p></li>
-    </ul>
-  </div>
-</section>
-
-<section class="day mist" id="how" aria-labelledby="h-how">
-  <div class="wrap">
-    <h2 id="h-how">How it works</h2>
-    <p class="intro">Here it is in plain words.</p>
-    <ol class="steps" role="list">
-      <li><h3>The phone looks up a name</h3><p>Before an app can open a site, the phone has to find out where the site lives. It asks a DNS server, a bit like looking a number up in a phone book.</p></li>
-      <li><h3>The app listens in</h3><p>The lookup passes through the app first, inside the phone. If the name is on the block list, the app answers with nothing. The phone never learns where the site is, so it never opens.</p></li>
-      <li><h3>The rest is passed on</h3><p>Every other lookup goes on to the network's own DNS server, and the site opens as usual. Later you will be able to pick a different DNS server yourself.</p></li>
-    </ol>
-    <div class="why">
-      <h3>And dangerous addresses?</h3>
-      <p>Some apps and some malicious software do not ask for a name, but go straight to an address. So the app downloads lists of known dangerous addresses while protection runs. A connection to an address on the lists is refused inside the phone at once. A notification tells you which app tried and which address it was. All other connections go around the app.</p>
-    </div>
-    <div class="why">
-      <h3>Why does the app ask for VPN permission?</h3>
-      <p>Android's VPN feature is how an ordinary app can see DNS lookups. The app uses it only as a local tunnel that starts and ends inside the app itself. There is no VPN server. Only DNS lookups and connections to addresses on the lists go through the app, and the rest of your traffic does not. The app sends nothing to us. The DNS lookups go only to the network's own DNS server, just as before, and the address lists are downloaded straight from the people who publish them.</p>
-    </div>
-  </div>
-</section>
-
 <section class="day" id="privacy-short" aria-labelledby="h-privacy">
   <div class="wrap">
-    <h2 id="h-privacy">Privacy in short</h2>
+    <h2 id="h-privacy">Good to know</h2>
     <ul class="checks" role="list">
-      <li>No account and no server run by us.</li>
-      <li>No tracking, no statistics and no ads in the app.</li>
-      <li>Your DNS lookups go only to the DNS server the app uses. By default that is the network's own.</li>
-      <li>The app downloads lists of dangerous addresses straight from the publishers, normally once a day. As with any visit to a website, the publishers can see your IP address, but the app sends no information about you.</li>
-      <li>Counts of blocked sites and addresses stay on the phone. The name of an app that tried to connect to a dangerous address is shown only in a notification and is not stored or sent.</li>
-      <li>You grant only two permissions: the VPN permission and notifications. Network access is granted by Android automatically, and it is also used to download the address lists. No access to contacts, location, files or Android's accessibility features.</li>
+      <li><strong>The app sends no information about you to anyone.</strong> No account, no tracking, no analytics, and the app shows no ads.</li>
+      <li>The filtering happens on the phone. There is no Cocode server, and the app does not send your traffic through a VPN server, as an ordinary VPN does.</li>
+      <li>Only DNS lookups and connections to known dangerous addresses pass through the app. A DNS lookup is when the phone asks where a site is. The rest of your traffic, such as web pages, video and app data, goes out as before.</li>
+      <li>DNS lookups that are not blocked go only to the network's own DNS server, as before.</li>
+      <li>Lists of dangerous addresses are downloaded straight from their publishers. They can see the phone's IP address, as any website can when you visit it. An IP address is the number your connection has on the internet.</li>
+      <li>You grant only two permissions: to use Android's VPN feature and to show notifications. The app has no access to contacts, location or files.</li>
+      <li>Free of charge and free software under the GPL-3.0 licence. Anyone can read, change and share the code.</li>
+      <li>Made for TalkBack, Android's screen reader, and for large text.</li>
     </ul>
     <p class="after"><a href="/en/privacy/">Read the full privacy policy</a></p>
   </div>
 </section>
 
+<section class="day mist" id="what" aria-labelledby="h-what">
+  <div class="wrap">
+    <h2 id="h-what">What it does</h2>
+    <p class="intro">The app blocks in two ways, for every app on the phone. The name filter stops known dangerous sites and ads. Address blocking refuses connections to known dangerous addresses.</p>
+    <ul class="cards" role="list">
+      <li><h3>Every app</h3><p>Games, news apps and browsers are filtered the same way. You don't set anything up app by app.</p></li>
+      <li><h3>Any network</h3><p>At home, on mobile data or on hotel Wi-Fi. The protection travels with the phone.</p></li>
+      <li><h3>Dangerous addresses</h3><p>Some apps and some malicious software go straight to an address without looking up a name, so the name filter cannot stop them. The app refuses connections to addresses on public lists of known dangerous addresses. When it does, a notification tells you which app tried.</p></li>
+      <li><h3>Free, with no account</h3><p>No payment and no login. The code is open under the GPL-3.0, so anyone can read it.</p></li>
+      <li><h3>A name list from AdGuard</h3><p>The names come from AdGuard's DNS filter, a list of sites to block. The list is inside the app. The app does not download it.</p></li>
+      <li><h3>Public address lists</h3><p>The addresses come from public lists of known dangerous addresses. The app downloads them to the phone itself, straight from the publishers, about once a day while protection runs. The publishers can see the phone's IP address. <a href="/en/privacy/">Read about it in the privacy policy.</a></p></li>
+    </ul>
+  </div>
+</section>
+
+<section class="day" id="how" aria-labelledby="h-how">
+  <div class="wrap">
+    <h2 id="h-how">How it works</h2>
+    <p class="intro">Here is what happens when you open a site.</p>
+    <ol class="steps" role="list">
+      <li><h3>The phone looks up a site's address</h3><p>Every site has a name, such as nyheder.example. Computers use addresses, which are numbers (IP addresses). Before an app can open a site, the phone has to find the address that belongs to the name. This is called a DNS lookup. The phone asks a DNS server, a bit like looking a number up in a phone book.</p></li>
+      <li><h3>The app sees the lookup first</h3><p>The lookup passes through the app first, inside the phone. If the name is on the block list, the app gives an empty answer. The phone then does not know where the site is, so the site does not open.</p></li>
+      <li><h3>The rest is passed on</h3><p>Every other lookup goes on to the network's own DNS server, and the site opens as usual.</p></li>
+    </ol>
+    <div class="why">
+      <h3>And dangerous addresses?</h3>
+      <p>Some apps and some malicious software do not ask for a name, but go straight to an address. So the app downloads lists of known dangerous addresses while protection runs. If an app tries to connect to an address on the lists, the app refuses the connection at once, inside the phone. Nothing is sent to that address. A notification tells you which app tried and which address it was. All other connections go around the app.</p>
+    </div>
+    <div class="why">
+      <h3>Why does the app ask for VPN permission?</h3>
+      <p>Android's VPN feature is how an ordinary app can see DNS lookups. An ordinary VPN sends your traffic to a server somewhere else. This app does not. It uses the feature only as a local tunnel that starts and ends inside the app itself, and there is no VPN server. Only DNS lookups and connections to addresses on the lists go through the tunnel. The rest of your traffic does not. The first time you tap Start protection, Android asks whether the app may use the VPN feature. If you say no, the app cannot start protection. While protection runs, Android shows a key icon. It is Android's own icon and does not mean there is a VPN server.</p>
+    </div>
+  </div>
+</section>
+
+
 <section class="day mist" id="limits" aria-labelledby="h-limits">
   <div class="wrap">
     <h2 id="h-limits">What the app cannot do</h2>
-    <p class="intro">It is better to know up front.</p>
+    <p class="intro">Here are the limits, so you can judge whether the app suits you.</p>
     <ul class="cards" role="list">
-      <li><h3>Private DNS must be Automatic or Off</h3><p>If Android's Private DNS is set to Automatic, the app works as normal and you need to do nothing. If Private DNS is set to a specific server (a host name), it cannot work together with the app. The phone would not reach the internet while protection runs, so the app stops protection and tells you. To use the app, choose Automatic or Off.</p></li>
-      <li><h3>Apps with their own secure DNS bypass the filter</h3><p>Some apps and browsers look sites up in their own encrypted way. The app cannot see those lookups.</p></li>
-      <li><h3>One VPN at a time</h3><p>Android allows only one VPN-type app at a time, so a work VPN cannot run alongside Cocode Guard.</p></li>
+      <li><h3>Private DNS must be Automatic or Off</h3><p>Private DNS is an Android setting. Where it is depends on the phone; on Samsung phones it is under Connections. If it is set to Automatic or Off, the app works and you need to do nothing. If it is set to a specific server (a host name), the app cannot be used. The phone would not reach the internet while protection runs. So the app stops protection and tells you with a notification. The app's screen then has a button, Open network settings, where you can change the setting. Afterwards, tap Start again.</p></li>
+      <li><h3>Apps with their own secure DNS bypass the name filter</h3><p>Some apps and browsers look sites up in their own encrypted way, for example a browser's secure DNS (DoH) setting. The app cannot see those lookups, so it cannot block them.</p></li>
+      <li><h3>One VPN at a time</h3><p>Android allows only one VPN-type app at a time, so a work VPN cannot run alongside Guard for Android. Android's “Block connections without VPN” setting cannot be used with the app either. The app sends only DNS lookups and connections to dangerous addresses through its tunnel, so the phone would not be able to reach the internet. If the setting is on, protection cannot run, and the app says so.</p></li>
       <li><h3>No list catches everything</h3><p>The app blocks what is on the lists. A new dangerous site or address can slip through, and a harmless site can be blocked by mistake.</p></li>
-      <li><h3>Address blocking needs fresh lists</h3><p>The app downloads the address lists when the phone is online. If a list is missing, or is more than 7 days old, the app does not use it, and the screen says so. The name filter works regardless.</p></li>
-      <li><h3>If protection stops, you are told</h3><p>If protection stops, the app says so with a notification. It never stops in silence.</p></li>
+      <li><h3>Address blocking needs fresh lists</h3><p>The app downloads the address lists when the phone is online. If a list is missing or is more than 7 days old, the app does not use it, because old lists can block addresses that other people use now. The screen tells you. Right after the first start, address blocking begins once the lists have downloaded. The name filter works regardless.</p></li>
+      <li><h3>If protection stops, you are told</h3><p>If protection stops without you asking, the app sends a notification saying that DNS lookups are no longer filtered. This needs notifications from the app to be switched on. If they are off, the screen shows a warning about it. If you stop protection yourself with Stop protection, the screen says it has stopped.</p></li>
     </ul>
   </div>
 </section>
@@ -147,10 +150,10 @@
   <div class="wrap">
     <h2 id="h-get">Get the app</h2>
     <!-- When the first release is out: change the intro, and drop the "only works once" sentence. -->
-    <p class="intro"><strong>The download is coming soon.</strong> The first version has not been released yet. The app is free.</p>
+    <p class="intro"><strong>The download is coming soon.</strong> The first version has not been released yet, so there is nothing to download today. The app is free.</p>
     <ul class="cards three" role="list">
       <li><h3>GitHub</h3><p><a href="https://github.com/cocodedk/guard-android/releases/latest/download/GuardAndroid.apk">Download GuardAndroid.apk, the Android installation file</a>. The link only works once the first version is released.</p></li>
-      <li><h3>F-Droid</h3><p>Coming soon. There is no F-Droid page yet.</p></li>
+      <li><h3>F-Droid</h3><p>Planned. F-Droid is an app store for free software. The app is not there yet.</p></li>
       <li><h3>Source code</h3><p><a href="https://github.com/cocodedk/guard-android">Read the source code on GitHub</a>. The app is free software under the GPL-3.0.</p></li>
     </ul>
   </div>
@@ -159,7 +162,7 @@
 <section class="day mist" id="box" aria-labelledby="h-box">
   <div class="wrap">
     <h2 id="h-box">The Cocode Guard box</h2>
-    <p class="box-text">The app is the phone companion to the Cocode Guard box, the small box by the router that watches over the whole home and writes to you on Telegram. The box protects the house. The app protects the phone when it leaves the house. The app also works fine without the box.</p>
+    <p class="box-text">The Cocode Guard box is a small box by the router that protects the whole home and writes to you on Telegram. Guard for Android is its companion: the box protects the house, and the app protects the phone when it leaves the house. You do not need the box to use the app.</p>
     <p class="box-link"><a class="btn dark" href="https://guard.cocode.dk/en/">Read about the Cocode Guard box</a></p>
   </div>
 </section>
@@ -167,7 +170,7 @@
 
 <footer class="night">
   <div class="wrap foot">
-    <p>Cocode Guard for Android is free software, released under the <a href="https://www.gnu.org/licenses/gpl-3.0.html">GNU General Public License version 3 (GPL-3.0)</a>.</p>
+    <p>Guard for Android is free software, released under the <a href="https://www.gnu.org/licenses/gpl-3.0.html">GNU General Public License version 3 (GPL-3.0)</a>.</p>
     <ul>
       <li><a href="https://github.com/cocodedk/guard-android">Source code on GitHub</a></li>
       <li><a href="/en/privacy/">Privacy policy</a></li>

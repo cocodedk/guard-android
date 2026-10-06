@@ -1,4 +1,4 @@
-/* Cocode Guard for Android. Same look as the Guard box site: the page opens at night (hero,
+/* Guard for Android. Same look as the Guard box site: the page opens at night (hero,
    header, footer) and turns to day below. No JavaScript is needed anywhere.
    Every text and background pair is at least 4.5:1. Focus rings are at least 3:1 against what
    is behind them: dark green on day, light green on night (the --focus token switches). */

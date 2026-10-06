@@ -1,1 +1,1 @@
-Cocode Guard
+Guard for Android
