@@ -1,0 +1,27 @@
+# Cocode Guard for Android
+
+> A free Android app (GPL-3.0) that blocks dangerous sites and ads in every app on the phone, on any network, by filtering DNS inside the phone over a local tunnel. No account, no Cocode server, no tracking. Block lists ship inside the app. The first release is still being built. Source: https://github.com/cocodedk/guard-android
+
+## WebMCP tools
+
+Every page of this site declares WebMCP tools with `document.modelContext.registerTool`, for agents in a browser that has WebMCP (Chrome 150+ with the flag). Each tool takes no input and answers from the page's own text, so answers match what a visitor reads. Call `describe` first.
+
+- `describe` (every page): what the page is, its language, summary, headings and the tools it offers.
+- `get_download` (home pages): the ways to get the app (GitHub APK, F-Droid, source code) as {name, url, note}.
+- `list_limits` (home pages): what the app cannot do, as {title, text}, including how it works with Android's Private DNS.
+- `get_privacy_summary` (privacy pages): the short privacy statement, the effective date and the headings of the full policy.
+
+Pages with tools:
+
+- https://android.guard.cocode.dk/ (Danish home): describe, get_download, list_limits
+- https://android.guard.cocode.dk/en/ (English home): describe, get_download, list_limits
+- https://android.guard.cocode.dk/privacy/ (Danish privacy policy): describe, get_privacy_summary
+- https://android.guard.cocode.dk/en/privacy/ (English privacy policy): describe, get_privacy_summary
+- https://android.guard.cocode.dk/404.html (page not found): describe
+
+## Pages
+
+- [Home, Danish](https://android.guard.cocode.dk/)
+- [Home, English](https://android.guard.cocode.dk/en/)
+- [Privacy policy, Danish](https://android.guard.cocode.dk/privacy/)
+- [Privacy policy, English](https://android.guard.cocode.dk/en/privacy/)

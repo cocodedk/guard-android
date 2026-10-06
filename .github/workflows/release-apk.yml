@@ -52,6 +52,10 @@ jobs:
           java-version: '17'
           cache: gradle
 
+      - name: Gate (buildSmoke) on the commit being released
+        # The same gate as CI and pre-push, run here on this exact checkout, before any signing.
+        run: ./gradlew buildSmoke --no-daemon
+
       - name: Read the version
         id: version
         run: |

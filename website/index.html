@@ -43,6 +43,7 @@
  "license": "https://www.gnu.org/licenses/gpl-3.0.html"
 }
 </script>
+<script type="module" src="/webmcp.js"></script>
 </head>
 <body>
 <a class="skip" href="#main">Spring til indhold</a>
@@ -125,7 +126,7 @@
     <h2 id="h-limits">Det kan appen ikke</h2>
     <p class="intro">Det er bedst at vide på forhånd.</p>
     <ul class="cards" role="list">
-      <li><h3>Androids Private DNS går uden om filteret</h3><p>Er Private DNS slået til i telefonens indstillinger, sender telefonen sine opslag krypteret uden om appen. Så kan appen ikke se dem. Slå Private DNS fra, hvis du vil have beskyttelse.</p></li>
+      <li><h3>Privat DNS skal være Automatisk eller Fra</h3><p>Er Androids Privat DNS sat til Automatisk, virker appen som den skal, og du skal ikke gøre noget. Er Privat DNS sat til en bestemt server (et værtsnavn), kan det ikke fungere sammen med appen. Telefonen ville ikke kunne komme på internettet, mens beskyttelsen kører, så appen stopper beskyttelsen og fortæller det. Vil du bruge appen, så vælg Automatisk eller Fra.</p></li>
       <li><h3>Apps med egen sikker DNS går uden om filteret</h3><p>Nogle apps og browsere slår selv sider op på en krypteret måde. De opslag kan appen ikke se.</p></li>
       <li><h3>Kun én VPN ad gangen</h3><p>Android tillader kun én VPN-app ad gangen. En arbejds-VPN kan derfor ikke køre samtidig med Cocode Guard.</p></li>
       <li><h3>Ingen liste fanger alt</h3><p>Appen blokerer det, der står på listen. En ny farlig side kan slippe igennem, og en harmløs side kan blive blokeret ved en fejl.</p></li>

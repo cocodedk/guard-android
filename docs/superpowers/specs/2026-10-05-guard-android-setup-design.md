@@ -94,12 +94,12 @@ no VPN server and no account; only DNS lookups enter it.
   exceptions are used; a rule matches the domain and all its subdomains; an exception wins over a
   block. Other rule types are skipped.
 - **UI (one screen):** status in plain words ("Beskyttet" / "Ikke beskyttet" and English
-  equivalents), a Start/Stop button, the number of blocked lookups since start, and a warning card
-  when Android's Private DNS is set to a specific server (strict mode bypasses the filter), read
-  from `LinkProperties.privateDnsServerName`. Automatic mode needs no warning (spec 01 explains).
+  equivalents), a Start/Stop button and the number of blocked lookups since start. Automatic
+  Private DNS needs no warning (spec 01 explains).
 - **Stop means stop:** a foreground notification while protecting. If the tunnel is revoked
   (`onRevoke`: another VPN app took over, or the VPN was turned off in settings), cannot run
-  (Android's "Block connections without VPN"), or the service fails, a notification says that
+  (Android's "Block connections without VPN", or Private DNS set to a specific server: with the
+  tunnel up, that setting leaves the phone unable to look up any name), or the service fails, a notification says that
   protection stopped and DNS lookups are no longer filtered. Spec 01 holds the full journey.
 - **Permissions:** `BIND_VPN_SERVICE` on the service, `INTERNET` and `ACCESS_NETWORK_STATE`
   (install-time, for the upstream socket and the network callback), `POST_NOTIFICATIONS`,
@@ -136,8 +136,9 @@ no VPN server and no account; only DNS lookups enter it.
 
 ## Risks
 
-- **Private DNS and apps with their own DoH** bypass the filter (IDEA.md questions 2–3). Spec 01
-  warns about Private DNS; DoH is a later spec.
+- **Private DNS set to a specific server** cuts off every lookup while the tunnel is up, so spec
+  01 stops protection and says why. **Apps with their own DoH** bypass the filter (IDEA.md
+  questions 2–3); DoH is a later spec.
 - **One VPN at a time:** a work VPN cannot run alongside the app; Android's own dialog covers it.
 - **Phone makers killing background apps:** the foreground service and the stop notification
   make a stop visible; battery-optimisation guidance is a later spec.
