@@ -1,8 +1,9 @@
 package dk.cocode.guard.iplist
 
-/** The last [capacity] keys seen; the oldest is forgotten first. Not thread-safe. */
+/** The [capacity] keys seen most recently; the one unseen for longest is forgotten first. Not thread-safe. */
 class RecentFlows(private val capacity: Int) {
-    private val seen = object : LinkedHashMap<Any, Unit>() {
+    // Access order: seeing a key again makes it the most recent, so an active flow is never forgotten.
+    private val seen = object : LinkedHashMap<Any, Unit>(16, 0.75f, true) {
         override fun removeEldestEntry(eldest: MutableMap.MutableEntry<Any, Unit>) = size > capacity
     }
 

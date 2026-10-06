@@ -18,6 +18,9 @@ class AddressListUpdates(
     @Volatile
     private var lastAttempt: Long? = null
 
+    /** Drops a download in flight; called when protection stops. Any thread. */
+    fun cancel() = store.cancel()
+
     /** The lists on disk. Blocks: call off the main thread. */
     fun load(): LoadedLists = store.load(clock())
 

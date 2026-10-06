@@ -126,19 +126,15 @@ class GuardVpnService : VpnService() {
         checkNotNull(upstream), routes, refusals,
     ) { scope.launch { stopForOther(StopReason.Error) } }
 
-    /** Brings up a tunnel with the new routes, then retires the old one: its loop stops before its descriptor closes. */
+    /** Brings up a tunnel with the new routes, then retires the old one (see [replaceTunnel]). */
     private fun swapTunnel(next: RouteSet) {
         if (!active) return
-        val fd = establishTunnel(next) ?: return stopForOther(StopReason.Error)
-        val oldLoop = loop
-        val oldTunnel = tunnel
-        val packets = newLoop(fd, next)
+        val (fd, packets) = replaceTunnel(tunnel, loop, { establishTunnel(next) }, { newLoop(it, next).apply { start() } }) {
+            it.stop()
+        } ?: return stopForOther(StopReason.Error)
         tunnel = fd
         loop = packets
         routes = next
-        packets.start()
-        oldLoop?.stop()
-        oldTunnel?.close()
     }
 
     private fun stopByOwner() {
@@ -162,6 +158,7 @@ class GuardVpnService : VpnService() {
         loop?.stop()
         upstream?.stop()
         tunnel?.close()
+        updates.cancel()
         startJob = null
         loop = null
         upstream = null

@@ -6,17 +6,15 @@ private val METADATA = Regex(""""type"\s*:\s*"metadata"""")
 private const val MIN_DROP_V4 = 500
 private const val MIN_DROP_V6 = 20
 
-/** Spamhaus JSON lines: one object per line, the last the metadata. Null when that line is missing (truncated). */
+/**
+ * Spamhaus JSON lines: one whole object per line, the last the metadata. Null when any line is cut
+ * off, or anything follows the metadata or it is missing: a broken download never replaces a good copy.
+ */
 fun parseSpamhausJson(body: String): List<Cidr>? {
-    var complete = false
-    val out = ArrayList<Cidr>()
-    for (line in body.lineSequence()) {
-        // A whole object, not a cut-off one: it must open and close its braces.
-        val t = line.trim()
-        if (t.startsWith("{") && t.endsWith("}") && METADATA.containsMatchIn(t)) complete = true
-        CIDR_FIELD.find(line)?.let { m -> parseCidr(m.groupValues[1])?.let { out.add(it) } }
-    }
-    return out.takeIf { complete }
+    val lines = body.lineSequence().map { it.trim() }.filter { it.isNotEmpty() }.toList()
+    if (lines.isEmpty() || !METADATA.containsMatchIn(lines.last())) return null
+    if (lines.any { !(it.startsWith("{") && it.endsWith("}")) }) return null
+    return lines.dropLast(1).mapNotNull { line -> CIDR_FIELD.find(line)?.let { parseCidr(it.groupValues[1]) } }
 }
 
 /** Feodo text: `#` comments and blank lines are skipped, every other line must be one IPv4 address. Null otherwise. */

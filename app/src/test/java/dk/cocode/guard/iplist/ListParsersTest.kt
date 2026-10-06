@@ -36,6 +36,18 @@ class ListParsersTest {
     }
 
     @Test
+    fun spamhausCutOffLineAfterMetadataIsRejected() {
+        val body = "{\"cidr\":\"192.0.2.0/24\"}\n$metadata\n{\"cidr\":\"203.0"
+        assertNull(parseSpamhausJson(body))
+    }
+
+    @Test
+    fun spamhausCutOffLineBeforeMetadataIsRejected() {
+        val body = "{\"cidr\":\"192.0.2.0/24\"}\n{\"cidr\":\"203.0\n$metadata"
+        assertNull(parseSpamhausJson(body))
+    }
+
+    @Test
     fun spamhausIpv6Parses() {
         val body = "{\"cidr\":\"2001:db8::/32\",\"sblid\":\"SBL3\",\"rir\":\"ripencc\"}\n$metadata"
         assertEquals(listOf("2001:db8::/32"), parseSpamhausJson(body)!!.map { it.toString() })

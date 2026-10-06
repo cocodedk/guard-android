@@ -73,10 +73,12 @@ class PacketLoop(
         if (running) ProtectionRepository.update { it.copy(blockedCount = it.blockedCount + 1) }
     }
 
-    private fun countAddress(address: String, listId: String) = synchronized(countLock) {
-        if (running) {
+    // The flow is remembered only while running: a loop stopped by a tunnel swap must not mark it seen,
+    // or the new loop, which shares [refusals], would never count or announce it.
+    private fun countAddress(buf: ByteArray, ip: IpPacket, listId: String) = synchronized(countLock) {
+        if (running && refusals.firstTime(buf, ip)) {
             ProtectionRepository.update { it.copy(blockedAddressCount = it.blockedAddressCount + 1) }
-            refusals.announce(address, listId)
+            refusals.announce(ipText(ip.dstIp), listId)
         }
     }
 
@@ -116,7 +118,7 @@ class PacketLoop(
     private fun refuse(buf: ByteArray, ip: IpPacket) {
         val listId = routes.listFor(ip.dstIp) ?: return
         val reply = refusalFor(buf, ip) ?: return
-        if (refusals.firstTime(buf, ip)) countAddress(ipText(ip.dstIp), listId)
+        countAddress(buf, ip, listId)
         write(reply)
     }
 

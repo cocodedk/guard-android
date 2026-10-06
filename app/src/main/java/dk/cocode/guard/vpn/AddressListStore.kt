@@ -27,11 +27,31 @@ private const val REFRESH_AFTER_MS = 24 * 60 * 60 * 1000L
 
 /**
  * The lists in [dir] (one `<id>.txt` of CIDR lines each, its modification time the fetch time) and
- * their download straight from the publishers ([fetch] is replaced in tests). Every function blocks:
- * call it off the main thread.
+ * their download straight from the publishers. Tests replace [open] (the HTTP connection) or [fetch]
+ * (the whole download). Every function but [cancel] blocks: call it off the main thread.
  */
-class AddressListStore(private val dir: File, private val fetch: (String) -> String? = ::downloadText) {
+class AddressListStore(
+    private val dir: File,
+    private val open: (String) -> HttpURLConnection = { URL(it).openConnection() as HttpURLConnection },
+    fetch: ((String) -> String?)? = null,
+) {
+    private val fetch: (String) -> String? = fetch ?: ::download
+
+    @Volatile
+    private var inFlight: HttpURLConnection? = null
+
+    // Set by [cancel], cleared by the next [refresh]: a cancel that lands before the connection is
+    // recorded still stops it, since [download] looks again once it has recorded it.
+    @Volatile
+    private var cancelled = false
+
     private fun file(list: AddressList) = File(dir, "${list.id}.txt")
+
+    /** Drops a download in flight, so stopping protection never waits out its timeouts. Any thread. */
+    fun cancel() {
+        cancelled = true
+        inFlight?.disconnect()
+    }
 
     fun load(now: Long): LoadedLists {
         val stored = HashMap<AddressList, List<Cidr>>()
@@ -58,9 +78,10 @@ class AddressListStore(private val dir: File, private val fetch: (String) -> Str
      * [active] turns false (protection stopped) nothing more is fetched or written.
      */
     fun refresh(active: () -> Boolean = { true }) {
+        cancelled = false
         dir.mkdirs()
         for (list in AddressList.entries) {
-            if (!active()) return
+            if (!active() || cancelled) return
             try {
                 val body = fetch(list.url) ?: continue
                 val parsed = (if (list == AddressList.Feodo) parseFeodo(body) else parseSpamhausJson(body)) ?: continue
@@ -74,28 +95,31 @@ class AddressListStore(private val dir: File, private val fetch: (String) -> Str
             }
         }
     }
-}
 
-// Redirects are not followed: only the three listed URLs are ever fetched. Null unless 200 and small enough.
-private fun downloadText(url: String): String? {
-    val connection = URL(url).openConnection() as HttpURLConnection
-    try {
-        connection.connectTimeout = TIMEOUT_MS
-        connection.readTimeout = TIMEOUT_MS
-        connection.instanceFollowRedirects = false
-        if (connection.responseCode != HttpURLConnection.HTTP_OK) return null
-        val body = ByteArrayOutputStream()
-        val chunk = ByteArray(8192)
-        connection.inputStream.use { input ->
-            while (true) {
-                val n = input.read(chunk)
-                if (n < 0) break
-                body.write(chunk, 0, n)
-                if (body.size() > MAX_BODY) return null
+    // Redirects are not followed: only the three listed URLs are ever fetched. Null unless 200 and small enough.
+    private fun download(url: String): String? {
+        val connection = open(url)
+        inFlight = connection
+        try {
+            if (cancelled) return null
+            connection.connectTimeout = TIMEOUT_MS
+            connection.readTimeout = TIMEOUT_MS
+            connection.instanceFollowRedirects = false
+            if (connection.responseCode != HttpURLConnection.HTTP_OK) return null
+            val body = ByteArrayOutputStream()
+            val chunk = ByteArray(8192)
+            connection.inputStream.use { input ->
+                while (true) {
+                    val n = input.read(chunk)
+                    if (n < 0) break
+                    body.write(chunk, 0, n)
+                    if (body.size() > MAX_BODY) return null
+                }
             }
+            return body.toString(Charsets.UTF_8.name())
+        } finally {
+            inFlight = null
+            connection.disconnect()
         }
-        return body.toString(Charsets.UTF_8.name())
-    } finally {
-        connection.disconnect()
     }
 }

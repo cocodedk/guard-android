@@ -39,7 +39,7 @@ class AddressListStoreTest {
         return if (url == AddressList.Feodo.url) feodoBody else "garbage"
     }
 
-    private fun store() = AddressListStore(dir, ::fetch)
+    private fun store() = AddressListStore(dir, fetch = ::fetch)
 
     private fun feodoFile() = File(dir, "feodo.txt")
 

@@ -13,6 +13,7 @@ import java.io.InputStream
 import java.io.OutputStream
 import java.util.concurrent.CopyOnWriteArrayList
 import java.util.concurrent.LinkedBlockingQueue
+import java.util.concurrent.Semaphore
 import java.util.concurrent.TimeUnit
 import org.junit.After
 import org.junit.Assert.assertEquals
@@ -24,10 +25,12 @@ import org.junit.Test
 /** The refusal path through a real PacketLoop; the tunnel is a pair of in-memory queues. */
 class RefusalsTest {
     private val incoming = LinkedBlockingQueue<ByteArray>()
+    private val reading = Semaphore(0)
     private val written = LinkedBlockingQueue<ByteArray>()
     private val input = object : InputStream() {
         override fun read() = throw UnsupportedOperationException()
         override fun read(b: ByteArray): Int {
+            reading.release() // a loop is now waiting on the tunnel
             val p = incoming.take()
             if (p.isEmpty()) return -1
             p.copyInto(b)
@@ -105,6 +108,25 @@ class RefusalsTest {
         reply()
         assertTrue(written.isEmpty())
         assertEquals(1, ProtectionRepository.state.value.blockedAddressCount)
+    }
+
+    @Test
+    fun stoppedLoopLeavesTheFlowToTheNextLoop() {
+        val refusals = Refusals { address, list, number -> notices.add(Triple(address, list, number)) }
+        val routes = RouteSet(mapOf("feodo" to listOf(parseCidr("203.0.113.0/24")!!)))
+        val old = PacketLoop(input, output, parseRules(emptySequence()), noDns, routes, refusals) {}
+        old.start()
+        assertTrue(reading.tryAcquire(5, TimeUnit.SECONDS))
+        old.stop() // a tunnel swap retires it while its read is still waiting
+        syn(40000) // the read it was waiting on still arrives
+        reply() // the old loop refuses it, but must not count it or remember the flow
+        assertEquals(0, ProtectionRepository.state.value.blockedAddressCount)
+        loop = PacketLoop(input, output, parseRules(emptySequence()), noDns, routes, refusals) {}
+        loop!!.start()
+        syn(40000) // the same flow, now through the new tunnel
+        reply()
+        assertEquals(1, ProtectionRepository.state.value.blockedAddressCount)
+        assertEquals(listOf(Triple("203.0.113.7", "feodo", 1)), notices.toList())
     }
 
     @Test

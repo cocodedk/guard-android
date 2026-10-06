@@ -14,6 +14,17 @@ class RecentFlowsTest {
     }
 
     @Test
+    fun seenAgainIsKeptLongest() {
+        val flows = RecentFlows(2)
+        flows.firstTime("a")
+        flows.firstTime("b")
+        flows.firstTime("a") // still active: now the most recent
+        flows.firstTime("c") // forgets "b", the one unseen for longest
+        assertFalse(flows.firstTime("a"))
+        assertTrue(flows.firstTime("b"))
+    }
+
+    @Test
     fun forgetsOldestPastCapacity() {
         val flows = RecentFlows(2)
         flows.firstTime("a")
