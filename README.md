@@ -6,7 +6,7 @@ protects the phone when it leaves the house. It works on its own, without the bo
 
 **Free software:** GPL-3.0 and free of charge. No account, no analytics, no ads, and no server run by us. The app contacts only the network's own DNS server and, to download its address lists, the publishers of those lists (see below).
 
-Status: early. The first version with protection is being built.
+Status: early. The first version is out.
 
 ## Website
 
@@ -15,12 +15,25 @@ Status: early. The first version with protection is being built.
 
 ## Download
 
-- GitHub: <https://github.com/cocodedk/guard-android/releases/latest/download/GuardAndroid.apk>
-- F-Droid: planned.
+<!-- cocode-apps:install:start -->
+- Coming to F-Droid
+- [Download the APK from GitHub](https://github.com/cocodedk/guard-android/releases/latest/download/GuardAndroid.apk)
+- [Auto-update the GitHub APK with Obtainium](https://apps.obtainium.imranr.dev/redirect?r=obtainium://add/https://github.com/cocodedk/guard-android)
+<!-- cocode-apps:install:end -->
 
 After installing, open the app and tap **Start protection** (*Start beskyttelse* in Danish). Android
 asks for your permission to set up the VPN connection and to send notifications. The screen always
 says whether the phone is protected. You stop protection with **Stop protection**.
+
+## Features
+
+- Blocks dangerous sites and ads in every app on the phone, on any network: home Wi-Fi, mobile data,
+  café Wi-Fi, abroad.
+- Refuses connections to known dangerous addresses on the internet (IP addresses), and can tell you
+  which app tried.
+- Filters on the phone itself, through a local tunnel that ends inside the app. No VPN server, no
+  account, no server run by us.
+- Danish and English, and built for TalkBack from the start (see [Accessibility](#accessibility)).
 
 ## How it works
 
@@ -90,7 +103,11 @@ Built for blind and low-vision people from the start: every control has a spoken
 (Android's screen reader), status changes are announced, text scales to 200%, and a unit test holds
 every color pair to WCAG AA contrast.
 
-## Permissions
+## Privacy
+
+The app collects nothing about you and sends nothing to us. Read the full [privacy policy](https://android.guard.cocode.dk/en/privacy/) ([Danish](https://android.guard.cocode.dk/privacy/)).
+
+### Permissions
 
 You grant only the VPN connection and notifications. The VPN permission lets the app see DNS
 lookups and refuse connections to dangerous addresses. Notifications let it tell you when protection
@@ -100,7 +117,23 @@ accessibility access. The manifest also declares `<queries>` for apps with a lau
 notification can name the app that tried to connect (an app without a launcher icon is not named); it
 is not a permission, and `QUERY_ALL_PACKAGES` is not used.
 
-## Build from source
+### Third-party data
+
+`app/src/main/assets/adguard-dns-filter.txt` is the [AdGuard DNS filter](https://github.com/AdguardTeam/AdGuardSDNSFilter)
+(GPL-3.0), snapshot of 2026-10-05.
+
+The address lists are **not** in this repository or in the APK; the phone downloads them itself
+(see [Address lists](#address-lists)). Tests use small hand-written fixtures.
+
+- **Spamhaus DROP** (IPv4 and IPv6), <https://www.spamhaus.org/drop/>, by The Spamhaus Project. Free
+  to use. Its content is copyrighted and comes with no licence to redistribute it, which is why the
+  app downloads it instead of shipping it. Credit: The Spamhaus Project. The name appears on the
+  app's screen and in its notifications.
+- **abuse.ch Feodo Tracker**, recommended IP blocklist,
+  <https://feodotracker.abuse.ch/blocklist/>. Its terms state that all datasets can be used for
+  commercial and non-commercial purposes without limitations (CC0).
+
+## Build
 
 Needs a JDK 17+ and the Android SDK (set `ANDROID_HOME` or `sdk.dir` in `local.properties`).
 
@@ -121,21 +154,9 @@ Kotlin and Jetpack Compose, one `app` module, no Google libraries. Package root 
 
 Feature work is specified in [`docs/lean/`](docs/lean/), one file per feature.
 
-## Third-party data
+## Contributing
 
-`app/src/main/assets/adguard-dns-filter.txt` is the [AdGuard DNS filter](https://github.com/AdguardTeam/AdGuardSDNSFilter)
-(GPL-3.0), snapshot of 2026-10-05.
-
-The address lists are **not** in this repository or in the APK; the phone downloads them itself
-(see [Address lists](#address-lists)). Tests use small hand-written fixtures.
-
-- **Spamhaus DROP** (IPv4 and IPv6), <https://www.spamhaus.org/drop/>, by The Spamhaus Project. Free
-  to use. Its content is copyrighted and comes with no licence to redistribute it, which is why the
-  app downloads it instead of shipping it. Credit: The Spamhaus Project. The name appears on the
-  app's screen and in its notifications.
-- **abuse.ch Feodo Tracker**, recommended IP blocklist,
-  <https://feodotracker.abuse.ch/blocklist/>. Its terms state that all datasets can be used for
-  commercial and non-commercial purposes without limitations (CC0).
+Issues and pull requests are welcome; see [CONTRIBUTING.md](CONTRIBUTING.md) and [SECURITY.md](SECURITY.md).
 
 ## Author
 

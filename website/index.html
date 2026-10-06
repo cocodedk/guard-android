@@ -4,7 +4,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Guard for Android: blokerer farlige sider og reklamer i alle apps</title>
-<meta name="description" content="Gratis app, der blokerer farlige sider, farlige adresser og reklamer i alle apps på Android, på alle netværk. Den virker på telefonen, uden konto og uden en server, som vi driver. Download kommer snart.">
+<meta name="description" content="Gratis app, der blokerer farlige sider, farlige adresser og reklamer i alle apps på Android, på alle netværk. Den virker på telefonen, uden konto og uden en server, som vi driver. Den første version er ude.">
 <meta name="theme-color" content="#0f1e36">
 <link rel="canonical" href="https://android.guard.cocode.dk/">
 <link rel="alternate" hreflang="da" href="https://android.guard.cocode.dk/">
@@ -13,8 +13,13 @@
 <meta property="og:type" content="website">
 <meta property="og:site_name" content="Guard for Android">
 <meta property="og:title" content="Guard for Android: blokerer farlige sider og reklamer i alle apps">
-<meta property="og:description" content="Gratis app, der blokerer farlige sider, farlige adresser og reklamer i alle apps på Android, på alle netværk. Den virker på telefonen, uden konto og uden en server, som vi driver. Download kommer snart.">
+<meta property="og:description" content="Gratis app, der blokerer farlige sider, farlige adresser og reklamer i alle apps på Android, på alle netværk. Den virker på telefonen, uden konto og uden en server, som vi driver. Den første version er ude.">
 <meta property="og:url" content="https://android.guard.cocode.dk/">
+<meta property="og:image" content="https://android.guard.cocode.dk/img/share.png">
+<meta property="og:image:width" content="1024">
+<meta property="og:image:height" content="500">
+<meta property="og:image:alt" content="Guard for Android: ikonet og appens navn">
+<meta name="twitter:card" content="summary_large_image">
 <meta property="og:locale" content="da_DK">
 <meta property="og:locale:alternate" content="en_GB">
 <link rel="icon" type="image/svg+xml" href="/favicon.svg">
@@ -25,7 +30,7 @@
  "@context": "https://schema.org",
  "@type": "MobileApplication",
  "name": "Guard for Android",
- "description": "Gratis app, der blokerer farlige sider, farlige adresser og reklamer i alle apps på Android, på alle netværk. Den virker på telefonen, uden konto og uden en server, som vi driver. Download kommer snart.",
+ "description": "Gratis app, der blokerer farlige sider, farlige adresser og reklamer i alle apps på Android, på alle netværk. Den virker på telefonen, uden konto og uden en server, som vi driver. Den første version er ude.",
  "url": "https://android.guard.cocode.dk/",
  "operatingSystem": "Android",
  "applicationCategory": "SecurityApplication",
@@ -46,12 +51,20 @@
 <script type="module" src="/webmcp.js"></script>
 </head>
 <body>
-<a class="skip" href="#main">Spring til indhold</a>
 <header class="night">
   <div class="wrap bar">
-    <a class="brand" href="/"><img src="/favicon.svg" alt="" width="30" height="30"><span>Guard for Android</span></a>
-    <nav class="menu" aria-label="Hovedmenu"><ul><li><a href="/#how">Sådan virker det</a></li><li><a href="/#get">Hent appen</a></li><li><a href="/privacy/">Privatliv</a></li></ul></nav>
-    <nav class="lang" aria-label="Sprog"><ul><li><a href="/" hreflang="da" lang="da" aria-current="page">Dansk</a></li><li><a href="/en/" hreflang="en" lang="en">English</a></li></ul></nav>
+    <!-- cocode-apps:nav:start -->
+<link rel="stylesheet" href="/css/cocode-nav.css">
+<a class="skip" href="#main">Spring til indhold</a>
+<nav class="cocode-nav" aria-label="Guard for Android">
+  <a class="brand" href="/" data-nav="home" aria-current="page"><img src="/img/icon.png" alt="" width="32" height="32">Guard for Android</a>
+  <a href="/#how" data-nav="how">Sådan virker det</a>
+  <a href="/#install" data-nav="install">Installér</a>
+  <a href="/privacy/" data-nav="privacy">Privatliv</a>
+  <a href="/en/" hreflang="en" lang="en" data-nav="lang">English</a>
+  <a href="https://cocode.dk/" data-nav="more">Flere apps</a>
+</nav>
+<!-- cocode-apps:nav:end -->
   </div>
 </header>
 <main id="main" tabindex="-1">
@@ -61,9 +74,9 @@
       <p class="eyebrow">Gratis. Ingen konto. Indsamler intet om dig.</p>
       <h1>Farlige sider og reklamer stoppes inde i din telefon.</h1>
       <p class="lede">Guard for Android blokerer kendte farlige sider og reklamer i alle apps på telefonen, på alle netværk: hjemme, på mobildata og på caféens wifi. Filtreringen sker på selve telefonen. Appen afviser også forbindelser til kendte farlige adresser på internettet (IP-adresser). Den er gratis og kræver ingen konto.</p>
-      <p class="status"><strong>Tidlig version.</strong> Den første udgave er under udvikling, så du kan endnu ikke hente appen. Download kommer snart. Siden her beskriver, hvordan appen er lavet til at virke.</p>
+      <p class="status"><strong>Tidlig version.</strong> Den første udgave er ude. Hent den nedenfor, og skriv gerne, hvis noget ikke virker.</p>
       <div class="actions">
-        <a class="btn" href="#get">Sådan får du appen</a>
+        <a class="btn" href="#install">Sådan får du appen</a>
         <a class="more" href="https://github.com/cocodedk/guard-android">Følg arbejdet på GitHub</a>
       </div>
     </div>
@@ -146,16 +159,16 @@
   </div>
 </section>
 
-<section class="day" id="get" aria-labelledby="h-get">
+<section class="day" id="install" aria-labelledby="h-install">
   <div class="wrap">
-    <h2 id="h-get">Hent appen</h2>
-    <!-- When the first release is out: change the intro, and drop the "virker først" sentence. -->
-    <p class="intro"><strong>Download kommer snart.</strong> Den første version er endnu ikke udgivet, så der er ikke noget at hente i dag. Appen er gratis.</p>
-    <ul class="cards three" role="list">
-      <li><h3>GitHub</h3><p><a href="https://github.com/cocodedk/guard-android/releases/latest/download/GuardAndroid.apk">Hent GuardAndroid.apk, installationsfilen til Android</a>. Linket virker først, når den første version er udgivet.</p></li>
-      <li><h3>F-Droid</h3><p>Planlagt. F-Droid er en app-butik for fri software. Appen er der endnu ikke.</p></li>
-      <li><h3>Kildekode</h3><p><a href="https://github.com/cocodedk/guard-android">Læs kildekoden på GitHub</a>. Appen er fri software under GPL-3.0.</p></li>
-    </ul>
+    <h2 id="h-install">Hent appen</h2>
+    <!-- cocode-apps:install:start -->
+<ul class="install" role="list">
+  <li><p class="fdroid-soon">Kommer på F-Droid</p></li>
+  <li><a href="https://github.com/cocodedk/guard-android/releases/latest/download/GuardAndroid.apk">Hent APK-filen fra GitHub</a></li>
+  <li><a href="https://apps.obtainium.imranr.dev/redirect?r=obtainium://add/https://github.com/cocodedk/guard-android">Opdatér GitHub-APK&#x27;en automatisk med Obtainium</a></li>
+</ul>
+<!-- cocode-apps:install:end -->
   </div>
 </section>
 
@@ -168,16 +181,13 @@
 </section>
 </main>
 
-<footer class="night">
-  <div class="wrap foot">
-    <p>Guard for Android er fri software under <a href="https://www.gnu.org/licenses/gpl-3.0.html">GNU General Public License version 3 (GPL-3.0)</a>.</p>
-    <ul>
-      <li><a href="https://github.com/cocodedk/guard-android">Kildekode på GitHub</a></li>
-      <li><a href="/privacy/">Privatlivspolitik</a></li>
-      <li><a href="mailto:bb@cocode.dk">bb@cocode.dk</a></li>
-      <li><a href="https://cocode.dk">Lavet af Babak, cocode.dk</a></li>
-    </ul>
-  </div>
+<div class="night"><div class="wrap foot"><!-- cocode-apps:footer:start -->
+<footer class="cocode-footer">
+  <a href="https://github.com/cocodedk/guard-android">Kildekode</a> ·
+  <a href="/privacy/">Privatliv</a> ·
+  Licens: GPL-3.0-or-later ·
+  <a href="https://cocode.dk/">Lavet af Cocode (cocode.dk)</a>
 </footer>
+<!-- cocode-apps:footer:end --></div></div>
 </body>
 </html>

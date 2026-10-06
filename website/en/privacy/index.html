@@ -15,6 +15,11 @@
 <meta property="og:title" content="Privacy policy: Guard for Android">
 <meta property="og:description" content="Privacy policy for Guard for Android: the app collects no personal data and has no account, no server run by us, no analytics and no ads. It downloads lists of dangerous addresses straight from their publishers.">
 <meta property="og:url" content="https://android.guard.cocode.dk/en/privacy/">
+<meta property="og:image" content="https://android.guard.cocode.dk/img/share.png">
+<meta property="og:image:width" content="1024">
+<meta property="og:image:height" content="500">
+<meta property="og:image:alt" content="Guard for Android: the icon and the app's name">
+<meta name="twitter:card" content="summary_large_image">
 <meta property="og:locale" content="en_GB">
 <meta property="og:locale:alternate" content="da_DK">
 <link rel="icon" type="image/svg+xml" href="/favicon.svg">
@@ -23,12 +28,20 @@
 <script type="module" src="/webmcp.js"></script>
 </head>
 <body>
-<a class="skip" href="#main">Skip to content</a>
 <header class="night">
   <div class="wrap bar">
-    <a class="brand" href="/en/"><img src="/favicon.svg" alt="" width="30" height="30"><span>Guard for Android</span></a>
-    <nav class="menu" aria-label="Main menu"><ul><li><a href="/en/#how">How it works</a></li><li><a href="/en/#get">Get the app</a></li><li><a href="/en/privacy/">Privacy</a></li></ul></nav>
-    <nav class="lang" aria-label="Language"><ul><li><a href="/privacy/" hreflang="da" lang="da">Dansk</a></li><li><a href="/en/privacy/" hreflang="en" lang="en" aria-current="page">English</a></li></ul></nav>
+    <!-- cocode-apps:nav:start -->
+<link rel="stylesheet" href="/css/cocode-nav.css">
+<a class="skip" href="#main">Skip to content</a>
+<nav class="cocode-nav" aria-label="Guard for Android">
+  <a class="brand" href="/en/" data-nav="home"><img src="/img/icon.png" alt="" width="32" height="32">Guard for Android</a>
+  <a href="/en/#how" data-nav="how">How it works</a>
+  <a href="/en/#install" data-nav="install">Install</a>
+  <a href="/en/privacy/" data-nav="privacy" aria-current="page">Privacy</a>
+  <a href="/" hreflang="da" lang="da" data-nav="lang">Dansk</a>
+  <a href="https://cocode.dk/" data-nav="more">More apps</a>
+</nav>
+<!-- cocode-apps:nav:end -->
   </div>
 </header>
 <main id="main" tabindex="-1">
@@ -36,7 +49,7 @@
   <div class="wrap">
     <h1>Privacy policy</h1>
     <p class="lede">Guard for Android collects no personal data.</p>
-    <p class="meta">Effective <time datetime="2026-10-05">5 October 2026</time>. Updated <time datetime="2026-10-06">6 October 2026</time>. The first version with protection is still being built. This policy describes how that version handles your data.</p>
+    <p class="meta">Effective <time datetime="2026-10-05">5 October 2026</time>. Updated <time datetime="2026-10-07">7 October 2026</time>. This policy describes how the app handles your data.</p>
   </div>
 </section>
 
@@ -119,16 +132,13 @@
 </section>
 </main>
 
-<footer class="night">
-  <div class="wrap foot">
-    <p>Guard for Android is free software, released under the <a href="https://www.gnu.org/licenses/gpl-3.0.html">GNU General Public License version 3 (GPL-3.0)</a>.</p>
-    <ul>
-      <li><a href="https://github.com/cocodedk/guard-android">Source code on GitHub</a></li>
-      <li><a href="/en/privacy/">Privacy policy</a></li>
-      <li><a href="mailto:bb@cocode.dk">bb@cocode.dk</a></li>
-      <li><a href="https://cocode.dk">Made by Babak, cocode.dk</a></li>
-    </ul>
-  </div>
+<div class="night"><div class="wrap foot"><!-- cocode-apps:footer:start -->
+<footer class="cocode-footer">
+  <a href="https://github.com/cocodedk/guard-android">Source code</a> ·
+  <a href="/en/privacy/">Privacy</a> ·
+  License: GPL-3.0-or-later ·
+  <a href="https://cocode.dk/">Made by Cocode (cocode.dk)</a>
 </footer>
+<!-- cocode-apps:footer:end --></div></div>
 </body>
 </html>
