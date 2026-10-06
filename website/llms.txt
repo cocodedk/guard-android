@@ -7,7 +7,7 @@
 Every page of this site declares WebMCP tools with `document.modelContext.registerTool`, for agents in a browser that has WebMCP (Chrome 150+ with the flag). Each tool takes no input and answers from the page's own text, so answers match what a visitor reads. Call `describe` first.
 
 - `describe` (every page): what the page is, its language, summary, headings and the tools it offers.
-- `get_download` (home pages): the ways to get the app (GitHub APK, F-Droid, source code) as {name, url, note}.
+- `get_download` (home pages): the ways to get the app (F-Droid, the GitHub APK, Obtainium) as {name, url}; url is null for F-Droid until the app is listed there.
 - `list_limits` (home pages): what the app cannot do, as {title, text}, including how it works with Android's Private DNS.
 - `get_privacy_summary` (privacy pages): the short privacy statement, the effective date and the headings of the full policy.
 
