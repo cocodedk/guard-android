@@ -10,13 +10,14 @@ private const val FLAG_QR = 0x8000
 private const val FLAG_OPCODE = 0x7800
 private const val FLAG_RD = 0x0100
 private const val FLAG_RA = 0x0080
+private const val RCODE_FORMERR = 1
 private const val RCODE_SERVFAIL = 2
 private const val TTL_SECONDS = 60
 
 private fun ByteArray.u8(i: Int) = this[i].toInt() and 0xFF
 private fun ByteArray.u16(i: Int) = (u8(i) shl 8) or u8(i + 1)
 
-/** Parses a query with exactly one question; null for anything else, so the caller forwards it. */
+/** Parses a query with exactly one question; null for anything else, which the caller never forwards. */
 fun parseQuery(payload: ByteArray): DnsQuestion? {
     if (payload.size < HEADER) return null
     if (payload.u16(2) and FLAG_QR != 0 || payload.u16(4) != 1) return null
@@ -28,9 +29,9 @@ fun parseQuery(payload: ByteArray): DnsQuestion? {
         if (len == 0) break
         // 0xC0 bits are a compression pointer (or a reserved form): not valid in a plain question.
         if (len and 0xC0 != 0 || pos + 1 + len > payload.size) return null
-        // A literal dot inside a label would read as a label boundary once joined; forward it instead.
-        if ((pos + 1 until pos + 1 + len).any { payload[it] == '.'.code.toByte() }) return null
-        labels += String(payload, pos + 1, len, Charsets.ISO_8859_1)
+        // A literal dot inside a label is a valid name but not a label boundary: escape it, so the
+        // joined name can never equal a different dotted name and is never matched by a rule.
+        labels += String(payload, pos + 1, len, Charsets.ISO_8859_1).replace(".", "\\.")
         pos += 1 + len
     }
     val typeAt = pos + 1
@@ -57,6 +58,21 @@ fun blockedAnswer(query: ByteArray, q: DnsQuestion): ByteArray {
 
 fun servfail(query: ByteArray, q: DnsQuestion): ByteArray =
     reply(query, q, FLAG_QR or (query.u16(2) and FLAG_RD) or FLAG_RA or RCODE_SERVFAIL, 0, ByteArray(0))
+
+/**
+ * FORMERR for a payload [parseQuery] rejected, built from its header alone; null when it is a
+ * response (QR=1) or has no complete header, which are dropped.
+ */
+fun formerr(payload: ByteArray): ByteArray? {
+    if (payload.size < HEADER || payload.u16(2) and FLAG_QR != 0) return null
+    val out = ByteArray(HEADER)
+    out[0] = payload[0]
+    out[1] = payload[1]
+    val flags = flags(payload) or RCODE_FORMERR
+    out[2] = (flags shr 8).toByte()
+    out[3] = flags.toByte()
+    return out
+}
 
 private fun flags(query: ByteArray) =
     FLAG_QR or (query.u16(2) and (FLAG_OPCODE or FLAG_RD)) or FLAG_RA

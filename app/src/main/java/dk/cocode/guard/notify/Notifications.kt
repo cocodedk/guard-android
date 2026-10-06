@@ -43,7 +43,7 @@ fun ongoingNotification(context: Context, state: ProtectionState): Notification 
     ensureChannels(context)
     val content = ongoingContent(state)
     val builder = Notification.Builder(context, CHANNEL_PROTECTION)
-        .setSmallIcon(R.drawable.ic_shield_on)
+        .setSmallIcon(content.icon)
         .setContentTitle(context.getString(content.title))
         .setContentIntent(openApp(context))
         .setOngoing(true)
@@ -62,14 +62,16 @@ fun ongoingNotification(context: Context, state: ProtectionState): Notification 
 /** Said whenever protection ends without the owner asking for it. */
 fun postStoppedAlert(context: Context, reason: StopReason) {
     ensureChannels(context)
-    val body = context.getString(alertBody(reason))
+    val content = alertContent(reason)
+    val body = context.getString(content.body)
     val alert = Notification.Builder(context, CHANNEL_ALERTS)
         .setSmallIcon(R.drawable.ic_shield_stopped)
-        .setContentTitle(context.getString(R.string.notif_stopped_title))
+        .setContentTitle(context.getString(content.title))
         .setContentText(body)
         .setStyle(Notification.BigTextStyle().bigText(body))
         .setContentIntent(openApp(context))
         .setAutoCancel(true)
+        .setOnlyAlertOnce(content.onlyAlertOnce)
         .build()
     manager(context).notify(ALERT_ID, alert)
 }

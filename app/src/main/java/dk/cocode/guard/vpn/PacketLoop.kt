@@ -2,6 +2,7 @@ package dk.cocode.guard.vpn
 
 import dk.cocode.guard.blocklist.BlockList
 import dk.cocode.guard.dns.blockedAnswer
+import dk.cocode.guard.dns.formerr
 import dk.cocode.guard.dns.parseQuery
 import dk.cocode.guard.dns.servfail
 import dk.cocode.guard.net.UdpPacket
@@ -79,8 +80,8 @@ class PacketLoop(
         val query = p.payload
         val q = parseQuery(query)
         val reply = when {
-            // A query our strict parser cannot read is forwarded unchanged, never dropped.
-            q == null -> forward(query)
+            // A query our strict parser rejects is never forwarded: upstream might resolve a blocked name.
+            q == null -> formerr(query)
             blockList.isBlocked(q.name) -> {
                 countBlocked()
                 blockedAnswer(query, q)

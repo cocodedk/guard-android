@@ -18,6 +18,7 @@ class NotificationContentTest {
         val c = ongoingContent(protectedState)
         assertEquals(R.string.notif_protected_title, c.title)
         assertEquals(R.string.notif_protected_text, c.text)
+        assertEquals(R.drawable.ic_shield_on, c.icon)
         assertTrue(c.showStop)
     }
 
@@ -26,6 +27,7 @@ class NotificationContentTest {
         val c = ongoingContent(protectedState.copy(privateDnsStrict = true))
         assertEquals(R.string.status_bypassed, c.title)
         assertEquals(R.string.card_private_dns_title, c.text)
+        assertEquals(R.drawable.ic_warning, c.icon)
         assertTrue(c.showStop)
     }
 
@@ -41,6 +43,17 @@ class NotificationContentTest {
         assertEquals(R.string.status_starting, c.title)
         assertNull(c.text)
         assertFalse(c.showStop)
+        assertEquals(R.drawable.ic_shield_off, c.icon)
+    }
+
+    @Test
+    fun repeatedStopAlertsStayQuiet() {
+        StopReason.entries.forEach {
+            val c = alertContent(it)
+            assertTrue(c.onlyAlertOnce)
+            assertEquals(R.string.notif_stopped_title, c.title)
+            assertEquals(alertBody(it), c.body)
+        }
     }
 
     @Test

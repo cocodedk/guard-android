@@ -2,6 +2,7 @@ package dk.cocode.guard.dns
 
 import org.junit.Assert.assertArrayEquals
 import org.junit.Assert.assertEquals
+import org.junit.Assert.assertFalse
 import org.junit.Assert.assertNotNull
 import org.junit.Assert.assertNull
 import org.junit.Test
@@ -49,11 +50,13 @@ class DnsMessageTest {
     }
 
     @Test
-    fun rejectsDotInsideLabel() {
-        // One label "a.b" followed by "com" would otherwise read as the name "a.b.com".
+    fun dotInsideLabelIsParsedButNeverReadAsTwoLabels() {
+        // One label "a.b" followed by "com" must not read as the name "a.b.com".
         val payload = query("axb.com")
         payload[14] = '.'.code.toByte()
-        assertNull(parseQuery(payload))
+        val name = parsed(payload).name
+        assertEquals("a\\.b.com", name)
+        assertFalse(name == "a.b.com")
     }
 
     @Test
@@ -115,5 +118,20 @@ class DnsMessageTest {
         assertEquals(0xABCD, u16(answer, 0))
         assertEquals(0x8182, u16(answer, 2))
         assertEquals(0, u16(answer, 6))
+    }
+
+    @Test
+    fun formerrHasRcode1AndHeaderOnly() {
+        val answer = checkNotNull(formerr(query(questions = 2)))
+        assertEquals(12, answer.size)
+        assertEquals(0xABCD, u16(answer, 0))
+        assertEquals(0x8181, u16(answer, 2))
+        assertEquals(0, u16(answer, 4))
+    }
+
+    @Test
+    fun formerrDropsResponsesAndShortPayloads() {
+        assertNull(formerr(query(flags = 0x8180)))
+        assertNull(formerr(ByteArray(11)))
     }
 }

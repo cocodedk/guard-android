@@ -122,13 +122,27 @@ class PacketLoopTest {
     }
 
     @Test
-    fun unparseableQueryIsForwardedUnchanged() {
-        val up = FakeUpstream(reply = byteArrayOf(0, 0, 1, 2))
+    fun rejectedQueryIsAnsweredFormerrNeverForwarded() {
+        val up = FakeUpstream(reply = query("ads.example.com"))
         start(up)
-        val garbage = byteArrayOf(0x12, 0x34, 0x01)
-        send(garbage)
+        val twoQuestions = query("ads.example.com").also { it[5] = 2 }
+        send(twoQuestions)
+        val r = reply()
+        assertEquals(12, r.payload.size)
+        assertEquals(0x12, r.payload[0].toInt())
+        assertEquals(1, r.payload[3].toInt() and 0x0F) // RCODE FORMERR
+        assertTrue(up.queries.isEmpty())
+    }
+
+    @Test
+    fun truncatedPayloadIsDroppedNeverForwarded() {
+        val up = FakeUpstream(reply = query("www.example.com"))
+        start(up)
+        send(byteArrayOf(0x12, 0x34, 0x01))
+        send(query("ads.example.com")) // a later query still gets through
         reply()
-        assertTrue(garbage.contentEquals(up.queries.poll(5, TimeUnit.SECONDS)))
+        assertTrue(up.queries.isEmpty())
+        assertTrue(tunnel.written.isEmpty())
     }
 
     @Test
