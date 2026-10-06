@@ -34,16 +34,14 @@ const getDownload = {
   name: 'get_download',
   title: 'Where to get the app',
   description:
-    'Lists the ways to get the app shown on this page, as {name, url, note}; url is null when the entry has no link. Read the note: a link may not work until the first release is out.',
+    'Lists the ways to get the app shown on this page, as {name, url}; url is null when the entry has no link yet (F-Droid before the app is listed there).',
   inputSchema: NONE,
   annotations: { readOnlyHint: true },
   execute: async () => ({
     ok: true,
-    status: text(document.querySelector('#get .intro')),
-    items: Array.from(document.querySelectorAll('#get .cards > li')).map((li) => ({
-      name: text(li.querySelector('h3')),
+    items: Array.from(document.querySelectorAll('#install .install > li')).map((li) => ({
+      name: text(li),
       url: li.querySelector('a')?.href || null,
-      note: text(li.querySelector('p')),
     })),
   }),
 };
