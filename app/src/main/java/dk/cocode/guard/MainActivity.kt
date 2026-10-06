@@ -1,7 +1,6 @@
 package dk.cocode.guard
 
 import android.Manifest
-import android.app.NotificationManager
 import android.content.ActivityNotFoundException
 import android.content.Intent
 import android.content.pm.PackageManager
@@ -16,6 +15,7 @@ import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.mutableStateOf
+import dk.cocode.guard.notify.alertsAllowed
 import dk.cocode.guard.ui.HomeAction
 import dk.cocode.guard.ui.HomeCard
 import dk.cocode.guard.ui.HomeScreen
@@ -52,7 +52,11 @@ class MainActivity : ComponentActivity() {
 
     override fun onResume() {
         super.onResume()
-        notificationsAllowed.value = getSystemService(NotificationManager::class.java).areNotificationsEnabled()
+        notificationsAllowed.value = alertsAllowed(this)
+        // Back from settings, lockdown, Private DNS or Always-on may have changed under a running tunnel.
+        if (ProtectionRepository.state.value.status == ProtectionStatus.Protected) {
+            startService(GuardVpnService.recheckIntent(this))
+        }
     }
 
     private fun onAction(action: HomeAction) {

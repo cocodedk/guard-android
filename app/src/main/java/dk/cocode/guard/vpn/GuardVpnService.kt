@@ -11,6 +11,7 @@ import android.system.OsConstants
 import dk.cocode.guard.MainActivity
 import dk.cocode.guard.R
 import dk.cocode.guard.notify.ONGOING_ID
+import dk.cocode.guard.notify.clearStoppedAlert
 import dk.cocode.guard.notify.ongoingNotification
 import dk.cocode.guard.notify.postStoppedAlert
 import dk.cocode.guard.notify.updateOngoing
@@ -22,6 +23,7 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.SupervisorJob
 import kotlinx.coroutines.cancel
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 
@@ -41,6 +43,11 @@ class GuardVpnService : VpnService() {
             stopByOwner()
             return START_NOT_STICKY
         }
+        if (intent?.action == ACTION_RECHECK) {
+            // Only the screen sends this, and only while protecting; never let it start protection.
+            if (active) recheck() else stopSelf()
+            return START_STICKY
+        }
         // Anything else is a start, including the system's own start for Always-on VPN.
         if (!active) start()
         return START_STICKY
@@ -52,17 +59,7 @@ class GuardVpnService : VpnService() {
             it.copy(status = ProtectionStatus.Starting, blockedCount = 0, alwaysOn = isAlwaysOn)
         }
         showForeground()
-        if (isLockdownEnabled) {
-            // Lockdown lets no traffic past the tunnel, and this one carries only DNS.
-            stopForOther(StopReason.Lockdown)
-            return
-        }
-        if (privateDnsStrict(this)) {
-            // Android sends a named Private DNS server's lookups into the tunnel, which only reaches
-            // the fake DNS address, so the phone could look up nothing at all.
-            stopForOther(StopReason.PrivateDns)
-            return
-        }
+        cannotRunReason()?.let { return stopForOther(it) }
         // Everything here after the list load runs on the main thread with no suspension point, and
         // revocation is also posted to the main thread, so it cannot interleave with startup.
         startJob = scope.launch {
@@ -87,13 +84,32 @@ class GuardVpnService : VpnService() {
                 loop = packets
                 ProtectionRepository.update { it.copy(status = ProtectionStatus.Protected, listSize = list.size) }
                 updateOngoing(this@GuardVpnService, ProtectionRepository.state.value)
+                // An alert from an earlier stop no longer holds, and left alone it would silence the next one.
+                clearStoppedAlert(this@GuardVpnService)
                 packets.start()
+                // Android need not restart the service when lockdown or Always-on change, so look again.
+                while (true) {
+                    delay(RECHECK_MS)
+                    recheck()
+                }
             } catch (e: CancellationException) {
                 throw e
             } catch (e: Exception) {
                 // Loading the list, establishing or registering the callback failed: clean up and say so.
                 stopForOther(StopReason.Error)
             }
+        }
+    }
+
+    private fun cannotRunReason(): StopReason? = cannotRun(isLockdownEnabled, privateDnsStrict(this))
+
+    /** While protecting: stop if protection can no longer work, else keep the Always-on flag current. */
+    private fun recheck() {
+        if (ProtectionRepository.state.value.status != ProtectionStatus.Protected) return
+        cannotRunReason()?.let { return stopForOther(it) }
+        if (ProtectionRepository.state.value.alwaysOn != isAlwaysOn) {
+            ProtectionRepository.update { it.copy(alwaysOn = isAlwaysOn) }
+            updateOngoing(this, ProtectionRepository.state.value)
         }
     }
 
@@ -168,9 +184,13 @@ class GuardVpnService : VpnService() {
 
     companion object {
         private const val ACTION_STOP = "dk.cocode.guard.STOP"
+        private const val ACTION_RECHECK = "dk.cocode.guard.RECHECK"
+        private const val RECHECK_MS = 30_000L
 
         fun startIntent(context: Context) = Intent(context, GuardVpnService::class.java)
 
         fun stopIntent(context: Context) = startIntent(context).setAction(ACTION_STOP)
+
+        fun recheckIntent(context: Context) = startIntent(context).setAction(ACTION_RECHECK)
     }
 }

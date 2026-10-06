@@ -76,6 +76,15 @@ fun postStoppedAlert(context: Context, reason: StopReason) {
     manager(context).notify(ALERT_ID, alert)
 }
 
+fun clearStoppedAlert(context: Context) = manager(context).cancel(ALERT_ID)
+
+/** False when notifications are off for the app or for its alerts channel: a stop could not be told. */
+fun alertsAllowed(context: Context): Boolean {
+    val m = manager(context)
+    val channel = m.getNotificationChannel(CHANNEL_ALERTS) // null until first use, when it is created on
+    return m.areNotificationsEnabled() && (channel == null || channel.importance != NotificationManager.IMPORTANCE_NONE)
+}
+
 fun updateOngoing(context: Context, state: ProtectionState) {
     manager(context).notify(ONGOING_ID, ongoingNotification(context, state))
 }

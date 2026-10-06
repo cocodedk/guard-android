@@ -11,6 +11,7 @@ import dk.cocode.guard.net.parseIpv4Udp
 import java.io.IOException
 import java.io.InputStream
 import java.io.OutputStream
+import java.util.concurrent.atomic.AtomicInteger
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.ExperimentalCoroutinesApi
@@ -23,6 +24,9 @@ private val DNS_ADDRESS_BYTES = byteArrayOf(10, 111, 222.toByte(), 2)
 private const val DNS_PORT = 53
 private const val MAX_PACKET = 32_768
 private const val QUERY_PARALLELISM = 16
+
+/** Queries waiting on an answer at once; more are dropped and the asking app retries. */
+internal const val MAX_PENDING = 64
 
 /**
  * Reads packets from the tunnel on one dedicated thread and answers each DNS query on its own
@@ -41,6 +45,7 @@ class PacketLoop(
     private val scope = CoroutineScope(SupervisorJob() + Dispatchers.IO.limitedParallelism(QUERY_PARALLELISM))
     private val writeLock = Any()
     private val countLock = Any()
+    private val pending = AtomicInteger()
 
     @Volatile
     private var running = true
@@ -68,7 +73,18 @@ class PacketLoop(
                 if (n < 0) throw IOException("tunnel closed")
                 val packet = parseIpv4Udp(buf, n) ?: continue
                 if (packet.dstIp.contentEquals(DNS_ADDRESS_BYTES) && packet.dstPort == DNS_PORT) {
-                    scope.launch { answer(packet) }
+                    // limitedParallelism caps threads, not suspended queries, so cap those here.
+                    if (pending.incrementAndGet() > MAX_PENDING) {
+                        pending.decrementAndGet()
+                        continue
+                    }
+                    scope.launch {
+                        try {
+                            answer(packet)
+                        } finally {
+                            pending.decrementAndGet()
+                        }
+                    }
                 }
             }
         } catch (e: Exception) {

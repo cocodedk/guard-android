@@ -9,6 +9,8 @@ import java.io.InputStream
 import java.io.OutputStream
 import java.util.concurrent.LinkedBlockingQueue
 import java.util.concurrent.TimeUnit
+import java.util.concurrent.atomic.AtomicInteger
+import kotlinx.coroutines.CompletableDeferred
 import org.junit.After
 import org.junit.Assert.assertEquals
 import org.junit.Assert.assertNotNull
@@ -43,6 +45,18 @@ class PacketLoopTest {
         override suspend fun query(payload: ByteArray): ByteArray? {
             queries.put(payload)
             return reply?.copyOf()
+        }
+    }
+
+    /** Never answers until released, like a resolver that has stopped replying. */
+    private class StuckUpstream : DnsUpstream {
+        override val hasNetwork = true
+        val asked = AtomicInteger()
+        val release = CompletableDeferred<Unit>()
+        override suspend fun query(payload: ByteArray): ByteArray? {
+            asked.incrementAndGet()
+            release.await()
+            return null
         }
     }
 
@@ -143,6 +157,25 @@ class PacketLoopTest {
         reply()
         assertTrue(up.queries.isEmpty())
         assertTrue(tunnel.written.isEmpty())
+    }
+
+    @Test
+    fun pendingQueriesAreCapped() {
+        val up = StuckUpstream()
+        start(up)
+        repeat(MAX_PENDING + 20) { send(query("www.example.com", id = it)) }
+        val deadline = System.currentTimeMillis() + 5_000
+        while (up.asked.get() < MAX_PENDING && System.currentTimeMillis() < deadline) Thread.sleep(10)
+        Thread.sleep(300)
+        assertEquals(MAX_PENDING, up.asked.get())
+        up.release.complete(Unit)
+        // Once the stuck queries end, new ones are admitted again.
+        val freed = System.currentTimeMillis() + 5_000
+        while (up.asked.get() == MAX_PENDING && System.currentTimeMillis() < freed) {
+            send(query("www.example.com"))
+            Thread.sleep(50)
+        }
+        assertTrue(up.asked.get() > MAX_PENDING)
     }
 
     @Test

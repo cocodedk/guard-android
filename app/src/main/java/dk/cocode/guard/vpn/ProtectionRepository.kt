@@ -18,6 +18,17 @@ sealed interface ProtectionStatus {
 
 enum class StopReason { Revoked, Lockdown, PrivateDns, Error }
 
+/**
+ * Why protection cannot run, or null if it can. Lockdown lets no traffic past a tunnel that carries
+ * only DNS; with Private DNS set to a server, Android sends its lookups into the tunnel, which only
+ * reaches the fake DNS address. Either way the phone would have no internet.
+ */
+fun cannotRun(lockdown: Boolean, privateDnsStrict: Boolean): StopReason? = when {
+    lockdown -> StopReason.Lockdown
+    privateDnsStrict -> StopReason.PrivateDns
+    else -> null
+}
+
 data class ProtectionState(
     val status: ProtectionStatus = ProtectionStatus.Off,
     val blockedCount: Int = 0, // since the current start; reset to 0 on each start

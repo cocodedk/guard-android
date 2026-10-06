@@ -26,9 +26,12 @@ Accessibility). Read `CLAUDE.md` first; its rules apply.
 - **Read loop** (one dedicated thread): read a packet from the tunnel `FileInputStream`. Keep only
   IPv4 + UDP + destination `10.111.222.2:53`; drop everything else silently (including TCP).
 - **Each query** (handled on `Dispatchers.IO.limitedParallelism(16)`, so slow upstream replies
-  cannot exhaust the shared IO pool; the read loop never waits for the network):
+  cannot exhaust the shared IO pool; the read loop never waits for the network). That limit caps
+  threads, not waiting queries, so at most 64 queries (`MAX_PENDING`) are in flight at once; a
+  query past that is dropped and the asking app retries.
   1. Parse the DNS question. If the payload is not a parseable query with exactly one question,
-     forward it unchanged (never break DNS because our parser is strict).
+     answer `FORMERR` (header only, same id) and never forward it: upstream might resolve a
+     blocked name our strict parser could not read. A payload shorter than a header gets nothing.
   2. If `BlockList.isBlocked(name)`: build the blocked answer, increment the blocked counter, and
      write the reply packet to the tunnel.
   3. Otherwise forward the payload to the network's DNS through Android's own resolver (below),
@@ -82,7 +85,9 @@ Accessibility). Read `CLAUDE.md` first; its rules apply.
     `notif_protected_text`, action `notif_action_stop` (stops protection). When Always-on VPN
     holds protection on, the Stop action is left out. The notification updates whenever the state
     changes.
-  - `alerts` ("Advarsler" / "Alerts"), importance HIGH: the stop notification (below).
+  - `alerts` ("Advarsler" / "Alerts"), importance HIGH: the stop notification (below). Each
+    successful start cancels an earlier stop alert: it no longer holds, and left in place its
+    `onlyAlertOnce` would silence the next one.
 - **Stop by the owner** (button or notification action): close the tunnel, stop the thread,
   unregister the callback, `stopForeground(STOP_FOREGROUND_REMOVE)`, `stopSelf()`, state `Off`.
   No alert: the owner asked for it and the screen already says "Ikke beskyttet". This is the only
@@ -93,7 +98,7 @@ Accessibility). Read `CLAUDE.md` first; its rules apply.
     turned off in Android's settings; the app cannot tell which, so the words name both.
   - An exception in the read loop or in `establish()`, or `establish()` returning null → `Error`.
   - **Lockdown** → `Lockdown`: at each start, before `establish()`, if `isLockdownEnabled()` is true,
-    do not establish. Android's "Block connections without VPN" lets no traffic past the tunnel,
+    do not establish; while protecting, the same check runs again (below). Android's "Block connections without VPN" lets no traffic past the tunnel,
     and this tunnel carries only DNS, so the phone would have no internet.
   - **Private DNS set to a server** → `PrivateDns`: at each start, after the lockdown check and
     before `establish()`, and whenever the default-network callback reports `LinkProperties` with
@@ -102,6 +107,12 @@ Accessibility). Read `CLAUDE.md` first; its rules apply.
     lookup fails: the phone has no internet at all. Checked on a Galaxy A52s (Android 14) on
     2026-10-06; with the tunnel down the same setting worked. The setting is read from the
     app's own default network (the real one, as the app is excluded from its tunnel).
+- **Checked again while protecting:** Android need not restart the service when lockdown or
+  Always-on change in its settings, so while `Protected` the service repeats the start check
+  (`cannotRun(isLockdownEnabled(), privateDnsStrict)`, pure, lockdown first) every 30 s and
+  whenever the screen comes back to the front (`onResume` sends the service a recheck intent,
+  which never starts protection). A reason stops protection as above; otherwise `alwaysOn` is
+  updated to `isAlwaysOn()` and the notification with it.
 - **Always-on VPN:** whenever the system starts the service (Android's own "Always-on VPN"
   setting does this, also after boot), it starts protection. The service records
   `isAlwaysOn()` in the state at each start. While it is true the app offers no Stop: Android would
@@ -192,6 +203,8 @@ column scrolls (`verticalScroll`) and respects `safeDrawingPadding`; nothing has
   anything else sets `PermissionRefused`. A null intent starts the service directly.
 - The StoppedPrivateDns card's button opens `Settings.ACTION_WIRELESS_SETTINGS`, falling back to
   `Settings.ACTION_SETTINGS` if no activity handles it.
+- "Notifications refused" means the app's notifications are off, or its `alerts` channel is
+  turned off (importance `NONE`): either way a stop could not be told.
 - The NotificationsOff card's button opens the app's notification settings
   (`Settings.ACTION_APP_NOTIFICATION_SETTINGS` with `EXTRA_APP_PACKAGE`).
 - The AlwaysOn and StoppedLockdown cards' button opens `Settings.ACTION_VPN_SETTINGS`.
@@ -282,7 +295,8 @@ Keep Android-free logic in plain Kotlin so it runs in JVM tests. Every code file
   `fun blockedAnswer(query: ByteArray, q: DnsQuestion): ByteArray`;
   `fun servfail(query: ByteArray, q: DnsQuestion): ByteArray`.
 - `vpn/GuardVpnService.kt`, `vpn/PacketLoop.kt`, `vpn/Upstream.kt` (forwarding through
-  `DnsResolver`, the network callback, the Private DNS check), `vpn/ProtectionRepository.kt` (state above).
+  `DnsResolver`, the network callback, the Private DNS check), `vpn/ProtectionRepository.kt` (state above
+  and `cannotRun`).
 - `notify/Notifications.kt` — channels, ongoing and alert notifications.
 - `ui/HomeUi.kt` (`homeUi` and its types), `ui/HomeScreen.kt`, `ui/HomeCards.kt`,
   `MainActivity.kt` (permission and VPN-consent launchers).
@@ -320,6 +334,11 @@ No real sockets, no name lookups, no Android framework in these tests.
     Stopped(Revoked), Stopped(Lockdown), Stopped(PrivateDns), Stopped(Error)) asserting status
     text, tone, cards in order, action and `showCounter`; plus `stoppedNeverSaysProtected`,
     `alwaysOnHidesStopAndShowsCard` and `notificationsCardWhenRefused`.
+- `vpn/CannotRunTest`: `lockdownStops`, `privateDnsServerStops`, `lockdownIsNamedWhenBoth`,
+  `runsWhenNeither`.
+- `vpn/PacketLoopTest` (in-memory tunnel, fake upstream): among others `pendingQueriesAreCapped`
+  (a resolver that never answers sees exactly `MAX_PENDING` queries; after it answers, new ones
+  are admitted) and `rejectedQueryIsAnsweredFormerrNeverForwarded`.
 
 The existing `ContrastTest` must still pass. `./gradlew buildSmoke --no-daemon` is the gate.
 
