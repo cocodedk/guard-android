@@ -9,9 +9,12 @@ rather than guessing.
 
 ## Rules
 
-- **Only DNS enters the tunnel.** `VpnService` is a local tunnel ending inside the app; its only
-  route is the fake DNS address. Never route other traffic, never add a remote server.
-- **No Cocode server, no account, no analytics, no remote code.** Block lists ship in `assets/`.
+- **Only DNS and traffic to listed bad addresses enter the tunnel.** `VpnService` is a local tunnel
+  ending inside the app; its routes are the fake DNS address and the ranges on the bad-address
+  lists. Traffic to a listed address is refused inside the app; nothing is ever relayed to the
+  internet, and there is no remote server. All other traffic stays off the tunnel.
+- **No Cocode server, no account, no analytics, no remote code.** The name list ships in
+  `assets/`. IP lists are downloaded on the phone straight from their publishers: data, never code.
 - **Stop means stop, said plainly.** Any path that ends protection without the owner asking for it
   posts a notification saying DNS lookups are no longer filtered. When the owner stops it, the
   screen says so. Never fail silently, and never say "protected" while the filter is bypassed.
