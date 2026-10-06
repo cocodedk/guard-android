@@ -12,13 +12,18 @@
     <string name="action_start_again">Start again</string>
     <string name="action_try_again">Try again</string>
 
-    <string name="counter">Blocked DNS lookups since protection started: %1$d</string>
-    <string name="list_line">Name list: AdGuard DNS filter, %1$s names</string>
-    <string name="counter_addresses">Blocked connections to dangerous addresses since protection started: %1$d</string>
+    <string name="tile_lookups_tag">Lookups</string>
+    <string name="tile_lookups_label">blocked since protection started</string>
+    <string name="tile_lookups_spoken">%1$s blocked DNS lookups since protection started</string>
+    <string name="tile_connections_tag">Connections</string>
+    <string name="tile_connections_label">to dangerous addresses, refused</string>
+    <string name="tile_connections_spoken">%1$s blocked connections to dangerous addresses since protection started</string>
+    <string name="lists_title">Lists</string>
+    <string name="list_names_active">%1$s names</string>
+    <string name="list_active">%1$s · downloaded %2$s</string>
+    <string name="list_paused">Paused · downloaded %1$s</string>
+    <string name="list_not_yet">Not downloaded yet</string>
     <string name="address_blocking_off">Blocking of dangerous addresses isn\'t active. The app downloads the lists directly from their publishers when the phone is online. Until then, only names are blocked.</string>
-    <string name="address_list_active">%1$s: Entries on the list: %2$s. Downloaded %3$s.</string>
-    <string name="address_list_too_old">%1$s: paused because the list is old (last downloaded %2$s). An old list can block addresses that other people use now. The app downloads a new list when the phone is online.</string>
-    <string name="address_list_not_yet">%1$s: not downloaded yet</string>
 
     <string name="recent_title">Recent blocks</string>
     <string name="recent_group">%1$s: %2$d blocked. Most recently tried to reach %3$s.</string>
