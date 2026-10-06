@@ -28,8 +28,11 @@ The owner renamed the app from "Cocode Guard" to **Guard for Android** (Google's
 
 Each line must be true of the app as merged, word for word. In particular, never say the app sends
 or transmits **nothing**: lookups that are not blocked go to the network's own DNS server, and the
-address lists are downloaded from their publishers. What is true, and what the screen says, is that
-the app sends **no information about you** to anyone and that there is no Cocode server.
+address lists are downloaded from their publishers. Nor may a promise say the app sends no
+information about you: a forwarded lookup tells the network's DNS server which name was asked for,
+and a list download shows the publisher the phone's IP address (the spec 04 grill, 2026-10-06).
+What is true, and what the screen says: the app **collects** no information about you, there is no
+Cocode server, and the next promises say plainly what does leave the phone and to whom.
 
 ## Home screen: "Godt at vide"
 
@@ -113,7 +116,7 @@ Issues and Contact do not depend on the language.
 | Key | Danish | English |
 |---|---|---|
 | promise_title | Godt at vide | Good to know |
-| promise_no_data | Appen sender ingen oplysninger om dig til nogen. Der er ingen konto, ingen sporing, ingen statistik og ingen reklamer. | The app sends no information about you to anyone. There is no account, tracking, analytics or ads. |
+| promise_no_data | Appen indsamler ingen oplysninger om dig. Der er ingen konto, ingen sporing, ingen statistik og ingen reklamer. | The app collects no information about you. There is no account, tracking, analytics or ads. |
 | promise_on_phone | Blokeringen sker på telefonen. Der er ingen Cocode-server og ingen VPN-server. Lister over farlige adresser hentes direkte fra udgiverne, som kan se din IP-adresse, ligesom en hjemmeside kan det ved et besøg. | The blocking happens on the phone. There is no Cocode server and no VPN server. Lists of dangerous addresses are downloaded directly from their publishers, who can see your IP address, just as a website can when you visit it. |
 | promise_only_dns | Kun DNS-opslag og forbindelser til kendte farlige adresser går gennem appen. Et DNS-opslag er måden, telefonen finder ud af, hvor en side ligger. Opslag, der ikke blokeres, går videre til netværkets egen DNS-server som før. Resten af din trafik rører appen ikke. | Only DNS lookups and connections to known dangerous addresses pass through the app. A DNS lookup is how the phone finds out where a site is. Lookups that aren't blocked go on to the network's own DNS server, as before. The app never touches the rest of your traffic. |
 | promise_free | Appen er gratis, og alle kan læse koden. Den er fri software under licensen GPL-3.0. | The app is free of charge, and anyone can read its code. It is free software under the GPL-3.0 license. |
