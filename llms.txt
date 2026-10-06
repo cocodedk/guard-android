@@ -1,18 +1,20 @@
 # Cocode Guard for Android
 
 > A free-software (GPL-3.0) Android app that blocks dangerous sites and ads for every app on the
-> phone, on any network, by filtering DNS lookups on the phone itself. It uses Android's VpnService
-> only as a local tunnel that ends inside the app: no VPN server, no account, no analytics. Kotlin
-> and Jetpack Compose, no Google libraries, built for TalkBack and large text. The phone companion
-> of the Cocode Guard home-network box.
+> phone, on any network, by filtering DNS lookups on the phone itself. It also refuses connections to
+> known-bad IP addresses, using public lists the phone downloads straight from their publishers. It
+> uses Android's VpnService only as a local tunnel that ends inside the app: no VPN server, no
+> account, no analytics. Kotlin and Jetpack Compose, no Google libraries, built for TalkBack and large
+> text. The phone companion of the Cocode Guard home-network box.
 
 Built by Babak Bandpey (Cocode, https://cocode.dk). Status: early; the first version with
-protection is being built (spec 01 in docs/lean), so the behaviour below is the design.
+protection is being built (specs 01 and 02 in docs/lean), so the behaviour below is the design.
 
 Design rules that explain most of the code:
 
-- **Only DNS enters the tunnel.** The tunnel's single route is a fake DNS address; all other
-  traffic bypasses the app.
+- **Only DNS and listed bad addresses enter the tunnel.** Its routes are a fake DNS address and the
+  ranges on the bad-address lists; traffic to a listed address is refused inside the app, never
+  relayed. All other traffic bypasses the app. The lists are downloaded on the phone, data only.
 - **Stop means stop, said plainly.** If protection stops, a notification says so; the app never
   fails silently.
 - **Blind-friendly is a requirement, not a polish step.** Spoken labels, live-region status,

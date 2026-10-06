@@ -1,6 +1,6 @@
 # Cocode Guard for Android
 
-> A free Android app (GPL-3.0) that blocks dangerous sites and ads in every app on the phone, on any network, by filtering DNS inside the phone over a local tunnel. No account, no Cocode server, no tracking. Block lists ship inside the app. The first release is still being built. Source: https://github.com/cocodedk/guard-android
+> A free Android app (GPL-3.0) that blocks dangerous sites and ads in every app on the phone, on any network, by filtering DNS inside the phone over a local tunnel. No account, no Cocode server, no tracking. The name block list ships inside the app. The app also refuses connections to known-bad IP addresses, using public lists it downloads on the phone straight from their publishers. The first release is still being built. Source: https://github.com/cocodedk/guard-android
 
 ## WebMCP tools
 
