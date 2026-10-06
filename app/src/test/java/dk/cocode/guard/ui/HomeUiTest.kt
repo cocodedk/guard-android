@@ -135,6 +135,15 @@ class HomeUiTest {
     }
 
     @Test
+    fun recentShownOnlyWhenProtected() {
+        val others = listOf(ProtectionStatus.Off, ProtectionStatus.Starting, ProtectionStatus.PermissionRefused) +
+            StopReason.entries.map { ProtectionStatus.Stopped(it) }
+        for (s in others) assertFalse("$s", ui(s).showRecent)
+        assertTrue(ui(ProtectionStatus.Protected).showRecent)
+        assertTrue(ui(ProtectionStatus.Protected, alwaysOn = true).showRecent) // the other Protected row
+    }
+
+    @Test
     fun addressListsOnlyWhenProtected() {
         val lists = listOf(status(AddressList.DropV4, ListState.Active))
         val others = listOf(

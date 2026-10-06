@@ -24,6 +24,7 @@ data class HomeUi(
     val showCounter: Boolean,
     val addressLists: List<ListStatus> = emptyList(), // only in Protected
     val addressBlockingOff: Boolean = false, // Protected with no list Active
+    val showRecent: Boolean = false, // only in Protected; the rows come from state.recentBlocks
 )
 
 /** What the screen shows for a state: the whole journey in one pure function. */
@@ -48,6 +49,7 @@ fun homeUi(state: ProtectionState, notificationsAllowed: Boolean): HomeUi {
             showCounter = true,
             addressLists = state.addressLists,
             addressBlockingOff = state.addressLists.none { it.state == ListState.Active },
+            showRecent = true,
         )
         is ProtectionStatus.Stopped -> HomeUi(
             R.string.status_off, Tone.Urgent, null, listOf(stoppedCard(status.reason)), HomeAction.StartAgain, false,

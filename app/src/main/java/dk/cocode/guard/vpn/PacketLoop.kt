@@ -14,6 +14,8 @@ import dk.cocode.guard.net.buildIpv4Udp
 import dk.cocode.guard.net.parseIpPacket
 import dk.cocode.guard.net.parseIpv4Udp
 import dk.cocode.guard.net.u16
+import dk.cocode.guard.recent.BlockEvent
+import dk.cocode.guard.recent.BlockKind
 import java.io.IOException
 import java.io.InputStream
 import java.io.OutputStream
@@ -50,6 +52,8 @@ class PacketLoop(
     private val refusals: Refusals = Refusals(),
     // Names the app owning a connection: protocol, source address and port, destination address and port.
     private val appOf: (Int, ByteArray, Int, ByteArray, Int) -> String? = { _, _, _, _, _ -> null },
+    // Names the app that sent a DNS query; asked only for a blocked name.
+    private val ownerOf: (UdpPacket) -> String? = { null },
     private val onFailure: (Throwable) -> Unit,
 ) {
     // Limited so slow upstream replies cannot exhaust the shared IO pool.
@@ -72,8 +76,11 @@ class PacketLoop(
         scope.cancel()
     }
 
-    private fun countBlocked() = synchronized(countLock) {
-        if (running) ProtectionRepository.update { it.copy(blockedCount = it.blockedCount + 1) }
+    private fun countBlocked(name: String, app: String?) = synchronized(countLock) {
+        if (running) {
+            ProtectionRepository.update { it.copy(blockedCount = it.blockedCount + 1) }
+            ProtectionRepository.record(BlockEvent(BlockKind.Name, name, app))
+        }
     }
 
     // The flow is remembered only while running: a loop stopped by a tunnel swap must not mark it seen,
@@ -82,7 +89,7 @@ class PacketLoop(
         if (running && refusals.firstTime(buf, ip)) {
             ProtectionRepository.update { it.copy(blockedAddressCount = it.blockedAddressCount + 1) }
             val h = ip.headerLength
-            refusals.announce(ipText(ip.dstIp), listId) { appOf(ip.protocol, ip.srcIp, buf.u16(h), ip.dstIp, buf.u16(h + 2)) }
+            refusals.record(ipText(ip.dstIp), listId) { appOf(ip.protocol, ip.srcIp, buf.u16(h), ip.dstIp, buf.u16(h + 2)) }
         }
     }
 
@@ -142,7 +149,8 @@ class PacketLoop(
             // A query our strict parser rejects is never forwarded: upstream might resolve a blocked name.
             q == null -> formerr(query)
             blockList.isBlocked(q.name) -> {
-                countBlocked()
+                // Asked before the reply is written: the app's socket may close right after.
+                countBlocked(q.name, ownerOf(p))
                 blockedAnswer(query, q)
             }
             !upstream.hasNetwork -> servfail(query, q)

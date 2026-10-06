@@ -4,6 +4,9 @@ import android.content.Context
 import dk.cocode.guard.blocklist.BlockList
 import dk.cocode.guard.blocklist.parseRules
 import dk.cocode.guard.iplist.ListStatus
+import dk.cocode.guard.recent.AppBlocks
+import dk.cocode.guard.recent.BlockEvent
+import dk.cocode.guard.recent.RecentBlocks
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
@@ -37,6 +40,7 @@ data class ProtectionState(
     val alwaysOn: Boolean = false, // VpnService.isAlwaysOn() at the last start
     val blockedAddressCount: Int = 0, // since the current start; reset to 0 on each start
     val addressLists: List<ListStatus> = emptyList(), // one per list, in AddressList order
+    val recentBlocks: List<AppBlocks> = emptyList(), // since the current start; cleared at every start and stop
 )
 
 /** The one process-wide record of protection, shared by the service and the screen. */
@@ -45,8 +49,32 @@ object ProtectionRepository {
     val state: StateFlow<ProtectionState> = mutableState.asStateFlow()
 
     private var blockList: BlockList? = null
+    private val recent = RecentBlocks()
 
     fun update(change: (ProtectionState) -> ProtectionState) = mutableState.update(change)
+
+    /** Keeps [event] and publishes the groups; read inside the update so a racing add is never published stale. */
+    fun record(event: BlockEvent) {
+        recent.add(event)
+        update { it.copy(recentBlocks = recent.groups()) }
+    }
+
+    /** A new start: counters, lists and recent blocks all begin empty. */
+    fun starting(alwaysOn: Boolean) {
+        recent.clear()
+        update {
+            it.copy(
+                status = ProtectionStatus.Starting, blockedCount = 0, blockedAddressCount = 0,
+                addressLists = emptyList(), alwaysOn = alwaysOn, recentBlocks = emptyList(),
+            )
+        }
+    }
+
+    /** Protection has ended, however; the recent blocks go with it. */
+    fun ended(status: ProtectionStatus) {
+        recent.clear()
+        update { it.copy(status = status, recentBlocks = emptyList()) }
+    }
 
     /** Loads the shipped list on first use and keeps it for later starts. Call off the main thread. */
     @Synchronized

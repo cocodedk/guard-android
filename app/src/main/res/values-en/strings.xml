@@ -20,6 +20,12 @@
     <string name="address_list_too_old">%1$s: paused, last downloaded %2$s. Old lists can block addresses that others use now.</string>
     <string name="address_list_not_yet">%1$s: not downloaded yet</string>
 
+    <string name="recent_title">Recent blocks</string>
+    <string name="recent_group">%1$s: %2$d blocked, latest %3$s</string>
+    <string name="recent_unknown_app">An unknown app</string>
+    <string name="recent_none">Nothing has been blocked since start.</string>
+    <string name="recent_note">This list stays on the phone and is cleared when protection starts or stops.</string>
+
     <string name="card_refused_title">Permission was refused</string>
     <string name="card_refused_body">The app needs Android\'s VPN permission to see DNS lookups. It is used only on the phone, and there is no Cocode server: lookups that are not blocked go to the network\'s own DNS server, as before.</string>
     <string name="card_revoked_title">Protection has stopped</string>
