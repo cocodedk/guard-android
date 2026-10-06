@@ -1,18 +1,9 @@
 package dk.cocode.guard.ui
 
 import androidx.annotation.StringRes
-import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.heightIn
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.safeDrawingPadding
-import androidx.compose.foundation.rememberScrollState
-import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
-import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -23,7 +14,11 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.semantics.heading
 import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import dk.cocode.guard.R
+import dk.cocode.guard.ui.fx.CondensedText
+import dk.cocode.guard.ui.fx.NeonScreen
+import dk.cocode.guard.ui.theme.GuardColors
 
 private val links = listOf(
     AboutLink.Website to R.string.link_website,
@@ -40,9 +35,11 @@ private val credits = listOf(
 )
 
 @Composable
-private fun SectionTitle(@StringRes title: Int) = Text(
+private fun SectionTitle(@StringRes title: Int) = CondensedText(
     text = stringResource(title),
     style = MaterialTheme.typography.titleMedium,
+    color = GuardColors.Cyan,
+    spacing = 3.sp,
     modifier = Modifier.padding(top = 24.dp).semantics { heading() },
 )
 
@@ -57,42 +54,32 @@ private fun Body(@StringRes text: Int) = Text(stringResource(text), style = Mate
 fun AboutScreen(version: String, openLink: (AboutLink) -> Boolean, onBack: () -> Unit) {
     var noBrowser by rememberSaveable { mutableStateOf(false) }
     val open = { link: AboutLink -> noBrowser = !openLink(link) }
-    Surface(modifier = Modifier.fillMaxSize(), color = MaterialTheme.colorScheme.background) {
-        Column(
-            modifier = Modifier
-                .safeDrawingPadding()
-                .verticalScroll(rememberScrollState())
-                .padding(24.dp),
-            verticalArrangement = Arrangement.spacedBy(16.dp),
-        ) {
-            TextButton(onClick = onBack, modifier = Modifier.heightIn(min = 48.dp)) {
-                Text(stringResource(R.string.action_back), style = MaterialTheme.typography.titleMedium)
-            }
+    NeonScreen {
+        OutlinedAction(R.string.action_back, onBack)
+        CondensedText(
+            text = stringResource(R.string.about_title),
+            style = MaterialTheme.typography.headlineMedium,
+            modifier = Modifier.semantics { heading() },
+        )
+        Text(stringResource(R.string.about_version, version), style = MaterialTheme.typography.bodyLarge)
+        Body(R.string.about_what)
+        SectionTitle(R.string.about_vpn_title)
+        Body(R.string.about_vpn_body)
+        SectionTitle(R.string.about_free_title)
+        Body(R.string.about_free_body)
+        SectionTitle(R.string.about_links_title)
+        links.forEach { (link, label) -> OutlinedAction(label, { open(link) }) }
+        if (noBrowser) Body(R.string.link_no_browser)
+        SectionTitle(R.string.about_credits_title)
+        credits.forEach {
             Text(
-                text = stringResource(R.string.about_title),
-                style = MaterialTheme.typography.headlineMedium,
-                modifier = Modifier.semantics { heading() },
+                text = stringResource(it),
+                style = MaterialTheme.typography.bodyMedium,
+                color = GuardColors.OnNightQuiet,
             )
-            Text(stringResource(R.string.about_version, version), style = MaterialTheme.typography.bodyLarge)
-            Body(R.string.about_what)
-            SectionTitle(R.string.about_vpn_title)
-            Body(R.string.about_vpn_body)
-            SectionTitle(R.string.about_free_title)
-            Body(R.string.about_free_body)
-            SectionTitle(R.string.about_links_title)
-            links.forEach { (link, label) -> OutlinedAction(label, { open(link) }) }
-            if (noBrowser) Body(R.string.link_no_browser)
-            SectionTitle(R.string.about_credits_title)
-            credits.forEach {
-                Text(
-                    text = stringResource(it),
-                    style = MaterialTheme.typography.bodyMedium,
-                    color = MaterialTheme.colorScheme.onSurfaceVariant,
-                )
-            }
-            SectionTitle(R.string.about_made_by_title)
-            Body(R.string.about_made_by)
-            OutlinedAction(R.string.link_contact, { open(AboutLink.Contact) })
         }
+        SectionTitle(R.string.about_made_by_title)
+        Body(R.string.about_made_by)
+        OutlinedAction(R.string.link_contact, { open(AboutLink.Contact) })
     }
 }

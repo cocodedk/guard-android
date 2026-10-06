@@ -15,13 +15,18 @@
     <string name="action_start_again">Start igen</string>
     <string name="action_try_again">Prøv igen</string>
 
-    <string name="counter">Blokerede DNS-opslag, siden beskyttelsen startede: %1$d</string>
-    <string name="list_line">Navneliste: AdGuard DNS filter, %1$s navne</string>
-    <string name="counter_addresses">Blokerede forbindelser til farlige adresser, siden beskyttelsen startede: %1$d</string>
+    <string name="tile_lookups_tag">Opslag</string>
+    <string name="tile_lookups_label">blokeret, siden beskyttelsen startede</string>
+    <string name="tile_lookups_spoken">%1$s blokerede DNS-opslag, siden beskyttelsen startede</string>
+    <string name="tile_connections_tag">Forbindelser</string>
+    <string name="tile_connections_label">til farlige adresser, afvist</string>
+    <string name="tile_connections_spoken">%1$s blokerede forbindelser til farlige adresser, siden beskyttelsen startede</string>
+    <string name="lists_title">Lister</string>
+    <string name="list_names_active">%1$s navne</string>
+    <string name="list_active">%1$s · hentet %2$s</string>
+    <string name="list_paused">Sat på pause · hentet %1$s</string>
+    <string name="list_not_yet">Ikke hentet endnu</string>
     <string name="address_blocking_off">Blokering af farlige adresser er ikke aktiv. Appen henter listerne direkte fra udgiverne, når telefonen er på nettet. Indtil da blokeres kun efter navn.</string>
-    <string name="address_list_active">%1$s: Antal på listen: %2$s. Hentet %3$s.</string>
-    <string name="address_list_too_old">%1$s: sat på pause, fordi listen er gammel (sidst hentet %2$s). En gammel liste kan blokere adresser, som nu bruges af andre. Appen henter en ny liste, når telefonen er på nettet.</string>
-    <string name="address_list_not_yet">%1$s: ikke hentet endnu</string>
 
     <string name="recent_title">Seneste blokeringer</string>
     <string name="recent_group">%1$s: %2$d blokeret. Prøvede senest at nå %3$s.</string>

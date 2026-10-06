@@ -41,8 +41,11 @@ rather than guessing.
 Kotlin, Jetpack Compose (Material 3), one `app` module, package root `dk.cocode.guard`:
 
 - `MainActivity.kt`: sets `GuardTheme` and the home screen.
-- `ui/`: screens. `ui/theme/`: `GuardColors` (box palette) and `GuardTheme`.
+- `ui/`: screens. `ui/theme/`: `GuardColors` (neon-noir palette), `Shapes` and `GuardTheme`.
   The contrast math lives with `ContrastTest` in `src/test`.
+- `ui/fx/`: the Blade Runner look (spec 05): `NeonScreen` (background, rain, scanlines), `neonPanel`,
+  `CondensedText` (upper case drawn, normal case spoken), `StatusOrb`, and `motionAllowed` (no motion
+  when Android's "Remove animations" is on). `ui/Dashboard.kt` draws what `ui/DashboardModel.kt` computes.
 - Packages that spec 01 adds (`vpn/`, `net/`, `dns/`, `blocklist/`, `notify/`): `vpn/` holds the
   service, packet loop, upstream and `ProtectionRepository` (the state the screen reads); `notify/`
   the notification channels. `net/`, `dns/` and `blocklist/` keep Android-free logic (packet and

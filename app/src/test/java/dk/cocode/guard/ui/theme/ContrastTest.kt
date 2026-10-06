@@ -36,11 +36,17 @@ class ContrastTest {
         val text = mapOf(
             "OnNight" to GuardColors.OnNight, "OnNightQuiet" to GuardColors.OnNightQuiet,
             "Ok" to GuardColors.Ok, "Notice" to GuardColors.Notice, "Urgent" to GuardColors.Urgent,
+            "Cyan" to GuardColors.Cyan, "Magenta" to GuardColors.Magenta, "Amber" to GuardColors.Amber,
         )
         val backgrounds = mapOf("Night" to GuardColors.Night, "Panel" to GuardColors.Panel)
         for ((fgName, fg) in text) for ((bgName, bg) in backgrounds) {
             assertReadable("$fgName on $bgName", fg, bg)
         }
+    }
+
+    @Test
+    fun nightTextOnTheOkButtonReads() {
+        assertReadable("Night on Ok", GuardColors.Night, GuardColors.Ok)
     }
 
     @Test
