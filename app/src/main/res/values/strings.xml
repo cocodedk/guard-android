@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="app_name" translatable="false">Cocode Guard</string>
+    <string name="app_name" translatable="false">Guard</string>
+    <string name="screen_title" translatable="false">Guard for Android</string>
 
     <string name="status_off">Ikke beskyttet</string>
     <string name="status_starting">Starter …</string>
@@ -46,7 +47,38 @@
     <string name="card_notifications_body">Appen kan ikke give dig besked, hvis beskyttelsen stopper. Så kan du være ubeskyttet uden at vide det. Tryk på \"Åbn notifikationsindstillinger\", og slå notifikationer til for appen. Sørg også for, at \"Advarsler\" er slået til.</string>
     <string name="card_notifications_action">Åbn notifikationsindstillinger</string>
 
-    <string name="closing_line">Kun DNS-opslag og forbindelser til kendte farlige adresser går gennem appen. Et DNS-opslag er måden, telefonen finder ud af, hvor en side ligger. Der er ingen Cocode-server og ingen konto. Apps med deres egen krypterede DNS går uden om navnefilteret.</string>
+    <string name="promise_title">Godt at vide</string>
+    <string name="promise_no_data">Appen indsamler ingen oplysninger om dig, og der er ingen konto, ingen sporing og ingen reklamer. Det, appen husker om blokeringer, bliver på telefonen og slettes, næste gang beskyttelsen starter.</string>
+    <string name="promise_on_phone">Blokeringen sker på telefonen. Der er ingen Cocode-server og ingen VPN-server. Lister over farlige adresser hentes direkte fra udgiverne, som kan se din IP-adresse, ligesom en hjemmeside kan det ved et besøg.</string>
+    <string name="promise_only_dns">Kun DNS-opslag og forbindelser til kendte farlige adresser går gennem appen. Et DNS-opslag er måden, telefonen finder ud af, hvor en side ligger. Opslag, der ikke blokeres, går videre til netværkets egen DNS-server som før. Resten af din trafik rører appen ikke.</string>
+    <string name="promise_free">Appen er gratis, og alle kan læse koden. Den er fri software under licensen GPL-3.0.</string>
+    <string name="promise_permissions">Appen beder kun om to tilladelser: VPN og notifikationer. Den har ikke adgang til dine kontakter, din placering eller dine filer.</string>
+    <string name="promise_accessible">Kan bruges med TalkBack og stor skrift.</string>
+    <string name="promise_limit">Én begrænsning: Apps med deres egen krypterede DNS går uden om navnefilteret, så i dem kan nogle farlige sider og reklamer slippe igennem.</string>
+    <string name="action_about">Om Guard for Android</string>
+    <string name="action_back">Tilbage</string>
+
+    <string name="about_title">Om Guard for Android</string>
+    <string name="about_version">Version %1$s</string>
+    <string name="about_what">Guard for Android blokerer farlige sider, reklamer og forbindelser til kendte farlige adresser i alle apps på telefonen, på ethvert netværk. Før en app åbner en side, slår telefonen op, hvor siden ligger. Det kaldes et DNS-opslag. Står sidens navn på appens liste over farlige sider og reklamer, får telefonen et tomt svar, og siden åbner ikke. Forbindelser til adresser på lister over kendte farlige adresser blokeres.</string>
+    <string name="about_vpn_title">Hvad vi mener med VPN</string>
+    <string name="about_vpn_body">Android kalder appen en VPN, fordi den bruger Androids VPN-funktion. Men den er ikke en VPN i den sædvanlige forstand: Der er ingen VPN-server, og din trafik sendes ikke via en ekstra server. Appen laver en lokal tunnel, en forbindelse der starter og slutter inde i appen på telefonen. Kun DNS-opslag og forbindelser til kendte farlige adresser går ind i den, så appen kan blokere dem. Al anden trafik går ud som før. Derfor viser Android en nøgle i statuslinjen, og derfor kan der kun køre én VPN-app ad gangen. Har du en anden VPN-app, kan du altså ikke bruge den samtidig med Guard for Android.</string>
+    <string name="about_free_title">Fri software</string>
+    <string name="about_free_body">Appen er gratis og udgivet under GNU General Public License, version 3 eller senere (GPL-3.0). Du må bruge, læse, ændre og dele den. Koden finder du under \"Se kildekoden på GitHub\" nedenfor.</string>
+    <string name="about_links_title">Links</string>
+    <string name="link_website">Åbn hjemmesiden</string>
+    <string name="link_privacy">Læs privatlivspolitikken</string>
+    <string name="link_source">Se kildekoden på GitHub</string>
+    <string name="link_issues">Meld en fejl på GitHub</string>
+    <string name="link_no_browser">Der er ingen app på telefonen, der kan åbne linket. Installer en browser eller en mailapp, og prøv igen.</string>
+    <string name="about_credits_title">Lister og tak</string>
+    <string name="credit_adguard">Navnelisten over farlige sider og reklamer er AdGuard DNS filter fra AdGuard (GPL-3.0). Den følger med i appen.</string>
+    <string name="credit_spamhaus">Adresselisterne Spamhaus DROP og DROPv6 kommer fra The Spamhaus Project, og appen henter dem direkte derfra. © The Spamhaus Project SLU.</string>
+    <string name="credit_feodo">Adresselisten Feodo Tracker kommer fra abuse.ch (CC0), og appen henter den direkte derfra.</string>
+    <string name="credit_androidx">Appen er bygget med AndroidX og Jetpack Compose (Apache-2.0).</string>
+    <string name="about_made_by_title">Lavet af</string>
+    <string name="about_made_by">Babak Bandpey, Cocode (cocode.dk).</string>
+    <string name="link_contact">Skriv til bb@cocode.dk</string>
 
     <string name="channel_protection">Beskyttelse</string>
     <string name="channel_alerts">Advarsler</string>

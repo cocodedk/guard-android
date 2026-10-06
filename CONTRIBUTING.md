@@ -1,4 +1,4 @@
-# Contributing to Cocode Guard for Android
+# Contributing to Guard for Android
 
 ## Local setup
 

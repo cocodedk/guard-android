@@ -87,6 +87,7 @@ fun HomeScreen(
     notificationsAllowed: Boolean,
     onAction: (HomeAction) -> Unit,
     onCardAction: (HomeCard) -> Unit,
+    onAbout: () -> Unit,
 ) {
     val ui = homeUi(state, notificationsAllowed)
     Surface(modifier = Modifier.fillMaxSize(), color = MaterialTheme.colorScheme.background) {
@@ -98,7 +99,7 @@ fun HomeScreen(
             verticalArrangement = Arrangement.spacedBy(16.dp),
         ) {
             Text(
-                text = stringResource(R.string.app_name),
+                text = stringResource(R.string.screen_title),
                 style = MaterialTheme.typography.headlineMedium,
                 modifier = Modifier.semantics { heading() },
             )
@@ -148,11 +149,7 @@ fun HomeScreen(
                     Text(stringResource(label), style = MaterialTheme.typography.titleMedium)
                 }
             }
-            Text(
-                text = stringResource(R.string.closing_line),
-                style = MaterialTheme.typography.bodyMedium,
-                color = MaterialTheme.colorScheme.onSurfaceVariant,
-            )
+            PromisesSection(onAbout)
         }
     }
 }

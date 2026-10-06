@@ -1,4 +1,4 @@
-# Profile: android-gradle (Cocode Guard for Android)
+# Profile: android-gradle (Guard for Android)
 
 Copied from graph-loop's `profiles/android-gradle.md` and given this repository's commands. The loop
 reads the first indented line under each field; it does not know what they mean.

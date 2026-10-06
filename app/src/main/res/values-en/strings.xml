@@ -44,7 +44,38 @@
     <string name="card_notifications_body">The app can\'t tell you if protection stops, so you could be unprotected without knowing. Tap \"Open notification settings\" and turn on notifications for the app. Also make sure \"Alerts\" is turned on.</string>
     <string name="card_notifications_action">Open notification settings</string>
 
-    <string name="closing_line">Only DNS lookups and connections to known dangerous addresses pass through the app. A DNS lookup is how the phone finds out where a site is. There is no Cocode server and no account. Apps with their own encrypted DNS bypass the name filter.</string>
+    <string name="promise_title">Good to know</string>
+    <string name="promise_no_data">The app collects no information about you, and there is no account, tracking or ads. What the app remembers about blocks stays on the phone and is cleared the next time protection starts.</string>
+    <string name="promise_on_phone">The blocking happens on the phone. There is no Cocode server and no VPN server. Lists of dangerous addresses are downloaded directly from their publishers, who can see your IP address, just as a website can when you visit it.</string>
+    <string name="promise_only_dns">Only DNS lookups and connections to known dangerous addresses pass through the app. A DNS lookup is how the phone finds out where a site is. Lookups that aren\'t blocked go on to the network\'s own DNS server, as before. The app never touches the rest of your traffic.</string>
+    <string name="promise_free">The app is free of charge, and anyone can read its code. It is free software under the GPL-3.0 license.</string>
+    <string name="promise_permissions">The app asks for only two permissions: VPN and notifications. It has no access to your contacts, location or files.</string>
+    <string name="promise_accessible">Works with TalkBack and large text sizes.</string>
+    <string name="promise_limit">One limit: apps that use their own encrypted DNS bypass the name filter, so some dangerous sites and ads can get through in them.</string>
+    <string name="action_about">About Guard for Android</string>
+    <string name="action_back">Back</string>
+
+    <string name="about_title">About Guard for Android</string>
+    <string name="about_version">Version %1$s</string>
+    <string name="about_what">Guard for Android blocks dangerous sites, ads and connections to known dangerous addresses in every app on the phone, on any network. Before an app opens a site, the phone looks up where the site is. This is called a DNS lookup. If the site\'s name is on the app\'s list of dangerous sites and ads, the phone gets an empty answer and the site does not open. Connections to addresses on lists of known dangerous addresses are blocked.</string>
+    <string name="about_vpn_title">What we mean by VPN</string>
+    <string name="about_vpn_body">Android calls the app a VPN because it uses Android\'s VPN feature. But it is not a VPN in the usual sense: there is no VPN server, and your traffic does not go through an extra server. The app makes a local tunnel, a connection that starts and ends inside the app, on the phone. Only DNS lookups and connections to known dangerous addresses enter it, so the app can block them. All other traffic goes out as before. That is why Android shows a key in the status bar, and why only one VPN app can run at a time. If you use another VPN app, you can\'t run it together with Guard for Android.</string>
+    <string name="about_free_title">Free software</string>
+    <string name="about_free_body">The app is free of charge and released under the GNU General Public License, version 3 or later (GPL-3.0). You may use, read, change and share it. You can find the code under \"See the source code on GitHub\" below.</string>
+    <string name="about_links_title">Links</string>
+    <string name="link_website">Open the website</string>
+    <string name="link_privacy">Read the privacy policy</string>
+    <string name="link_source">See the source code on GitHub</string>
+    <string name="link_issues">Report a problem on GitHub</string>
+    <string name="link_no_browser">No app on the phone can open the link. Install a browser or an email app, then try again.</string>
+    <string name="about_credits_title">Lists and credits</string>
+    <string name="credit_adguard">The name list of dangerous sites and ads is the AdGuard DNS filter from AdGuard (GPL-3.0). It comes with the app.</string>
+    <string name="credit_spamhaus">The Spamhaus DROP and DROPv6 address lists come from The Spamhaus Project, and the app downloads them directly from there. © The Spamhaus Project SLU.</string>
+    <string name="credit_feodo">The Feodo Tracker address list comes from abuse.ch (CC0), and the app downloads it directly from there.</string>
+    <string name="credit_androidx">The app is built with AndroidX and Jetpack Compose (Apache-2.0).</string>
+    <string name="about_made_by_title">Made by</string>
+    <string name="about_made_by">Babak Bandpey, Cocode (cocode.dk).</string>
+    <string name="link_contact">Write to bb@cocode.dk</string>
 
     <string name="channel_protection">Protection</string>
     <string name="channel_alerts">Alerts</string>
