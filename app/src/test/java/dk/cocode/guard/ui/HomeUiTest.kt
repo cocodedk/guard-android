@@ -14,10 +14,9 @@ import org.junit.Test
 class HomeUiTest {
     private fun ui(
         status: ProtectionStatus,
-        strict: Boolean = false,
         alwaysOn: Boolean = false,
         notifications: Boolean = true,
-    ) = homeUi(ProtectionState(status = status, privateDnsStrict = strict, alwaysOn = alwaysOn), notifications)
+    ) = homeUi(ProtectionState(status = status, alwaysOn = alwaysOn), notifications)
 
     @Test
     fun off() {
@@ -63,17 +62,6 @@ class HomeUiTest {
         assertTrue(ui.showCounter)
     }
 
-    @Test
-    fun protectedWithStrictPrivateDns() {
-        val ui = ui(ProtectionStatus.Protected, strict = true, alwaysOn = true, notifications = false)
-        assertEquals(R.string.status_bypassed, ui.statusText)
-        assertEquals(Tone.Urgent, ui.statusTone)
-        assertNull(ui.detailText)
-        assertEquals(listOf(HomeCard.PrivateDns, HomeCard.AlwaysOn, HomeCard.NotificationsOff), ui.cards)
-        assertEquals(HomeAction.None, ui.primaryAction)
-        assertTrue(ui.showCounter)
-    }
-
     private fun assertStopped(reason: StopReason, card: HomeCard) {
         val ui = ui(ProtectionStatus.Stopped(reason))
         assertEquals(R.string.status_off, ui.statusText)
@@ -91,22 +79,18 @@ class HomeUiTest {
     fun stoppedLockdown() = assertStopped(StopReason.Lockdown, HomeCard.StoppedLockdown)
 
     @Test
+    fun stoppedPrivateDns() = assertStopped(StopReason.PrivateDns, HomeCard.StoppedPrivateDns)
+
+    @Test
     fun stoppedError() = assertStopped(StopReason.Error, HomeCard.StoppedError)
 
     @Test
-    fun privateDnsCardOnlyWhenProtectedAndStrict() {
-        val others = listOf(ProtectionStatus.Off, ProtectionStatus.Starting, ProtectionStatus.PermissionRefused) +
-            StopReason.entries.map { ProtectionStatus.Stopped(it) }
-        for (status in others) assertFalse(HomeCard.PrivateDns in ui(status, strict = true).cards)
-        assertFalse(HomeCard.PrivateDns in ui(ProtectionStatus.Protected, strict = false).cards)
-        assertTrue(HomeCard.PrivateDns in ui(ProtectionStatus.Protected, strict = true).cards)
-    }
-
-    @Test
-    fun bypassedNeverSaysProtected() {
-        val ui = ui(ProtectionStatus.Protected, strict = true)
-        assertNotEquals(R.string.status_protected, ui.statusText)
-        assertNotEquals(R.string.detail_protected, ui.detailText)
+    fun stoppedNeverSaysProtected() {
+        for (reason in StopReason.entries) {
+            val ui = ui(ProtectionStatus.Stopped(reason))
+            assertNotEquals(R.string.status_protected, ui.statusText)
+            assertNotEquals(R.string.detail_protected, ui.detailText)
+        }
     }
 
     @Test

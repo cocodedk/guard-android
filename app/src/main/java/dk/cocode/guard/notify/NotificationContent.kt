@@ -11,9 +11,6 @@ data class OngoingContent(val title: Int, val text: Int?, val showStop: Boolean,
 fun ongoingContent(state: ProtectionState): OngoingContent = when {
     state.status == ProtectionStatus.Starting ->
         OngoingContent(R.string.status_starting, null, false, R.drawable.ic_shield_off)
-    state.privateDnsStrict -> OngoingContent(
-        R.string.status_bypassed, R.string.card_private_dns_title, canStop(state), R.drawable.ic_warning,
-    )
     else -> OngoingContent(
         R.string.notif_protected_title, R.string.notif_protected_text, canStop(state), R.drawable.ic_shield_on,
     )
@@ -31,5 +28,6 @@ fun alertContent(reason: StopReason) = AlertContent(R.string.notif_stopped_title
 fun alertBody(reason: StopReason): Int = when (reason) {
     StopReason.Revoked -> R.string.card_revoked_body
     StopReason.Lockdown -> R.string.card_lockdown_body
+    StopReason.PrivateDns -> R.string.card_private_dns_body
     StopReason.Error -> R.string.card_error_body
 }

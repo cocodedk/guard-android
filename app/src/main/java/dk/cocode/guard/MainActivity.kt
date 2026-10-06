@@ -23,7 +23,6 @@ import dk.cocode.guard.ui.theme.GuardTheme
 import dk.cocode.guard.vpn.GuardVpnService
 import dk.cocode.guard.vpn.ProtectionRepository
 import dk.cocode.guard.vpn.ProtectionStatus
-import dk.cocode.guard.vpn.privateDnsStrict
 
 class MainActivity : ComponentActivity() {
     private val notificationsAllowed = mutableStateOf(true)
@@ -43,11 +42,6 @@ class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
-        // Read once when the app opens; while protecting, the network callback keeps it current.
-        if (ProtectionRepository.state.value.status != ProtectionStatus.Protected) {
-            val strict = privateDnsStrict(this)
-            ProtectionRepository.update { it.copy(privateDnsStrict = strict) }
-        }
         setContent {
             val state by ProtectionRepository.state.collectAsState()
             GuardTheme {
@@ -86,7 +80,7 @@ class MainActivity : ComponentActivity() {
 
     private fun onCardAction(card: HomeCard) {
         when (card) {
-            HomeCard.PrivateDns -> openSettings(Intent(Settings.ACTION_WIRELESS_SETTINGS), Intent(Settings.ACTION_SETTINGS))
+            HomeCard.StoppedPrivateDns -> openSettings(Intent(Settings.ACTION_WIRELESS_SETTINGS), Intent(Settings.ACTION_SETTINGS))
             HomeCard.NotificationsOff -> openSettings(
                 Intent(Settings.ACTION_APP_NOTIFICATION_SETTINGS).putExtra(Settings.EXTRA_APP_PACKAGE, packageName),
             )

@@ -27,7 +27,7 @@ private fun textOf(card: HomeCard) = when (card) {
     HomeCard.StoppedLockdown ->
         CardText(R.string.card_lockdown_title, R.string.card_lockdown_body, R.string.card_vpn_settings_action)
     HomeCard.StoppedError -> CardText(R.string.card_error_title, R.string.card_error_body)
-    HomeCard.PrivateDns ->
+    HomeCard.StoppedPrivateDns ->
         CardText(R.string.card_private_dns_title, R.string.card_private_dns_body, R.string.card_private_dns_action)
     HomeCard.AlwaysOn ->
         CardText(R.string.card_always_on_title, R.string.card_always_on_body, R.string.card_vpn_settings_action)

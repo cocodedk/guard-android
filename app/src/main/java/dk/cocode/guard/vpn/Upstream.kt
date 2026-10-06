@@ -8,7 +8,7 @@ import android.net.Network
 import android.os.CancellationSignal
 import java.util.concurrent.Executor
 
-/** True when Private DNS names a host (strict mode), the only mode that bypasses the filter. */
+/** True when Private DNS names a host (strict mode): with the tunnel up, the phone could look up nothing. */
 fun privateDnsStrict(context: Context): Boolean {
     val cm = context.getSystemService(ConnectivityManager::class.java)
     val link = cm.activeNetwork?.let { cm.getLinkProperties(it) }
@@ -27,7 +27,7 @@ interface DnsUpstream {
  * Forwards lookups through Android's own resolver, which talks to the network's DNS server and
  * encrypts the lookup whenever Private DNS is on, and tracks the default network while protecting.
  */
-class Upstream(context: Context, private val onLinkChanged: () -> Unit) : DnsUpstream {
+class Upstream(context: Context, private val onPrivateDnsStrict: () -> Unit) : DnsUpstream {
     private val cm = context.getSystemService(ConnectivityManager::class.java)
 
     @Volatile
@@ -44,9 +44,7 @@ class Upstream(context: Context, private val onLinkChanged: () -> Unit) : DnsUps
         }
 
         override fun onLinkPropertiesChanged(network: Network, linkProperties: LinkProperties) {
-            val strict = linkProperties.privateDnsServerName != null
-            ProtectionRepository.update { it.copy(privateDnsStrict = strict) }
-            onLinkChanged()
+            if (linkProperties.privateDnsServerName != null) onPrivateDnsStrict()
         }
     }
 

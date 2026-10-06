@@ -40,7 +40,7 @@ private fun Tone.color(): Color = when (this) {
 }
 
 private fun statusIcon(state: ProtectionState, ui: HomeUi): Int = when (state.status) {
-    ProtectionStatus.Protected -> if (ui.statusTone == Tone.Ok) R.drawable.ic_shield_on else R.drawable.ic_warning
+    ProtectionStatus.Protected -> R.drawable.ic_shield_on
     is ProtectionStatus.Stopped -> R.drawable.ic_shield_stopped
     else -> R.drawable.ic_shield_off
 }

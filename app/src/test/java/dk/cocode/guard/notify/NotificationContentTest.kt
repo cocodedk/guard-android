@@ -23,18 +23,8 @@ class NotificationContentTest {
     }
 
     @Test
-    fun strictPrivateDnsNeverSaysProtected() {
-        val c = ongoingContent(protectedState.copy(privateDnsStrict = true))
-        assertEquals(R.string.status_bypassed, c.title)
-        assertEquals(R.string.card_private_dns_title, c.text)
-        assertEquals(R.drawable.ic_warning, c.icon)
-        assertTrue(c.showStop)
-    }
-
-    @Test
     fun alwaysOnLeavesOutStop() {
         assertFalse(ongoingContent(protectedState.copy(alwaysOn = true)).showStop)
-        assertFalse(ongoingContent(protectedState.copy(alwaysOn = true, privateDnsStrict = true)).showStop)
     }
 
     @Test
@@ -60,6 +50,7 @@ class NotificationContentTest {
     fun alertUsesTheCardWordsForEachReason() {
         assertEquals(R.string.card_revoked_body, alertBody(StopReason.Revoked))
         assertEquals(R.string.card_lockdown_body, alertBody(StopReason.Lockdown))
+        assertEquals(R.string.card_private_dns_body, alertBody(StopReason.PrivateDns))
         assertEquals(R.string.card_error_body, alertBody(StopReason.Error))
     }
 }

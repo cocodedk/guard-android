@@ -3,7 +3,6 @@
     <string name="status_off">Not protected</string>
     <string name="status_starting">Starting …</string>
     <string name="status_protected">Protected</string>
-    <string name="status_bypassed">The filter is bypassed</string>
     <string name="detail_off">Tap Start protection to block dangerous sites and ads for every app, on any network.</string>
     <string name="detail_protected">Dangerous sites and ads are blocked for every app.</string>
 
@@ -27,8 +26,8 @@
     <string name="card_always_on_title">Always-on VPN is on</string>
     <string name="card_always_on_body">Android keeps protection on. Turn off Always-on VPN in VPN settings to be able to stop it.</string>
     <string name="card_vpn_settings_action">Open VPN settings</string>
-    <string name="card_private_dns_title">Private DNS bypasses the filter</string>
-    <string name="card_private_dns_body">Private DNS is set to a specific server, so nothing is blocked. Turn it off or choose Automatic under Network and internet.</string>
+    <string name="card_private_dns_title">Protection can\'t run with Private DNS</string>
+    <string name="card_private_dns_body">Private DNS is set to a specific server. With that setting the phone can\'t reach the internet at all while protection runs, so it has stopped. DNS lookups are not filtered. Turn Private DNS off or choose Automatic under Network and internet, then start again.</string>
     <string name="card_private_dns_action">Open network settings</string>
     <string name="card_notifications_title">Notifications are off</string>
     <string name="card_notifications_body">The app can\'t tell you if protection stops.</string>

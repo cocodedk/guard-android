@@ -49,15 +49,18 @@ class GuardVpnService : VpnService() {
     private fun start() {
         active = true
         ProtectionRepository.update {
-            it.copy(
-                status = ProtectionStatus.Starting, blockedCount = 0, alwaysOn = isAlwaysOn,
-                privateDnsStrict = privateDnsStrict(this),
-            )
+            it.copy(status = ProtectionStatus.Starting, blockedCount = 0, alwaysOn = isAlwaysOn)
         }
         showForeground()
         if (isLockdownEnabled) {
             // Lockdown lets no traffic past the tunnel, and this one carries only DNS.
             stopForOther(StopReason.Lockdown)
+            return
+        }
+        if (privateDnsStrict(this)) {
+            // Android sends a named Private DNS server's lookups into the tunnel, which only reaches
+            // the fake DNS address, so the phone could look up nothing at all.
+            stopForOther(StopReason.PrivateDns)
             return
         }
         // Everything here after the list load runs on the main thread with no suspension point, and
@@ -74,7 +77,7 @@ class GuardVpnService : VpnService() {
                 tunnel = fd
                 val up = Upstream(this@GuardVpnService) {
                     // Called on a network thread; the main thread orders it against stop cleanup.
-                    scope.launch { refreshNotification() }
+                    scope.launch { stopForOther(StopReason.PrivateDns) }
                 }
                 upstream = up
                 up.start()
@@ -83,7 +86,7 @@ class GuardVpnService : VpnService() {
                 ) { scope.launch { stopForOther(StopReason.Error) } }
                 loop = packets
                 ProtectionRepository.update { it.copy(status = ProtectionStatus.Protected, listSize = list.size) }
-                refreshNotification()
+                updateOngoing(this@GuardVpnService, ProtectionRepository.state.value)
                 packets.start()
             } catch (e: CancellationException) {
                 throw e
@@ -116,10 +119,6 @@ class GuardVpnService : VpnService() {
         } else {
             startForeground(ONGOING_ID, notification)
         }
-    }
-
-    private fun refreshNotification() {
-        if (active) updateOngoing(this, ProtectionRepository.state.value)
     }
 
     private fun stopByOwner() {

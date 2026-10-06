@@ -5,7 +5,6 @@
     <string name="status_off">Ikke beskyttet</string>
     <string name="status_starting">Starter …</string>
     <string name="status_protected">Beskyttet</string>
-    <string name="status_bypassed">Filteret bliver omgået</string>
     <string name="detail_off">Tryk på Start beskyttelse for at blokere farlige sider og reklamer for alle apps, på ethvert netværk.</string>
     <string name="detail_protected">Farlige sider og reklamer blokeres for alle apps.</string>
 
@@ -29,8 +28,8 @@
     <string name="card_always_on_title">Altid aktiveret VPN er slået til</string>
     <string name="card_always_on_body">Android holder beskyttelsen tændt. Slå Altid aktiveret VPN fra under VPN-indstillinger for at kunne stoppe den.</string>
     <string name="card_vpn_settings_action">Åbn VPN-indstillinger</string>
-    <string name="card_private_dns_title">Privat DNS går uden om filteret</string>
-    <string name="card_private_dns_body">Privat DNS er slået til med en bestemt server, så intet bliver blokeret. Slå det fra eller vælg Automatisk under Netværk og internet.</string>
+    <string name="card_private_dns_title">Beskyttelsen kan ikke køre med Privat DNS</string>
+    <string name="card_private_dns_body">Privat DNS er sat til en bestemt server. Med den indstilling kan telefonen slet ikke komme på nettet, mens beskyttelsen kører, så den er stoppet. DNS-opslag bliver ikke filtreret. Slå Privat DNS fra, eller vælg Automatisk under Netværk og internet, og start igen.</string>
     <string name="card_private_dns_action">Åbn netværksindstillinger</string>
     <string name="card_notifications_title">Notifikationer er slået fra</string>
     <string name="card_notifications_body">Appen kan ikke sige til, hvis beskyttelsen stopper.</string>

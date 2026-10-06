@@ -16,13 +16,12 @@ sealed interface ProtectionStatus {
     data class Stopped(val reason: StopReason) : ProtectionStatus
 }
 
-enum class StopReason { Revoked, Lockdown, Error }
+enum class StopReason { Revoked, Lockdown, PrivateDns, Error }
 
 data class ProtectionState(
     val status: ProtectionStatus = ProtectionStatus.Off,
     val blockedCount: Int = 0, // since the current start; reset to 0 on each start
     val listSize: Int = 0, // usable block rules loaded
-    val privateDnsStrict: Boolean = false,
     val alwaysOn: Boolean = false, // VpnService.isAlwaysOn() at the last start
 )
 
