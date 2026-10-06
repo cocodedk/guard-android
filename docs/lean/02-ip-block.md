@@ -41,7 +41,9 @@ reaches the app.
   phone downloads it itself, and tests use small hand-written fixtures. Spamhaus also forbids using
   its name in marketing or other promotional material, so the name appears **only on the app
   screen and in notifications**, as plain attribution of where an entry came from, and never on the
-  website, in the store listing or in release notes. Feodo Tracker's terms are at
+  website's promotional pages, in the store listing or in release notes. The privacy pages and the
+  README name it all the same: they state who receives the phone's IP address when a list is
+  downloaded, a disclosure, not promotion. Feodo Tracker's terms are at
   `https://feodotracker.abuse.ch/blocklist/`; it is also downloaded, not shipped.
 
 ### Which ranges are kept

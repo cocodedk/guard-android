@@ -1,12 +1,13 @@
 Cocode Guard blokerer farlige sider og reklamer for alle apps på din telefon, på ethvert netværk: derhjemme, på mobildata, på caféens wifi og i udlandet.
 
 <b>Sådan virker det</b>
-Appen bruger Androids VPN-funktion som en lokal tunnel, der ender inde i appen. Kun DNS-opslag går ind i den. Navne på blokeringslisten (AdGuard DNS filter) får et tomt svar; alle andre opslag sendes videre til dit netværks egen DNS-server. Der er ingen VPN-server: din øvrige trafik går ud præcis som før.
+Appen bruger Androids VPN-funktion som en lokal tunnel, der ender inde i appen. Kun DNS-opslag og forbindelser til kendte farlige adresser går ind i den. Navne på blokeringslisten (AdGuard DNS filter) får et tomt svar; alle andre opslag sendes videre til dit netværks egen DNS-server. Forbindelser fra alle apps til adresser på offentlige lister over kendte farlige adresser afvises med det samme, og en notifikation fortæller, hvilken app der prøvede. Der er ingen VPN-server: din øvrige trafik går ud præcis som før.
 
 <b>Privat fra starten</b>
 <ul>
-<li>Ingen konto, ingen server, ingen statistik, ingen reklamer.</li>
-<li>Du skal kun give to tilladelser: VPN-forbindelsen og notifikationer. Netværksadgang giver Android automatisk.</li>
+<li>Ingen konto, ingen statistik, ingen reklamer og ingen server, som vi driver.</li>
+<li>Adresselisterne hentes direkte fra udgiverne til telefonen, normalt en gang i døgnet, og kun mens beskyttelsen kører. Som ved ethvert besøg på en hjemmeside kan udgiverne se din IP-adresse; appen sender ingen oplysninger om dig.</li>
+<li>Du skal kun give to tilladelser: VPN-forbindelsen og notifikationer. Netværksadgang giver Android automatisk og bruges også til at hente adresselisterne.</li>
 <li>Fri software under GPL-3.0, og gratis.</li>
 </ul>
 
@@ -17,4 +18,4 @@ Hvis beskyttelsen stopper, for eksempel fordi en anden VPN-app har overtaget, f�
 Bygget til TalkBack og stor skrift fra starten.
 
 <b>Begrænsninger</b>
-Androids indstilling Privat DNS og apps med deres egen sikre DNS går uden om filteret; appen advarer dig om Privat DNS. Der kan kun køre én VPN-app ad gangen.
+Apps med deres egen sikre DNS går uden om navnefilteret. Androids Privat DNS sat til en bestemt server kan ikke bruges sammen med appen: beskyttelsen stopper og siger det ("Automatisk" virker). Der kan kun køre én VPN-app ad gangen. Blokering af adresser kræver, at listerne er hentet og under 7 dage gamle; skærmen siger, hvis en liste mangler eller er sat på pause.
