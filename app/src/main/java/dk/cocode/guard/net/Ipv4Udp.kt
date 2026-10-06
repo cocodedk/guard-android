@@ -10,15 +10,6 @@ data class UdpPacket(
 
 private const val IP_HEADER = 20
 private const val UDP_HEADER = 8
-private const val PROTOCOL_UDP = 17
-
-private fun ByteArray.u8(i: Int) = this[i].toInt() and 0xFF
-private fun ByteArray.u16(i: Int) = (u8(i) shl 8) or u8(i + 1)
-
-private fun ByteArray.put16(i: Int, v: Int) {
-    this[i] = (v shr 8).toByte()
-    this[i + 1] = v.toByte()
-}
 
 /** Parses an IPv4 + UDP packet from the first [length] bytes of [buf]; null for anything else. */
 fun parseIpv4Udp(buf: ByteArray, length: Int): UdpPacket? {
@@ -63,21 +54,4 @@ fun buildIpv4Udp(p: UdpPacket): ByteArray {
     // Zero means "no checksum" in UDP, so a computed zero is sent as all ones.
     out.put16(IP_HEADER + 6, checksum(sum(out, IP_HEADER, total, pseudo)).let { if (it == 0) 0xFFFF else it })
     return out
-}
-
-private fun sum(buf: ByteArray, from: Int, to: Int, initial: Int = 0): Int {
-    var s = initial
-    var i = from
-    while (i + 1 < to) {
-        s += buf.u16(i)
-        i += 2
-    }
-    if (i < to) s += buf.u8(i) shl 8
-    return s
-}
-
-private fun checksum(sum: Int): Int {
-    var s = sum
-    while (s ushr 16 != 0) s = (s and 0xFFFF) + (s ushr 16)
-    return s.inv() and 0xFFFF
 }

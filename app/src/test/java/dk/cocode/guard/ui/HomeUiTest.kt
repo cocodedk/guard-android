@@ -1,6 +1,9 @@
 package dk.cocode.guard.ui
 
 import dk.cocode.guard.R
+import dk.cocode.guard.iplist.AddressList
+import dk.cocode.guard.iplist.ListState
+import dk.cocode.guard.iplist.ListStatus
 import dk.cocode.guard.vpn.ProtectionState
 import dk.cocode.guard.vpn.ProtectionStatus
 import dk.cocode.guard.vpn.StopReason
@@ -105,5 +108,42 @@ class HomeUiTest {
         assertEquals(listOf(HomeCard.NotificationsOff), ui(ProtectionStatus.Off, notifications = false).cards)
         assertEquals(listOf(HomeCard.NotificationsOff), ui(ProtectionStatus.Protected, notifications = false).cards)
         assertEquals(emptyList<HomeCard>(), ui(ProtectionStatus.Off, notifications = true).cards)
+    }
+
+    private fun status(list: AddressList, state: ListState) =
+        ListStatus(list, state, if (state == ListState.Active) 10 else 0, if (state == ListState.NotYet) null else 1L)
+
+    private fun uiWith(lists: List<ListStatus>, status: ProtectionStatus = ProtectionStatus.Protected) =
+        homeUi(ProtectionState(status = status, addressLists = lists), true)
+
+    @Test
+    fun protectedShowsEveryList() {
+        val lists = listOf(
+            status(AddressList.DropV4, ListState.Active),
+            status(AddressList.DropV6, ListState.TooOld),
+            status(AddressList.Feodo, ListState.NotYet),
+        )
+        assertEquals(lists, uiWith(lists).addressLists)
+    }
+
+    @Test
+    fun offLineWhenNoListActive() {
+        val none = listOf(status(AddressList.DropV4, ListState.TooOld), status(AddressList.Feodo, ListState.NotYet))
+        assertTrue(uiWith(none).addressBlockingOff)
+        assertTrue(uiWith(emptyList()).addressBlockingOff)
+        assertFalse(uiWith(none + status(AddressList.DropV6, ListState.Active)).addressBlockingOff)
+    }
+
+    @Test
+    fun addressListsOnlyWhenProtected() {
+        val lists = listOf(status(AddressList.DropV4, ListState.Active))
+        val others = listOf(
+            ProtectionStatus.Off, ProtectionStatus.Starting, ProtectionStatus.PermissionRefused,
+            ProtectionStatus.Stopped(StopReason.Error),
+        )
+        for (s in others) {
+            assertEquals(emptyList<ListStatus>(), uiWith(lists, s).addressLists)
+            assertFalse(uiWith(emptyList(), s).addressBlockingOff)
+        }
     }
 }

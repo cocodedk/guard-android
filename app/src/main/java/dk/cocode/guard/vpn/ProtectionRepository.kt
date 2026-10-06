@@ -3,6 +3,7 @@ package dk.cocode.guard.vpn
 import android.content.Context
 import dk.cocode.guard.blocklist.BlockList
 import dk.cocode.guard.blocklist.parseRules
+import dk.cocode.guard.iplist.ListStatus
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
@@ -34,6 +35,8 @@ data class ProtectionState(
     val blockedCount: Int = 0, // since the current start; reset to 0 on each start
     val listSize: Int = 0, // usable block rules loaded
     val alwaysOn: Boolean = false, // VpnService.isAlwaysOn() at the last start
+    val blockedAddressCount: Int = 0, // since the current start; reset to 0 on each start
+    val addressLists: List<ListStatus> = emptyList(), // one per list, in AddressList order
 )
 
 /** The one process-wide record of protection, shared by the service and the screen. */

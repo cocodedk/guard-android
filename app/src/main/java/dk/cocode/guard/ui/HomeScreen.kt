@@ -28,10 +28,14 @@ import androidx.compose.ui.semantics.liveRegion
 import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.unit.dp
 import dk.cocode.guard.R
+import dk.cocode.guard.iplist.ListState
+import dk.cocode.guard.iplist.ListStatus
 import dk.cocode.guard.ui.theme.GuardColors
 import dk.cocode.guard.vpn.ProtectionState
 import dk.cocode.guard.vpn.ProtectionStatus
+import java.text.DateFormat
 import java.text.NumberFormat
+import java.util.Date
 
 private fun Tone.color(): Color = when (this) {
     Tone.Ok -> GuardColors.Ok
@@ -52,6 +56,27 @@ private fun actionLabel(action: HomeAction): Int? = when (action) {
     HomeAction.StartAgain -> R.string.action_start_again
     HomeAction.TryAgain -> R.string.action_try_again
     HomeAction.None -> null
+}
+
+@Composable
+private fun AddressLine(text: String) = Text(
+    text = text,
+    style = MaterialTheme.typography.bodyMedium,
+    color = MaterialTheme.colorScheme.onSurfaceVariant,
+)
+
+/** The line for one list: a list that is missing or paused is said so, never left out. */
+@Composable
+private fun addressListText(status: ListStatus): String {
+    val date = status.fetched?.let { DateFormat.getDateInstance(DateFormat.MEDIUM).format(Date(it)) }.orEmpty()
+    val source = status.list.source
+    return when (status.state) {
+        ListState.NotYet -> stringResource(R.string.address_list_not_yet, source)
+        ListState.Active -> stringResource(
+            R.string.address_list_active, source, NumberFormat.getIntegerInstance().format(status.entries), date,
+        )
+        ListState.TooOld -> stringResource(R.string.address_list_too_old, source, date)
+    }
 }
 
 // Built for TalkBack first: the title is a heading, the status is a polite live region so a change
@@ -101,10 +126,16 @@ fun HomeScreen(
                         style = MaterialTheme.typography.bodyLarge,
                     )
                     Text(
+                        text = stringResource(R.string.counter_addresses, state.blockedAddressCount),
+                        style = MaterialTheme.typography.bodyLarge,
+                    )
+                    Text(
                         text = stringResource(R.string.list_line, NumberFormat.getIntegerInstance().format(state.listSize)),
                         style = MaterialTheme.typography.bodyMedium,
                         color = MaterialTheme.colorScheme.onSurfaceVariant,
                     )
+                    if (ui.addressBlockingOff) AddressLine(stringResource(R.string.address_blocking_off))
+                    ui.addressLists.forEach { AddressLine(addressListText(it)) }
                 }
             }
             actionLabel(ui.primaryAction)?.let { label ->

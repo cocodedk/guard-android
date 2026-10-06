@@ -14,9 +14,11 @@ import dk.cocode.guard.vpn.StopReason
 
 private const val CHANNEL_PROTECTION = "protection"
 private const val CHANNEL_ALERTS = "alerts"
+private const val CHANNEL_BLOCKED = "blocked_addresses"
 
 const val ONGOING_ID = 1
 private const val ALERT_ID = 2
+private const val ADDRESS_ID_BASE = 100
 
 private fun manager(context: Context) = context.getSystemService(NotificationManager::class.java)
 
@@ -29,6 +31,10 @@ private fun ensureChannels(context: Context) {
             ),
             NotificationChannel(
                 CHANNEL_ALERTS, context.getString(R.string.channel_alerts), NotificationManager.IMPORTANCE_HIGH,
+            ),
+            NotificationChannel(
+                CHANNEL_BLOCKED, context.getString(R.string.channel_blocked_addresses),
+                NotificationManager.IMPORTANCE_DEFAULT,
             ),
         ),
     )
@@ -74,6 +80,21 @@ fun postStoppedAlert(context: Context, reason: StopReason) {
         .setOnlyAlertOnce(content.onlyAlertOnce)
         .build()
     manager(context).notify(ALERT_ID, alert)
+}
+
+/** Said the first time an address is refused in a start; [number] (1 and up) gives each address its own id. */
+fun postAddressNotice(context: Context, number: Int, address: String, listTitle: String) {
+    ensureChannels(context)
+    val body = context.getString(R.string.notif_address_text, address, listTitle)
+    val notice = Notification.Builder(context, CHANNEL_BLOCKED)
+        .setSmallIcon(R.drawable.ic_shield_on)
+        .setContentTitle(context.getString(R.string.notif_address_title))
+        .setContentText(body)
+        .setStyle(Notification.BigTextStyle().bigText(body))
+        .setContentIntent(openApp(context))
+        .setAutoCancel(true)
+        .build()
+    manager(context).notify(ADDRESS_ID_BASE + number, notice)
 }
 
 fun clearStoppedAlert(context: Context) = manager(context).cancel(ALERT_ID)
