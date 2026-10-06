@@ -12,8 +12,9 @@ rather than guessing.
 - **Only DNS enters the tunnel.** `VpnService` is a local tunnel ending inside the app; its only
   route is the fake DNS address. Never route other traffic, never add a remote server.
 - **No Cocode server, no account, no analytics, no remote code.** Block lists ship in `assets/`.
-- **Stop means stop, said plainly.** Any path that ends protection posts a notification saying the
-  phone now uses normal DNS without blocking. Never fail silently.
+- **Stop means stop, said plainly.** Any path that ends protection without the owner asking for it
+  posts a notification saying DNS lookups are no longer filtered. When the owner stops it, the
+  screen says so. Never fail silently, and never say "protected" while the filter is bypassed.
 - **Few permissions.** Only those the spec being built names in its Permissions section.
 - **No Google or Play libraries.** F-Droid builds must stay reproducible: no JDK toolchain pin, no
   foojay resolver, version only in `gradle.properties`, R8 on in release.
@@ -24,7 +25,8 @@ rather than guessing.
 - Every control has a spoken label saying what it does (`contentDescription` / `semantics`), not
   what it looks like.
 - The screen title is a `heading()`; a status that changes is a polite `liveRegion`.
-- Grouped content (a warning card and its action) reads as one unit (`mergeDescendants`).
+- A card's title and body read as one unit (`mergeDescendants`); its button is its own stop, so
+  it can be found and activated on its own.
 - Meaning never rests on color alone: every state has words, plus an icon where useful.
 - Touch targets ≥ 48dp; text in `sp`; screens scroll so 200% font size never clips.
 - Every color comes from `GuardColors` and every text pair is in `ContrastTest` (AA: 4.5:1 text,
