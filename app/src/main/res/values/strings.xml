@@ -1,6 +1,47 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="app_name" translatable="false">Cocode Guard</string>
-    <string name="status_not_built">Ikke beskyttet endnu</string>
-    <string name="home_explain">Appen blokerer farlige sider og reklamer for alle apps på telefonen, på ethvert netværk. Beskyttelsen kommer i næste version.</string>
+
+    <string name="status_off">Ikke beskyttet</string>
+    <string name="status_starting">Starter …</string>
+    <string name="status_protected">Beskyttet</string>
+    <string name="status_bypassed">Filteret bliver omgået</string>
+    <string name="detail_off">Tryk på Start beskyttelse for at blokere farlige sider og reklamer for alle apps, på ethvert netværk.</string>
+    <string name="detail_protected">Farlige sider og reklamer blokeres for alle apps.</string>
+
+    <string name="action_start">Start beskyttelse</string>
+    <string name="action_starting">Starter beskyttelse</string>
+    <string name="action_stop">Stop beskyttelse</string>
+    <string name="action_start_again">Start igen</string>
+    <string name="action_try_again">Prøv igen</string>
+
+    <string name="counter">Blokeret siden start: %1$d</string>
+    <string name="list_line">Blokeringsliste: AdGuard DNS filter, %1$s navne</string>
+
+    <string name="card_refused_title">Tilladelsen blev afvist</string>
+    <string name="card_refused_body">Appen skal have Androids VPN-tilladelse for at se DNS-opslag. Den bruges kun på telefonen, og der er ingen Cocode-server: opslag, der ikke blokeres, går til netværkets egen DNS-server som før.</string>
+    <string name="card_revoked_title">Beskyttelsen er stoppet</string>
+    <string name="card_revoked_body">Android stoppede beskyttelsen, for eksempel fordi en anden VPN-app tog over, eller fordi VPN blev slået fra i indstillingerne. DNS-opslag bliver ikke længere filtreret.</string>
+    <string name="card_lockdown_title">Beskyttelsen kan ikke køre</string>
+    <string name="card_lockdown_body">\"Bloker forbindelser uden VPN\" er slået til. Appen sender kun DNS-opslag gennem sin tunnel, så med den indstilling kan telefonen slet ikke komme på nettet. Slå indstillingen fra under VPN-indstillinger, og start igen.</string>
+    <string name="card_error_title">Beskyttelsen er stoppet</string>
+    <string name="card_error_body">Der skete en fejl. DNS-opslag bliver ikke længere filtreret.</string>
+    <string name="card_always_on_title">Altid aktiveret VPN er slået til</string>
+    <string name="card_always_on_body">Android holder beskyttelsen tændt. Slå Altid aktiveret VPN fra under VPN-indstillinger for at kunne stoppe den.</string>
+    <string name="card_vpn_settings_action">Åbn VPN-indstillinger</string>
+    <string name="card_private_dns_title">Privat DNS går uden om filteret</string>
+    <string name="card_private_dns_body">Privat DNS er slået til med en bestemt server, så intet bliver blokeret. Slå det fra eller vælg Automatisk under Netværk og internet.</string>
+    <string name="card_private_dns_action">Åbn netværksindstillinger</string>
+    <string name="card_notifications_title">Notifikationer er slået fra</string>
+    <string name="card_notifications_body">Appen kan ikke sige til, hvis beskyttelsen stopper.</string>
+    <string name="card_notifications_action">Åbn notifikationsindstillinger</string>
+
+    <string name="closing_line">Kun DNS-opslag går gennem appen. Ingen server, ingen konto. Apps med deres egen sikre DNS går uden om filteret.</string>
+
+    <string name="channel_protection">Beskyttelse</string>
+    <string name="channel_alerts">Advarsler</string>
+    <string name="notif_protected_title">Beskyttet</string>
+    <string name="notif_protected_text">Farlige sider og reklamer blokeres.</string>
+    <string name="notif_action_stop">Stop</string>
+    <string name="notif_stopped_title">Beskyttelsen er stoppet</string>
 </resources>
