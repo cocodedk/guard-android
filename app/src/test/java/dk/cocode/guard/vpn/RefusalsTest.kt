@@ -51,6 +51,7 @@ class RefusalsTest {
     private val client = addr("10.111.1.1")
     private val listed = addr("203.0.113.7")
     private val notices = CopyOnWriteArrayList<Triple<String, String, Int>>()
+    private val apps = CopyOnWriteArrayList<String?>()
     private var loop: PacketLoop? = null
 
     @Before
@@ -64,7 +65,7 @@ class RefusalsTest {
 
     private fun start() {
         val routes = RouteSet(mapOf("feodo" to listOf(parseCidr("203.0.113.0/24")!!)))
-        val refusals = Refusals { address, list, number -> notices.add(Triple(address, list, number)) }
+        val refusals = Refusals { address, list, number, app -> notices.add(Triple(address, list, number)); apps.add(app) }
         loop = PacketLoop(input, output, parseRules(emptySequence()), noDns, routes, refusals) {}
         loop!!.start()
     }
@@ -112,7 +113,7 @@ class RefusalsTest {
 
     @Test
     fun stoppedLoopLeavesTheFlowToTheNextLoop() {
-        val refusals = Refusals { address, list, number -> notices.add(Triple(address, list, number)) }
+        val refusals = Refusals { address, list, number, app -> notices.add(Triple(address, list, number)); apps.add(app) }
         val routes = RouteSet(mapOf("feodo" to listOf(parseCidr("203.0.113.0/24")!!)))
         val old = PacketLoop(input, output, parseRules(emptySequence()), noDns, routes, refusals) {}
         old.start()
@@ -130,9 +131,28 @@ class RefusalsTest {
     }
 
     @Test
+    fun noticeNamesTheAppAskedOncePerAddress() {
+        val asked = CopyOnWriteArrayList<Int>()
+        val routes = RouteSet(mapOf("feodo" to listOf(parseCidr("203.0.113.0/24")!!)))
+        val refusals = Refusals { address, list, number, app -> notices.add(Triple(address, list, number)); apps.add(app) }
+        loop = PacketLoop(input, output, parseRules(emptySequence()), noDns, routes, refusals, { proto, _, srcPort, _, dstPort ->
+            asked.add(srcPort)
+            "Chrome".takeIf { proto == PROTOCOL_TCP && dstPort == 443 }
+        }) {}
+        loop!!.start()
+        syn(40000)
+        syn(40001) // a second flow to the same address: counted, but no second notice and no second lookup
+        reply()
+        reply()
+        assertEquals(listOf("Chrome"), apps.toList())
+        assertEquals(listOf(40000), asked.toList())
+        assertEquals(2, ProtectionRepository.state.value.blockedAddressCount)
+    }
+
+    @Test
     fun noticesStopAtTwenty() {
         val seen = ArrayList<Int>()
-        val refusals = Refusals { _, _, number -> seen.add(number) }
+        val refusals = Refusals { _, _, number, _ -> seen.add(number) }
         repeat(25) { refusals.announce("203.0.113.$it", "feodo") }
         refusals.announce("203.0.113.0", "feodo") // already announced
         assertEquals((1..MAX_ADDRESS_NOTICES).toList(), seen)

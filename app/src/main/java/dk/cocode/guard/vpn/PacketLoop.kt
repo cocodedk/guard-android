@@ -13,6 +13,7 @@ import dk.cocode.guard.net.UdpPacket
 import dk.cocode.guard.net.buildIpv4Udp
 import dk.cocode.guard.net.parseIpPacket
 import dk.cocode.guard.net.parseIpv4Udp
+import dk.cocode.guard.net.u16
 import java.io.IOException
 import java.io.InputStream
 import java.io.OutputStream
@@ -47,6 +48,8 @@ class PacketLoop(
     private val upstream: DnsUpstream,
     private val routes: RouteSet = RouteSet(emptyMap()),
     private val refusals: Refusals = Refusals(),
+    // Names the app owning a connection: protocol, source address and port, destination address and port.
+    private val appOf: (Int, ByteArray, Int, ByteArray, Int) -> String? = { _, _, _, _, _ -> null },
     private val onFailure: (Throwable) -> Unit,
 ) {
     // Limited so slow upstream replies cannot exhaust the shared IO pool.
@@ -78,7 +81,8 @@ class PacketLoop(
     private fun countAddress(buf: ByteArray, ip: IpPacket, listId: String) = synchronized(countLock) {
         if (running && refusals.firstTime(buf, ip)) {
             ProtectionRepository.update { it.copy(blockedAddressCount = it.blockedAddressCount + 1) }
-            refusals.announce(ipText(ip.dstIp), listId)
+            val h = ip.headerLength
+            refusals.announce(ipText(ip.dstIp), listId) { appOf(ip.protocol, ip.srcIp, buf.u16(h), ip.dstIp, buf.u16(h + 2)) }
         }
     }
 

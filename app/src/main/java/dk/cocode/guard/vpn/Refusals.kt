@@ -19,9 +19,10 @@ private data class Flow(val protocol: Int, val srcPort: Int, val dst: String, va
 /**
  * What one start remembers about refused connections, shared by every [PacketLoop] of that start so a
  * tunnel swap neither counts a flow twice nor posts more notifications. [onNewAddress] gets the
- * address, the id of the list holding it and the notification number (1 to [MAX_ADDRESS_NOTICES]).
+ * address, the id of the list holding it, the notification number (1 to [MAX_ADDRESS_NOTICES]) and
+ * the name of the app that tried, or null when Android cannot tell.
  */
-class Refusals(private val onNewAddress: (String, String, Int) -> Unit = { _, _, _ -> }) {
+class Refusals(private val onNewAddress: (String, String, Int, String?) -> Unit = { _, _, _, _ -> }) {
     private val flows = RecentFlows(MAX_FLOWS)
     private val noticed = HashSet<String>()
 
@@ -35,8 +36,9 @@ class Refusals(private val onNewAddress: (String, String, Int) -> Unit = { _, _,
 
     /** Posts one notification the first time [address] is refused, up to [MAX_ADDRESS_NOTICES] a start. */
     @Synchronized
-    internal fun announce(address: String, listId: String) {
-        if (noticed.size < MAX_ADDRESS_NOTICES && noticed.add(address)) onNewAddress(address, listId, noticed.size)
+    internal fun announce(address: String, listId: String, app: () -> String? = { null }) {
+        // [app] asks Android, so it is asked only for a notification that is actually posted.
+        if (noticed.size < MAX_ADDRESS_NOTICES && noticed.add(address)) onNewAddress(address, listId, noticed.size, app())
     }
 
 }

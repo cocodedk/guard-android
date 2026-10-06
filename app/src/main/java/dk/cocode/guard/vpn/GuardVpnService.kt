@@ -62,8 +62,8 @@ class GuardVpnService : VpnService() {
                 addressLists = emptyList(), alwaysOn = isAlwaysOn,
             )
         }
-        refusals = Refusals { address, listId, number ->
-            postAddressNotice(this, number, address, AddressList.entries.first { it.id == listId }.title)
+        refusals = Refusals { address, listId, number, app ->
+            postAddressNotice(this, number, address, AddressList.entries.first { it.id == listId }.title, app)
         }
         showForeground()
         cannotRunReason()?.let { return stopForOther(it) }
@@ -123,7 +123,7 @@ class GuardVpnService : VpnService() {
 
     private fun newLoop(fd: ParcelFileDescriptor, routes: RouteSet) = PacketLoop(
         FileInputStream(fd.fileDescriptor), FileOutputStream(fd.fileDescriptor), checkNotNull(names),
-        checkNotNull(upstream), routes, refusals,
+        checkNotNull(upstream), routes, refusals, { p, src, sp, dst, dp -> appOwning(p, src, sp, dst, dp) },
     ) { scope.launch { stopForOther(StopReason.Error) } }
 
     /** Brings up a tunnel with the new routes, then retires the old one (see [replaceTunnel]). */

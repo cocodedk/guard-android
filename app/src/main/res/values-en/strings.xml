@@ -45,6 +45,8 @@
     <string name="channel_blocked_addresses">Blocked addresses</string>
     <string name="notif_address_title">Dangerous address blocked</string>
     <string name="notif_address_text">An app tried to connect to %1$s, which is on the %2$s list. The connection was refused.</string>
+    <string name="notif_address_text_app">%1$s tried to connect to %2$s, which is on the %3$s list. The connection was refused.</string>
+    <string name="app_android_system">Android system</string>
     <string name="notif_protected_title">Protected</string>
     <string name="notif_protected_text">Dangerous sites and ads are blocked.</string>
     <string name="notif_action_stop">Stop</string>

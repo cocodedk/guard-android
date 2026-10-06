@@ -83,9 +83,13 @@ fun postStoppedAlert(context: Context, reason: StopReason) {
 }
 
 /** Said the first time an address is refused in a start; [number] (1 and up) gives each address its own id. */
-fun postAddressNotice(context: Context, number: Int, address: String, listTitle: String) {
+fun postAddressNotice(context: Context, number: Int, address: String, listTitle: String, app: String?) {
     ensureChannels(context)
-    val body = context.getString(R.string.notif_address_text, address, listTitle)
+    val body = if (app == null) {
+        context.getString(R.string.notif_address_text, address, listTitle)
+    } else {
+        context.getString(R.string.notif_address_text_app, app, address, listTitle)
+    }
     val notice = Notification.Builder(context, CHANNEL_BLOCKED)
         .setSmallIcon(R.drawable.ic_shield_on)
         .setContentTitle(context.getString(R.string.notif_address_title))
