@@ -1,4 +1,4 @@
-# Cocode Guard for Android
+# Guard for Android
 
 Blocks dangerous sites and ads for every app on the phone, on any network: at home, on mobile data,
 on café Wi-Fi, abroad. The [Cocode Guard box](https://guard.cocode.dk) protects the house; this app
@@ -20,7 +20,7 @@ Status: early. The first version with protection is being built.
 
 ## How it works
 
-Android lets one app see the phone's DNS lookups through its VPN feature (`VpnService`). Cocode Guard
+Android lets one app see the phone's DNS lookups through its VPN feature (`VpnService`). Guard for Android
 uses that feature **only as a local tunnel that ends inside the app**. There is no VPN server.
 
 1. The tunnel's routes are a fake DNS address and the ranges on public lists of known-bad IP

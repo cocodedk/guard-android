@@ -1,4 +1,4 @@
-Cocode Guard blocks dangerous sites and ads for every app on your phone, on any network: at home, on mobile data, on café Wi-Fi, abroad.
+Guard for Android blocks dangerous sites and ads for every app on your phone, on any network: at home, on mobile data, on café Wi-Fi, abroad.
 
 <b>How it works</b>
 The app uses Android's VPN feature only as a local tunnel that ends inside the app. Only DNS lookups and connections to known dangerous addresses enter it. Names on the block list (the AdGuard DNS filter) get an empty answer; every other lookup is passed on to your network's own DNS server. Connections from any app to addresses on public lists of known dangerous addresses are refused at once, and a notification tells you which app tried. There is no VPN server: your other traffic goes out exactly as before.

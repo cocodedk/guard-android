@@ -1,4 +1,4 @@
-# Cocode Guard for Android
+# Guard for Android
 
 > A free-software (GPL-3.0) Android app that blocks dangerous sites and ads for every app on the
 > phone, on any network, by filtering DNS lookups on the phone itself. It also refuses connections to
