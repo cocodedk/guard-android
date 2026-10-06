@@ -30,7 +30,7 @@ android {
 
     defaultConfig {
         applicationId = "dk.cocode.guard"
-        minSdk = 26
+        minSdk = 29
         targetSdk = 36
         versionCode = appVersionCode
         versionName = appVersionName

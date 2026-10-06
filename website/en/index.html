@@ -43,6 +43,7 @@
  "license": "https://www.gnu.org/licenses/gpl-3.0.html"
 }
 </script>
+<script type="module" src="/webmcp.js"></script>
 </head>
 <body>
 <a class="skip" href="#main">Skip to content</a>
@@ -125,7 +126,7 @@
     <h2 id="h-limits">What the app cannot do</h2>
     <p class="intro">It is better to know up front.</p>
     <ul class="cards" role="list">
-      <li><h3>Android's Private DNS bypasses the filter</h3><p>If Private DNS is turned on in the phone's settings, the phone sends its lookups encrypted and around the app, so the app cannot see them. Turn Private DNS off if you want protection.</p></li>
+      <li><h3>Private DNS must be Automatic or Off</h3><p>If Android's Private DNS is set to Automatic, the app works as normal and you need to do nothing. If Private DNS is set to a specific server (a host name), it cannot work together with the app. The phone would not reach the internet while protection runs, so the app stops protection and tells you. To use the app, choose Automatic or Off.</p></li>
       <li><h3>Apps with their own secure DNS bypass the filter</h3><p>Some apps and browsers look sites up in their own encrypted way. The app cannot see those lookups.</p></li>
       <li><h3>One VPN at a time</h3><p>Android allows only one VPN-type app at a time, so a work VPN cannot run alongside Cocode Guard.</p></li>
       <li><h3>No list catches everything</h3><p>The app blocks what is on the list. A new dangerous site can slip through, and a harmless site can be blocked by mistake.</p></li>

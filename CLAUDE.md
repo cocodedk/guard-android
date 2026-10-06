@@ -43,8 +43,10 @@ Kotlin, Jetpack Compose (Material 3), one `app` module, package root `dk.cocode.
 - `MainActivity.kt`: sets `GuardTheme` and the home screen.
 - `ui/`: screens. `ui/theme/`: `GuardColors` (box palette) and `GuardTheme`.
   The contrast math lives with `ContrastTest` in `src/test`.
-- Packages that spec 01 adds (`vpn/`, `dns/`, `blocklist/`) keep Android-free logic (packet and DNS
-  parsing, rule matching) in plain Kotlin, so it is unit-tested on the JVM.
+- Packages that spec 01 adds (`vpn/`, `net/`, `dns/`, `blocklist/`, `notify/`): `vpn/` holds the
+  service, packet loop, upstream and `ProtectionRepository` (the state the screen reads); `notify/`
+  the two notification channels. `net/`, `dns/` and `blocklist/` keep Android-free logic (packet and
+  DNS parsing, rule matching) in plain Kotlin, so it is unit-tested on the JVM.
 
 ## Commands
 

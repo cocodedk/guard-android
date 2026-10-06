@@ -1,5 +1,44 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="status_not_built">Not protected yet</string>
-    <string name="home_explain">The app blocks dangerous sites and ads for every app on the phone, on any network. Protection arrives in the next version.</string>
+    <string name="status_off">Not protected</string>
+    <string name="status_starting">Starting …</string>
+    <string name="status_protected">Protected</string>
+    <string name="detail_off">Tap Start protection to block dangerous sites and ads for every app, on any network.</string>
+    <string name="detail_protected">Dangerous sites and ads are blocked for every app.</string>
+
+    <string name="action_start">Start protection</string>
+    <string name="action_starting">Starting protection</string>
+    <string name="action_stop">Stop protection</string>
+    <string name="action_start_again">Start again</string>
+    <string name="action_try_again">Try again</string>
+
+    <string name="counter">Blocked since start: %1$d</string>
+    <string name="list_line">Block list: AdGuard DNS filter, %1$s names</string>
+
+    <string name="card_refused_title">Permission was refused</string>
+    <string name="card_refused_body">The app needs Android\'s VPN permission to see DNS lookups. It is used only on the phone, and there is no Cocode server: lookups that are not blocked go to the network\'s own DNS server, as before.</string>
+    <string name="card_revoked_title">Protection has stopped</string>
+    <string name="card_revoked_body">Android stopped protection, for example because another VPN app took over or the VPN was turned off in settings. DNS lookups are no longer filtered.</string>
+    <string name="card_lockdown_title">Protection can\'t run</string>
+    <string name="card_lockdown_body">\"Block connections without VPN\" is on. The app sends only DNS lookups through its tunnel, so with that setting the phone can\'t reach the internet at all. Turn the setting off in VPN settings, then start again.</string>
+    <string name="card_error_title">Protection has stopped</string>
+    <string name="card_error_body">Something went wrong. DNS lookups are no longer filtered.</string>
+    <string name="card_always_on_title">Always-on VPN is on</string>
+    <string name="card_always_on_body">Android keeps protection on. Turn off Always-on VPN in VPN settings to be able to stop it.</string>
+    <string name="card_vpn_settings_action">Open VPN settings</string>
+    <string name="card_private_dns_title">Protection can\'t run with Private DNS</string>
+    <string name="card_private_dns_body">Private DNS is set to a specific server. With that setting the phone can\'t reach the internet at all while protection runs, so it has stopped. DNS lookups are not filtered. Turn Private DNS off or choose Automatic under Network and internet, then start again.</string>
+    <string name="card_private_dns_action">Open network settings</string>
+    <string name="card_notifications_title">Notifications are off</string>
+    <string name="card_notifications_body">The app can\'t tell you if protection stops.</string>
+    <string name="card_notifications_action">Open notification settings</string>
+
+    <string name="closing_line">Only DNS lookups pass through the app. No server, no account. Apps with their own secure DNS bypass the filter.</string>
+
+    <string name="channel_protection">Protection</string>
+    <string name="channel_alerts">Alerts</string>
+    <string name="notif_protected_title">Protected</string>
+    <string name="notif_protected_text">Dangerous sites and ads are blocked.</string>
+    <string name="notif_action_stop">Stop</string>
+    <string name="notif_stopped_title">Protection has stopped</string>
 </resources>
