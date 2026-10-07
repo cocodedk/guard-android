@@ -5,7 +5,7 @@ Guard for Android blokerer farlige sider og reklamer for alle apps på din telef
 <li><b>Den blokerer også farlige adresser, uden at al din trafik går gennem appen.</b> Noget skadeligt software springer navneopslaget over og går direkte til en adresse. Appen afviser forbindelser til adresser på offentlige lister over kendte farlige adresser, for eksempel kriminelle netværk og botnet-servere. Kun DNS-opslag og de forbindelser går ind i appen. Resten af din trafik gør aldrig.</li>
 <li><b>Den fortæller, hvilken app der prøvede.</b> En notifikation nævner appen, for eksempel "Chrome prøvede at forbinde til …", når Android kan oplyse, hvilken app det var. Listen Seneste blokeringer viser, hvad hver app prøvede at nå.</li>
 <li><b>Den stopper ikke i stilhed.</b> Hvis beskyttelsen stopper uden din anmodning, får du en notifikation om, at DNS-opslag ikke længere filtreres. Hvis en indstilling i Android ville afskære telefonen fra nettet, stopper appen og forklarer hvorfor. Slår du appens notifikationer fra, kan appen ikke sige til, og skærmen minder dig om det.</li>
-<li><b>Krypterede opslag forbliver krypterede.</b> Opslag, der ikke blokeres, sender Android selv videre. Krypterer Android dine opslag (Privat DNS sat til Automatisk), forbliver de krypterede.</li>
+<li><b>Krypterede opslag forbliver krypterede.</b> Opslag, der ikke blokeres, sender Android selv videre. Krypterer Android dine opslag (Privat DNS på Automatisk, når netværket understøtter det), forbliver de krypterede.</li>
 <li><b>Intet at sætte op.</b> Én knap og ingen lister at vælge. Lavet til TalkBack fra starten: alle knapper har en talt beskrivelse, ændringer i status bliver læst op, og teksten kan forstørres til 200 %.</li>
 </ul>
 

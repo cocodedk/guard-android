@@ -42,7 +42,8 @@ café Wi-Fi, abroad. What sets it apart:
   without VPN", would cut the phone off while a DNS-only tunnel runs, so the app detects both, stops
   and says why.
 - **It keeps encrypted DNS encrypted.** Lookups that aren't blocked go out through Android's own
-  resolver (`DnsResolver`), so with Private DNS on Automatic they stay encrypted.
+  resolver (`DnsResolver`), so a lookup Android encrypts (Private DNS on Automatic, when the
+  network's DNS server supports it) stays encrypted.
 - **Nothing to configure.** One button, no lists to choose. Danish and English, and built for
   TalkBack from the start (see [Accessibility](#accessibility)).
 
