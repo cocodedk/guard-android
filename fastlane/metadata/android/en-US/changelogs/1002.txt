@@ -1,0 +1,1 @@
+No changes in the app. The description now starts with what makes the app different: it blocks dangerous addresses without taking in all your traffic, names the app that tried, and says plainly when protection stops.
