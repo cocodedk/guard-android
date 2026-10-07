@@ -23,7 +23,7 @@
     <string name="tile_connections_spoken">%1$s blokerede forbindelser til farlige adresser, siden beskyttelsen startede</string>
     <string name="lists_title">Lister</string>
     <string name="list_names_active">%1$s navne</string>
-    <string name="list_active">%1$s poster på listen · hentet %2$s</string>
+    <string name="list_active">Poster på listen: %1$s · hentet %2$s</string>
     <string name="list_paused">Blokerer ikke: listen er over 7 dage gammel · hentet %1$s</string>
     <string name="list_not_yet">Ikke hentet endnu</string>
     <string name="address_blocking_off">Blokering af farlige adresser er ikke aktiv. Appen henter listerne direkte fra udgiverne, når telefonen er på nettet. Indtil da blokeres kun efter navn.</string>

@@ -137,7 +137,7 @@ outline, credits in quiet text. Notifications are unchanged (Android draws them)
 | tile_connections_spoken | %1$s blokerede forbindelser til farlige adresser, siden beskyttelsen startede | %1$s blocked connections to dangerous addresses since protection started |
 | lists_title | Lister | Lists |
 | list_names_active | %1$s navne | %1$s names |
-| list_active | %1$s poster på listen · hentet %2$s | %1$s list entries · downloaded %2$s |
+| list_active | Poster på listen: %1$s · hentet %2$s | List entries: %1$s · downloaded %2$s |
 | list_paused | Blokerer ikke: listen er over 7 dage gammel · hentet %1$s | Not blocking: list is over 7 days old · downloaded %1$s |
 | list_not_yet | Ikke hentet endnu | Not downloaded yet |
 

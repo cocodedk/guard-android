@@ -20,7 +20,7 @@
     <string name="tile_connections_spoken">%1$s blocked connections to dangerous addresses since protection started</string>
     <string name="lists_title">Lists</string>
     <string name="list_names_active">%1$s names</string>
-    <string name="list_active">%1$s list entries · downloaded %2$s</string>
+    <string name="list_active">List entries: %1$s · downloaded %2$s</string>
     <string name="list_paused">Not blocking: list is over 7 days old · downloaded %1$s</string>
     <string name="list_not_yet">Not downloaded yet</string>
     <string name="address_blocking_off">Blocking of dangerous addresses isn\'t active. The app downloads the lists directly from their publishers when the phone is online. Until then, only names are blocked.</string>
