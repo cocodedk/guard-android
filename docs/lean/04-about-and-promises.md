@@ -176,7 +176,7 @@ Issues and Contact do not depend on the language.
 
 ## Checked by hand on the owner's phone (not part of the gate)
 
-The launcher shows "Guard"; the home heading says "Guard for Android". With TalkBack: the six promises read one per swipe after the button; the "Hvad vi mener med VPN" section reads as heading then paragraph; "Om Cocode Guard" opens the
+The launcher shows "Guard"; the home heading says "Guard for Android". With TalkBack: the six promises read one per swipe after the button; the "Hvad vi mener med VPN" section reads as heading then paragraph; "Om Guard for Android" opens the
 page; section headings can be jumped between; each link opens the browser or the mail app; the back
 button and the back gesture return home; 200% font: nothing clipped on either screen.
 

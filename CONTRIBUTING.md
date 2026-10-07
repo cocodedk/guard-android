@@ -45,7 +45,8 @@ Every change keeps the app usable without sight:
 ## Coding conventions
 
 - Kotlin official style. Code files under 200 lines; split at a natural seam.
-- No Google or Play library, and no permission a spec does not name.
+- No Google Play services, no tracking library, and no permission a spec does not name. AndroidX and
+  Jetpack Compose provide the app's Android UI.
 - User-facing text lives in `res/values/strings.xml` (Danish, the default) and
   `res/values-en/strings.xml` (English). Plain words, short sentences.
 

@@ -21,7 +21,8 @@ enum class BlockKind { Name, Address }
 data class BlockEvent(val kind: BlockKind, val target: String, val app: String?)
 ```
 
-- `target` is the blocked name exactly as `DnsMessage` parsed it (lowercased, no trailing dot), or
+- `target` is the blocked name as `DnsMessage` parsed it (case kept, no trailing dot; matching against
+  the block list ignores case), or
   the refused address as `ipText` writes it.
 - `app` is the app's name from `appOwning(...)` (`vpn/AppNames.kt`, unchanged), or null when Android
   cannot tell. "Android-systemet" comes from `appOwning` itself for system UIDs; nothing else is

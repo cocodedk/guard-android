@@ -38,7 +38,7 @@
   <a href="/en/#how" data-nav="how">How it works</a>
   <a href="/en/#install" data-nav="install">Install</a>
   <a href="/en/privacy/" data-nav="privacy" aria-current="page">Privacy</a>
-  <a href="/" hreflang="da" lang="da" data-nav="lang">Dansk</a>
+  <a href="/privacy/" hreflang="da" lang="da" data-nav="lang">Dansk</a>
   <a href="https://cocode.dk/" data-nav="more">More apps</a>
 </nav>
 <!-- cocode-apps:nav:end -->
@@ -57,7 +57,7 @@
   <div class="wrap">
     <div class="prose">
       <h2>In short</h2>
-      <p>The app collects no personal data. It has no account, no server run by us, no analytics and no ads. Your DNS lookups (the questions your phone asks to find a site's address) go only to the DNS server the app uses, which is the current network's own. While protection runs, the app downloads lists of known dangerous addresses straight from the organisations that publish them. The app sends them no information about you; the section on address lists explains what they can see anyway.</p>
+      <p>The app collects no personal data. It has no account, no server run by us, no analytics and no ads. Your DNS lookups (the questions your phone asks to find a site's address) go only to the DNS server the app uses, which is the current network's own. While protection runs, the app downloads lists of known dangerous addresses straight from the organisations that publish them. The publishers can see your IP address and the ordinary details of a network request, as a website can when you visit it. The app sends them no account and no history of what it blocked. The section on address lists explains more.</p>
 
       <h2>Who is responsible</h2>
       <p>The data controller is Cocode (Babak Bandpey), <a href="mailto:bb@cocode.dk">bb@cocode.dk</a>. Because the app collects no personal data, we hold no information about you in practice. You can send questions about the app or this policy to the same address.</p>
@@ -76,7 +76,7 @@
       <p>Android calls the app a VPN because it uses Android's VPN feature. A VPN usually sends your traffic to a server run by someone else. This app does not. There is no VPN server, and the local tunnel starts and ends inside the app, on the phone. Only DNS lookups and connections to addresses on the lists below go through the app. The rest of your traffic does not go through the app. While protection runs, Android shows a key icon in the status bar. That is Android's own sign for apps that use its VPN feature. It does not mean your traffic goes to a VPN server.</p>
 
       <h2>Lists of dangerous addresses</h2>
-      <p>Some apps and some malicious software go straight to an address (an IP address, the number that identifies a computer on the internet) instead of looking up a name. The name list cannot stop that. So the app downloads lists of known dangerous addresses. While protection runs, the app refuses at once any connection from any app to an address on the lists. The connection never leaves the phone, and the app passes nothing on to the internet. The app counts the refused connections, and a notification tells you which app tried (when Android can say), which address it was and which list it was on.</p>
+      <p>Some apps and some malicious software go straight to an address (an IP address, the number that identifies a computer on the internet) instead of looking up a name. The name list cannot stop that. So the app downloads lists of known dangerous addresses. While protection runs, the app refuses at once any connection from any app to an address on the lists. The connection never leaves the phone, and the app passes nothing on to the internet. The app counts the refused connections. With notifications on, you are told about the first block of each address, up to 20 different addresses every time protection starts. The notification says which address it was, which list it was on and, when Android can say, which app tried.</p>
 
       <h3>Which lists</h3>
       <ul>
@@ -86,27 +86,27 @@
       <p>The app fetches nothing else from them but these three files. The lists are data. The app never downloads program code and runs nothing it downloads.</p>
 
       <h3>How and how often</h3>
-      <p>The app downloads the lists itself, straight from the publishers, over HTTPS. There is no server of ours in between. It downloads only while protection runs. Once all three lists are downloaded, it normally waits at least 24 hours before fetching again. If a download fails, the app tries again later, after at least an hour. Each time, it fetches all three lists.</p>
+      <p>The app downloads the lists itself, straight from the publishers, over HTTPS. There is no server of ours in between. It downloads only while protection runs. Once all three lists are downloaded, it normally waits at least 24 hours before fetching again. If a download fails, the app tries again about once an hour for as long as protection keeps running. If you stop and start protection, the app can try again at once. Each time, it fetches all three lists.</p>
 
       <h3>What the publishers can see</h3>
-      <p>As with any visit to a website, the publisher can see your IP address, the time and the ordinary details of a network request, for example Android's standard text (the user agent) saying which Android version and which phone is asking. The app sends no account, no identifier and no information about you or about what it has blocked. What the publishers do with what they can see is up to them. We do not see it.</p>
+      <p>As with any visit to a website, the publisher can see your IP address, the time and the ordinary details of a network request, for example Android's standard text (the user agent) saying which Android version and which phone is asking. Beyond that, the app sends no account, no identifier and no information about what it has blocked. What the publishers do with what they can see is up to them. We do not see it.</p>
       <p>The phone looks up the publishers' names in the ordinary way. So the network's DNS server and your internet provider can see that the phone is downloading the lists, just as with any other website.</p>
 
       <h3>Which app tried</h3>
-      <p>To name the app, the app asks Android which app owns a blocked lookup or connection. This happens on the phone. The app can only see the apps that have an icon on the home screen. If Android cannot say which app it was, the notification says only "an app" and the "Recent blocks" list says "An unknown app". The name is shown in the notification for a blocked address and in the "Recent blocks" list on the app's screen. For each app, the list shows how many lookups and connections were blocked and the latest names or addresses it tried to reach. The list exists only in the phone's memory while protection runs, is cleared whenever protection starts or stops, and is never saved or sent anywhere. The notification is Android's, so Android may keep it itself, for example in the notification history.</p>
+      <p>To name the app, the app asks Android which app owns a blocked lookup or connection. This happens on the phone. The app can only name the apps that Android shows it. These are apps with a launcher icon (they appear in the phone's app list) and some of Android's own system parts, which appear as "Android system". The icon need not be on the home screen. If Android cannot say which app it was, the notification says only "an app" and the "Recent blocks" list says "An unknown app". The name is shown in the notification for a blocked address and in the "Recent blocks" list on the app's screen. For each app, the list shows how many lookups and connections were blocked and the latest names or addresses it tried to reach. The list exists only in the phone's memory while protection runs, is cleared whenever protection starts or stops, and is never saved or sent anywhere. The notification is Android's, so Android may keep it itself, for example in the notification history.</p>
 
       <h2>What stays on the phone</h2>
-      <p>The app counts how many lookups and connections it has blocked. The numbers and the app's settings stay on the phone and are not sent anywhere. The app writes no history of blocked names, addresses or apps. It remembers, in memory only and only while protection runs, which addresses it has already told you about.</p>
-      <p>The address lists are stored on the phone too, so they can be used without downloading again. If a list is more than 7 days old, the app pauses it, because old lists can block addresses that others use now. The screen tells you when a list is paused. You delete everything by clearing the app's data or uninstalling the app.</p>
+      <p>The app counts how many lookups and connections it has blocked. The numbers stay on the phone and are not sent anywhere. The app writes no history of blocked names, addresses or apps. It remembers, in memory only and only while protection runs, which addresses it has already told you about.</p>
+      <p>The address lists are stored on the phone too, so they can be used without downloading again. When a list becomes more than 7 days old, the app stops using it at its next hourly check, because old lists can block addresses that others use now. The screen tells you when a list is not in use. You delete everything by clearing the app's data or uninstalling the app.</p>
       <p>The block list of names, AdGuard's DNS filter, comes bundled in the app. The app does not download it from any server. If a later version fetches updates to the name list, this policy will be corrected to say so.</p>
 
       <h2>Permissions</h2>
       <h3>VPN</h3>
       <p>Needed so the app can see DNS lookups and refuse connections to dangerous addresses. Android asks for your permission the first time you tap Start protection. Without it, the app cannot protect the phone. See the section on DNS lookups for what the tunnel does and does not do.</p>
       <h3>Notifications</h3>
-      <p>Used to tell you if protection stops, and when a connection to a dangerous address has been refused. If you turn notifications off, the app cannot tell you when protection stops, and the screen reminds you of that.</p>
+      <p>Android asks for this permission only on Android 13 and later. It is used to tell you if protection stops, and about refused connections to dangerous addresses (up to 20 different addresses every time protection starts). If you turn notifications off, the app cannot tell you when protection stops, and the screen reminds you of that.</p>
       <h3>Everything else</h3>
-      <p>The app uses no other permissions. It has no access to your contacts, your location, your files or Android's accessibility features. The app uses Android's ordinary network access, which Android grants automatically, so it can pass lookups on and download the address lists.</p>
+      <p>The app asks for no other permissions. Android does grant it three things automatically: internet access, so it can pass lookups on and download the address lists; checking whether the phone is online; and running protection as a foreground service, which shows an ongoing notification while it runs. The app has no access to your contacts, your location, your files or Android's accessibility features.</p>
 
       <h2>Sharing with others</h2>
       <p>We share no data with anyone, because we have none. The lookups go to the DNS server, and the lists are downloaded from the publishers, as described above. Whoever runs them sees what a server always sees in a connection: your IP address and the time.</p>
@@ -118,10 +118,11 @@
       <p>Under the General Data Protection Regulation (GDPR) you have the right to access, correct and delete your data. Because we hold no information about you, there is nothing to access or delete. Write to <a href="mailto:bb@cocode.dk">bb@cocode.dk</a> if you are in doubt anyway. You can also complain to the Danish Data Protection Agency, <a href="https://www.datatilsynet.dk/english">Datatilsynet</a>.</p>
 
       <h2>This website</h2>
-      <p>The website uses no cookies, no statistics and no JavaScript. The typeface is served from the site itself, so no third party sees your visit. Like any web server, the server the site sits on may keep ordinary access logs.</p>
+      <p>The website uses no cookies and no statistics. It contains a small piece of JavaScript that only makes the page's content available to AI assistants in browsers that support it. The script fetches nothing and sends nothing. The typeface is served from the site itself, not from a third party. The website is hosted by GitHub Pages, which logs visitors' IP addresses for security purposes (see <a href="https://docs.github.com/en/pages/getting-started-with-github-pages/what-is-github-pages#data-collection">GitHub's description</a>). That happens at GitHub, not at our end.</p>
 
       <h2>Changes</h2>
       <p>If we change the policy, we change the date at the top and say what is new. Older versions can be seen in the project's history on <a href="https://github.com/cocodedk/guard-android">GitHub</a>.</p>
+      <p><strong>7 October 2026:</strong> corrected so the policy matches the app. The publishers can see your IP address and the ordinary details of a request. Notifications about blocked addresses cover up to 20 different addresses every time protection starts. A failed list download is retried about once an hour while protection runs. The app can only name the apps Android shows it. The app's automatic permissions are listed. The website uses a small piece of JavaScript and is hosted by GitHub Pages, which logs IP addresses. The sentence saying the first version is still under development is removed, because version 0.1.0 is released.</p>
       <p><strong>6 October 2026:</strong> a new section on lists of dangerous addresses and on the app downloading them. The sections on what stays on the phone, on permissions and on sharing with others are updated.</p>
 
       <h2>Contact</h2>

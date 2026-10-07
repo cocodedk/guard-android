@@ -9,8 +9,8 @@
     <string name="action_start">Start protection</string>
     <string name="action_starting">Starting protection</string>
     <string name="action_stop">Stop protection</string>
-    <string name="action_start_again">Start again</string>
-    <string name="action_try_again">Try again</string>
+    <string name="action_start_again">Start protection again</string>
+    <string name="action_try_again">Start protection</string>
 
     <string name="tile_lookups_tag">Lookups</string>
     <string name="tile_lookups_label">blocked since protection started</string>
@@ -20,8 +20,8 @@
     <string name="tile_connections_spoken">%1$s blocked connections to dangerous addresses since protection started</string>
     <string name="lists_title">Lists</string>
     <string name="list_names_active">%1$s names</string>
-    <string name="list_active">%1$s · downloaded %2$s</string>
-    <string name="list_paused">Paused · downloaded %1$s</string>
+    <string name="list_active">List entries: %1$s · downloaded %2$s</string>
+    <string name="list_paused">Not blocking: list is over 7 days old · downloaded %1$s</string>
     <string name="list_not_yet">Not downloaded yet</string>
     <string name="address_blocking_off">Blocking of dangerous addresses isn\'t active. The app downloads the lists directly from their publishers when the phone is online. Until then, only names are blocked.</string>
 
@@ -32,20 +32,20 @@
     <string name="recent_note">This list stays on the phone and is cleared each time protection starts or stops.</string>
 
     <string name="card_refused_title">Permission was not granted</string>
-    <string name="card_refused_body">Without Android\'s VPN permission, the app can\'t see DNS lookups, so it can\'t block anything. The permission is used only on the phone, and there is no Cocode server. Lookups that aren\'t blocked go to the network\'s own DNS server, as before. Tap \"Try again\" if you want to give permission now.</string>
+    <string name="card_refused_body">Without Android\'s VPN permission, the app can\'t see DNS lookups, so it can\'t block anything. The permission is used only on the phone, and there is no Cocode server. Lookups that aren\'t blocked go to the network\'s own DNS server, as before. Tap \"Start protection\" if you want to give permission now.</string>
     <string name="card_revoked_title">Protection has stopped</string>
-    <string name="card_revoked_body">The phone is no longer protected: DNS lookups aren\'t filtered, so dangerous sites and ads aren\'t blocked. Android stopped protection, for example because another VPN app took over or the VPN was turned off in Android\'s settings. Tap \"Start again\" in the app to start protection again.</string>
+    <string name="card_revoked_body">The phone is no longer protected: DNS lookups aren\'t filtered, so dangerous sites and ads aren\'t blocked. Android stopped protection, for example because another VPN app took over or the VPN was turned off in Android\'s settings. Tap \"Start protection again\" in the app.</string>
     <string name="card_lockdown_title">Protection can\'t run</string>
-    <string name="card_lockdown_body">The phone is not protected: DNS lookups aren\'t filtered, so dangerous sites and ads aren\'t blocked. The cause is Android\'s \"Block connections without VPN\" setting. With it on, Android lets traffic through only a VPN, and the app\'s VPN connection takes only DNS lookups and connections to known dangerous addresses. So the phone can\'t reach the internet at all. Turn the setting off in Android\'s VPN settings, then tap \"Start again\" in the app.</string>
+    <string name="card_lockdown_body">The phone is not protected: DNS lookups aren\'t filtered, so dangerous sites and ads aren\'t blocked. The cause is Android\'s \"Block connections without VPN\" setting. With it on, Android lets traffic through only a VPN, and the app\'s VPN connection takes only DNS lookups and connections to known dangerous addresses. So the phone can\'t reach the internet at all. Turn the setting off in Android\'s VPN settings, then tap \"Start protection again\" in the app.</string>
     <string name="card_error_title">Protection has stopped</string>
-    <string name="card_error_body">The phone is no longer protected: DNS lookups aren\'t filtered, so dangerous sites and ads aren\'t blocked. Something went wrong. Tap \"Start again\" in the app to try to start protection again.</string>
+    <string name="card_error_body">The phone is no longer protected: DNS lookups aren\'t filtered, so dangerous sites and ads aren\'t blocked. Something went wrong. Tap \"Start protection again\" in the app to try again.</string>
     <string name="card_always_on_title">Always-on VPN is on</string>
     <string name="card_always_on_body">Android keeps protection on, so you can\'t stop it here in the app. To stop it, turn off \"Always-on VPN\" in Android\'s VPN settings. Tap \"Open VPN settings\" to get there.</string>
     <string name="card_vpn_settings_action">Open VPN settings</string>
     <string name="card_private_dns_title">Protection can\'t run with Private DNS</string>
-    <string name="card_private_dns_body">The phone is not protected: DNS lookups aren\'t filtered, so dangerous sites and ads aren\'t blocked. \"Private DNS\" is set to a specific server. With that setting the phone can\'t reach the internet at all while protection runs, so the app has stopped protection. Tap \"Open network settings\", find \"Private DNS\", and choose \"Off\" or \"Automatic\". Then tap \"Start again\" in the app.</string>
+    <string name="card_private_dns_body">The phone is not protected: DNS lookups aren\'t filtered, so dangerous sites and ads aren\'t blocked. \"Private DNS\" is set to a specific server. With that setting the phone can\'t reach the internet at all while protection runs, so the app has stopped protection. Tap \"Open network settings\", find \"Private DNS\", and choose \"Off\" or \"Automatic\". Then tap \"Start protection again\" in the app.</string>
     <string name="card_private_dns_action">Open network settings</string>
-    <string name="card_notifications_title">Notifications are off</string>
+    <string name="card_notifications_title">Alerts about stopped protection are off</string>
     <string name="card_notifications_body">The app can\'t tell you if protection stops, so you could be unprotected without knowing. Tap \"Open notification settings\" and turn on notifications for the app. Also make sure \"Alerts\" is turned on.</string>
     <string name="card_notifications_action">Open notification settings</string>
 
@@ -54,9 +54,9 @@
     <string name="promise_on_phone">The blocking happens on the phone. There is no Cocode server and no VPN server. Lists of dangerous addresses are downloaded directly from their publishers, who can see your IP address, just as a website can when you visit it.</string>
     <string name="promise_only_dns">Only DNS lookups and connections to known dangerous addresses pass through the app. A DNS lookup is how the phone finds out where a site is. Lookups that aren\'t blocked go on to the network\'s own DNS server, as before. The app never touches the rest of your traffic.</string>
     <string name="promise_free">The app is free of charge, and anyone can read its code. It is free software under the GPL-3.0 license.</string>
-    <string name="promise_permissions">The app asks for only two permissions: VPN and notifications. It has no access to your contacts, location or files.</string>
+    <string name="promise_permissions">The app asks only for permission to use a VPN and, on Android 13 or later, to show notifications. It has no access to your contacts, location or files.</string>
     <string name="promise_accessible">Works with TalkBack and large text sizes.</string>
-    <string name="promise_limit">One limit: apps that use their own encrypted DNS bypass the name filter, so some dangerous sites and ads can get through in them.</string>
+    <string name="promise_limit">One limit: apps that use their own DNS, such as encrypted DNS, bypass the name filter, so some dangerous sites and ads can get through in them.</string>
     <string name="action_about">About Guard for Android</string>
     <string name="action_back">Back</string>
 

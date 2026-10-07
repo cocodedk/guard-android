@@ -187,13 +187,13 @@ column scrolls (`verticalScroll`) and respects `safeDrawingPadding`; nothing has
 |---|---|---|---|---|
 | Off | Ikke beskyttet (Notice, shield outline) | `detail_off` | NotificationsOff if refused | Start beskyttelse |
 | Android's VPN dialog showing | unchanged | | | |
-| PermissionRefused | Ikke beskyttet (Notice) | — | PermissionRefused | Prøv igen |
+| PermissionRefused | Ikke beskyttet (Notice) | — | PermissionRefused | Start beskyttelse |
 | Starting | Starter … (Notice) | — | | Starter beskyttelse (disabled) |
 | Protected | Beskyttet (Ok, filled shield with check) | `detail_protected` | AlwaysOn if always-on; NotificationsOff if refused | Stop beskyttelse, or none if always-on |
-| Stopped(Revoked) | Ikke beskyttet (Urgent, shield with slash) | — | StoppedRevoked | Start igen |
-| Stopped(Lockdown) | Ikke beskyttet (Urgent, shield with slash) | — | StoppedLockdown | Start igen |
-| Stopped(PrivateDns) | Ikke beskyttet (Urgent, shield with slash) | — | StoppedPrivateDns | Start igen |
-| Stopped(Error) | Ikke beskyttet (Urgent, shield with slash) | — | StoppedError | Start igen |
+| Stopped(Revoked) | Ikke beskyttet (Urgent, shield with slash) | — | StoppedRevoked | Start beskyttelsen igen |
+| Stopped(Lockdown) | Ikke beskyttet (Urgent, shield with slash) | — | StoppedLockdown | Start beskyttelsen igen |
+| Stopped(PrivateDns) | Ikke beskyttet (Urgent, shield with slash) | — | StoppedPrivateDns | Start beskyttelsen igen |
+| Stopped(Error) | Ikke beskyttet (Urgent, shield with slash) | — | StoppedError | Start beskyttelsen igen |
 
 - The counter and list line show only in the Protected row.
 - "None" means no primary button: the AlwaysOn card's own button is the way out.
@@ -243,8 +243,8 @@ column scrolls (`verticalScroll`) and respects `safeDrawingPadding`; nothing has
 | action_start | Start beskyttelse | Start protection |
 | action_starting | Starter beskyttelse | Starting protection |
 | action_stop | Stop beskyttelse | Stop protection |
-| action_start_again | Start igen | Start again |
-| action_try_again | Prøv igen | Try again |
+| action_start_again | Start beskyttelsen igen | Start protection again |
+| action_try_again | Start beskyttelse | Start protection |
 | counter | Blokeret siden start: %1$d | Blocked since start: %1$d |
 | list_line | Blokeringsliste: AdGuard DNS filter, %1$s navne | Block list: AdGuard DNS filter, %1$s names |
 | card_refused_title | Tilladelsen blev afvist | Permission was refused |
@@ -261,7 +261,7 @@ column scrolls (`verticalScroll`) and respects `safeDrawingPadding`; nothing has
 | card_private_dns_title | Beskyttelsen kan ikke køre med Privat DNS | Protection can't run with Private DNS |
 | card_private_dns_body | Privat DNS er sat til en bestemt server. Med den indstilling kan telefonen slet ikke komme på nettet, mens beskyttelsen kører, så den er stoppet. DNS-opslag bliver ikke filtreret. Slå Privat DNS fra, eller vælg Automatisk under Netværk og internet, og start igen. | Private DNS is set to a specific server. With that setting the phone can't reach the internet at all while protection runs, so it has stopped. DNS lookups are not filtered. Turn Private DNS off or choose Automatic under Network and internet, then start again. |
 | card_private_dns_action | Åbn netværksindstillinger | Open network settings |
-| card_notifications_title | Notifikationer er slået fra | Notifications are off |
+| card_notifications_title | Advarsler om stoppet beskyttelse er slået fra | Alerts about stopped protection are off |
 | card_notifications_body | Appen kan ikke sige til, hvis beskyttelsen stopper. | The app can't tell you if protection stops. |
 | card_notifications_action | Åbn notifikationsindstillinger | Open notification settings |
 | closing_line | Kun DNS-opslag går gennem appen. Ingen server, ingen konto. Apps med deres egen sikre DNS går uden om filteret. | Only DNS lookups pass through the app. No server, no account. Apps with their own secure DNS bypass the filter. |

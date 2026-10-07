@@ -3,37 +3,33 @@ Guard for Android blokerer farlige sider og reklamer for alle apps på din telef
 <b>Det særlige ved appen</b>
 <ul>
 <li><b>Den blokerer også farlige adresser, uden at al din trafik går gennem appen.</b> Noget skadeligt software springer navneopslaget over og går direkte til en adresse. Appen afviser forbindelser til adresser på offentlige lister over kendte farlige adresser, for eksempel kriminelle netværk og botnet-servere. Kun DNS-opslag og de forbindelser går ind i appen. Resten af din trafik gør aldrig.</li>
-<li><b>Den fortæller, hvilken app der prøvede.</b> En notifikation nævner appen, for eksempel "Chrome prøvede at forbinde til …", når Android kan oplyse, hvilken app det var. Listen Seneste blokeringer viser, hvad hver app prøvede at nå.</li>
-<li><b>Den stopper ikke i stilhed.</b> Hvis beskyttelsen stopper uden din anmodning, får du en notifikation om, at DNS-opslag ikke længere filtreres. Hvis en indstilling i Android ville afskære telefonen fra nettet, stopper appen og forklarer hvorfor. Slår du appens notifikationer fra, kan appen ikke sige til, og skærmen minder dig om det.</li>
+<li><b>Den fortæller, hvilken app der prøvede.</b> En notifikation nævner appen, for eksempel "Chrome prøvede at oprette forbindelse til …", når Android kan oplyse, hvilken app det var. Med notifikationer slået til får du besked om den første blokering af op til 20 forskellige adresser, hver gang beskyttelsen startes. Listen Seneste blokeringer viser, hvad hver app prøvede at nå. Den bliver kun i telefonen og slettes, når beskyttelsen starter eller stopper.</li>
+<li><b>Den prøver at give besked, når beskyttelsen stopper.</b> Hvis beskyttelsen stopper uden din anmodning, forsøger appen at sende en notifikation om, at DNS-opslag ikke længere filtreres. Det kræver, at notifikationer er slået til, og beskeden kan udeblive, hvis Android lukker appen uventet. Er de slået fra, minder skærmen dig om det.</li>
 <li><b>Krypterede opslag forbliver krypterede.</b> Opslag, der ikke blokeres, sender Android selv videre. Krypterer Android dine opslag (Privat DNS på Automatisk, når netværket understøtter det), forbliver de krypterede.</li>
-<li><b>Intet at sætte op.</b> Én knap og ingen lister at vælge. Lavet til TalkBack fra starten: alle knapper har en talt beskrivelse, ændringer i status bliver læst op, og teksten kan forstørres til 200 %.</li>
+<li><b>Intet at sætte op.</b> Ingen indstillinger og ingen lister at vælge. Lavet til TalkBack: alle knapper har en talt beskrivelse, ændringer i status bliver læst op, og teksten kan forstørres til 200 %.</li>
 </ul>
 
 <b>Kom i gang</b>
-Åbn appen og tryk på Start beskyttelse. Android beder dig om to tilladelser: VPN-forbindelsen og notifikationer. Du stopper beskyttelsen med knappen Stop beskyttelse.
+Åbn appen og tryk på Start beskyttelse. Android beder dig om tilladelse til VPN-forbindelsen og, på Android 13 eller nyere, til notifikationer, men ikke om andet. Du stopper beskyttelsen med knappen Stop beskyttelse.
 
 <b>Sådan virker den</b>
-<ul>
-<li>Når en app vil åbne en side, spørger telefonen først, hvor siden ligger. Det kaldes et DNS-opslag. Står navnet på blokeringslisten (AdGuard DNS filter, som ligger i appen), får appen et tomt svar, og siden eller reklamen bliver ikke hentet. Alle andre opslag går videre til dit netværks egen DNS-server.</li>
-<li>Listen Seneste blokeringer findes kun i telefonens hukommelse og slettes, når beskyttelsen starter eller stopper.</li>
-</ul>
+Når en app vil åbne en side, spørger telefonen først, hvor siden ligger. Det kaldes et DNS-opslag. Står navnet på blokeringslisten (AdGuard DNS filter, som ligger i appen), får appen et tomt svar, og siden eller reklamen bliver ikke hentet. Alle andre opslag går videre til dit netværks egen DNS-server.
 
 <b>Hvad der går gennem appen</b>
-Appen bruger Androids VPN-funktion, men kun som en lokal tunnel, der ender inde i appen. Der er ingen VPN-server, og resten af din trafik går ud som før. Derfor viser Android en nøgle i statuslinjen, mens beskyttelsen kører.
+Appen bruger Androids VPN-funktion kun som en lokal tunnel, der ender inde i appen. Der er ingen VPN-server. Derfor viser Android en nøgle i statuslinjen, mens beskyttelsen kører.
 
 <b>Privatliv</b>
 <ul>
 <li>Appen indsamler ingen oplysninger om dig. Ingen konto, ingen statistik, ingen reklamer, og vi driver ingen server.</li>
 <li>Adresselisterne hentes direkte fra udgiverne til telefonen, normalt en gang i døgnet og kun mens beskyttelsen kører. Som ved ethvert besøg på en hjemmeside kan udgiverne se din IP-adresse.</li>
-<li>Du giver kun to tilladelser: VPN-forbindelsen og notifikationer. Netværksadgang giver Android automatisk, og den bruges også til at hente listerne.</li>
 <li>Fri software under GPL-3.0, og gratis. Alle kan læse koden.</li>
 </ul>
 
 <b>Begrænsninger</b>
 <ul>
-<li>Apps med deres egen sikre DNS, for eksempel en browser med DoH slået til, går uden om navnefilteret.</li>
+<li>Apps med deres egen DNS, for eksempel en browser med krypteret DNS (DoH) slået til, går uden om navnefilteret.</li>
 <li>Androids Privat DNS sat til en bestemt server kan ikke bruges sammen med appen. Telefonen ville ikke kunne komme på nettet, så beskyttelsen stopper og siger det. "Automatisk" virker. Af samme grund kan Androids indstilling "Bloker forbindelser uden VPN" heller ikke bruges sammen med appen.</li>
 <li>Android tillader kun én VPN-app ad gangen, så appen kan ikke køre sammen med en anden VPN.</li>
-<li>Blokering af adresser kræver, at listerne er hentet og under 7 dage gamle, for gamle lister kan blokere adresser, som andre bruger nu. Skærmen siger, hvis en liste mangler eller er sat på pause. Navnefilteret virker uanset.</li>
+<li>Blokering af adresser kræver hentede lister. Bliver en liste mere end 7 dage gammel, holder appen op med at bruge den ved næste kontrol, som sker hver time, fordi gamle lister kan blokere adresser, som andre bruger nu. Skærmen siger, hvis en liste mangler eller ikke bruges. Navnefilteret virker uanset.</li>
 <li>Ingen liste fanger alt.</li>
 </ul>

@@ -9,7 +9,8 @@
     <uses-permission android:name="android.permission.FOREGROUND_SERVICE_SYSTEM_EXEMPTED" />
 
     <!-- Lets the app see apps with a launcher icon, so a blocked-address notification can name the
-         app that tried. Not a permission; no other packages become visible. -->
+         app that tried. Not a permission. Android also shows this app a few other packages by default,
+         such as system components. -->
     <queries>
         <intent>
             <action android:name="android.intent.action.MAIN" />
