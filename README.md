@@ -76,8 +76,8 @@ Tracker recommended IP blocklist. There is no Cocode server in between. Details:
 - Only those three files are fetched. They are data: the app reads them and never runs them.
 - Normally once a day. While protection keeps running, a failed download is retried about once an
   hour. Stopping and starting protection can trigger an earlier retry.
-- Each list is stored in the app's private files. A list older than 7 days is not used, and the
-  screen says so, because old lists can block addresses that others use now.
+- Each list is stored in the app's private files. When a list becomes older than 7 days, the app stops using it at its
+  next hourly check, and the screen says so, because old lists can block addresses that others use now.
 - Each publisher sees what any web server sees: the phone's IP address, the time and the ordinary
   details of a request (Android's default user agent). The app sends no account, identifier or data
   about the user or about what was blocked.
@@ -102,8 +102,8 @@ Tracker recommended IP blocklist. There is no Cocode server in between. Details:
   Android ends the whole app abruptly. If you stop protection yourself, the screen says so. If you
   turn off the app's notifications, the app can't tell you when protection stops, and the screen
   reminds you of that.
-- Address blocking needs downloaded lists. A list that is missing, or older than 7 days, is not used,
-  and the screen says so. The name filter works regardless. No list catches everything.
+- Address blocking needs downloaded lists. A missing list is not used, and a list older than 7 days
+  is dropped at the next hourly check; the screen says so. The name filter works regardless. No list catches everything.
 
 ## Accessibility
 

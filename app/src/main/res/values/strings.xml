@@ -89,8 +89,8 @@
     <string name="channel_alerts">Advarsler</string>
     <string name="channel_blocked_addresses">Blokerede adresser</string>
     <string name="notif_address_title">Farlig adresse blokeret</string>
-    <string name="notif_address_text">En app prøvede at forbinde til %1$s, som står på listen %2$s. Forbindelsen blev blokeret, før den nåede frem til adressen.</string>
-    <string name="notif_address_text_app">%1$s prøvede at forbinde til %2$s, som står på listen %3$s. Forbindelsen blev blokeret, før den nåede frem til adressen.</string>
+    <string name="notif_address_text">En app prøvede at oprette forbindelse til %1$s, som står på listen %2$s. Forbindelsen blev blokeret, før den nåede frem til adressen.</string>
+    <string name="notif_address_text_app">%1$s prøvede at oprette forbindelse til %2$s, som står på listen %3$s. Forbindelsen blev blokeret, før den nåede frem til adressen.</string>
     <string name="app_android_system">Android-systemet</string>
     <string name="notif_protected_title">Beskyttet</string>
     <string name="notif_protected_text">Farlige sider og reklamer blokeres.</string>
