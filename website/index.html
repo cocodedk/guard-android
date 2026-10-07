@@ -91,7 +91,22 @@
   </div>
 </section>
 
-<section class="day" id="privacy-short" aria-labelledby="h-privacy">
+<section class="day" id="what" aria-labelledby="h-what">
+  <div class="wrap">
+    <h2 id="h-what">Det særlige ved appen</h2>
+    <p class="intro">Appen blokerer på to måder for alle apps på telefonen og på alle netværk. Navnefilteret stopper kendte farlige sider og reklamer. Adresseblokeringen afviser forbindelser til kendte farlige adresser.</p>
+    <ul class="cards" role="list">
+      <li><h3>Også farlige adresser</h3><p>Noget skadeligt software springer navneopslaget over og går direkte til en adresse, så et navnefilter alene kan ikke stoppe det. Appen afviser forbindelser til adresser på offentlige lister over kendte farlige adresser, for eksempel kriminelle netværk og botnet-servere. Kun DNS-opslag og de forbindelser går gennem appen. Resten af din trafik gør aldrig.</p></li>
+      <li><h3>Den nævner appen</h3><p>Når en forbindelse bliver afvist, fortæller en notifikation dig, hvilken app der prøvede, når Android kan oplyse det, for eksempel "Chrome prøvede at oprette forbindelse til …". Med notifikationer slået til får du besked om den første blokering af op til 20 forskellige adresser, hver gang beskyttelsen startes. Listen Seneste blokeringer på skærmen viser, hvad hver app prøvede at nå, så du kan finde en app, der bliver ved.</p></li>
+      <li><h3>Den stopper ikke i stilhed</h3><p>Hvis beskyttelsen stopper uden din anmodning, forsøger appen at sende en notifikation om, at DNS-opslag ikke længere filtreres. Det kræver, at notifikationer fra appen er slået til, og notifikationen kan udeblive, hvis Android lukker appens proces uventet. Hvis en indstilling i Android ville afskære telefonen fra nettet, stopper appen og forklarer hvorfor. Slår du appens notifikationer fra, minder skærmen dig om, at appen ikke kan sige til.</p></li>
+      <li><h3>Krypterede opslag forbliver krypterede</h3><p>Opslag, der ikke blokeres, sender Android selv videre. Krypterer Android dine opslag (Privat DNS på Automatisk, når netværket understøtter det), forbliver de krypterede.</p></li>
+      <li><h3>Intet at sætte op</h3><p>Tryk på Start beskyttelse. Der er ingen indstillinger og ingen lister at vælge. Apps, der bruger telefonens almindelige DNS-opslag, filtreres uden opsætning i hver enkelt app, hvad enten det er spil, nyhedsapps eller browsere. Det virker hjemme, på mobildata eller på hotellets wifi. Apps med egen DNS <a href="#limits">kan gå uden om navnefilteret</a>.</p></li>
+      <li><h3>Hvor listerne kommer fra</h3><p>Navnene kommer fra AdGuards DNS-filter, som ligger i selve appen. Adresselisterne henter appen selv til telefonen, direkte fra udgiverne, cirka en gang i døgnet, mens beskyttelsen kører. Udgiverne kan se telefonens IP-adresse. <a href="/privacy/">Læs om det i privatlivspolitikken.</a></p></li>
+    </ul>
+  </div>
+</section>
+
+<section class="day mist" id="privacy-short" aria-labelledby="h-privacy">
   <div class="wrap">
     <h2 id="h-privacy">Godt at vide</h2>
     <ul class="checks" role="list">
@@ -105,21 +120,6 @@
       <li>Lavet til TalkBack, Androids skærmlæser, og til stor skrift.</li>
     </ul>
     <p class="after"><a href="/privacy/">Læs hele privatlivspolitikken</a></p>
-  </div>
-</section>
-
-<section class="day mist" id="what" aria-labelledby="h-what">
-  <div class="wrap">
-    <h2 id="h-what">Hvad den gør</h2>
-    <p class="intro">Appen blokerer på to måder for alle apps på telefonen. Navnefilteret stopper kendte farlige sider og reklamer. Adresseblokeringen afviser forbindelser til kendte farlige adresser.</p>
-    <ul class="cards" role="list">
-      <li><h3>Alle apps</h3><p>Apps, der bruger telefonens almindelige DNS-opslag, filtreres uden særskilt opsætning, hvad enten det er spil, nyhedsapps eller browsere. Apps med egen DNS <a href="#limits">kan gå uden om navnefilteret</a>.</p></li>
-      <li><h3>Alle netværk</h3><p>Hjemme, på mobildata eller på hotellets wifi. Beskyttelsen følger med telefonen.</p></li>
-      <li><h3>Farlige adresser</h3><p>Nogle apps og noget skadeligt software går direkte til en adresse uden at slå et navn op, så navnefilteret kan ikke stoppe dem. Appen afviser forbindelser til adresser på offentlige lister over kendte farlige adresser. Med notifikationer slået til får du besked om den første blokering af op til 20 forskellige adresser, hver gang beskyttelsen startes. Appens navn vises, når Android kan oplyse det.</p></li>
-      <li><h3>Gratis og uden konto</h3><p>Ingen betaling og intet login. Koden er åben under GPL-3.0, så alle kan læse den.</p></li>
-      <li><h3>Navneliste fra AdGuard</h3><p>Navnene kommer fra AdGuards DNS-filter, en liste over sider, der skal blokeres. Listen ligger i selve appen. Appen henter den ikke fra nettet.</p></li>
-      <li><h3>Offentlige adresselister</h3><p>Adresserne kommer fra offentlige lister over kendte farlige adresser. Appen henter dem selv til telefonen, direkte fra udgiverne, cirka en gang i døgnet, mens beskyttelsen kører. Udgiverne kan se telefonens IP-adresse. <a href="/privacy/">Læs om det i privatlivspolitikken.</a></p></li>
-    </ul>
   </div>
 </section>
 

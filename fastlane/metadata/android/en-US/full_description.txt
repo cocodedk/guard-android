@@ -1,38 +1,36 @@
 Guard for Android blocks dangerous sites and ads for every app on your phone, on any network: at home, on mobile data, on café Wi-Fi, abroad. The app is free and needs no account.
 
-<b>Getting started</b>
-Open the app and tap Start protection. Android asks you for permission for the VPN connection and, on Android 13 or later, for notifications. The screen always tells you whether you are protected. You stop protection with the Stop protection button.
-
-<b>What the app does</b>
+<b>What makes it different</b>
 <ul>
-<li>When an app wants to open a site, the phone first asks where the site is. This is called a DNS lookup. If the name is on the block list (the AdGuard DNS filter), the app gives an empty answer, and the site or ad is not loaded. Every other lookup goes on to your network's own DNS server.</li>
-<li>Some apps and some malicious software go straight to an address without looking anything up. So the app downloads lists of known dangerous addresses. A connection from an app to an address on the lists is refused at once. With notifications on, you are told about the first block of each of up to 20 different addresses every time protection starts. The app's name is shown when Android can say which app it was.</li>
-<li>The Recent blocks list shows which apps were blocked, how many times, and what they tried to reach. You can use it to find an app that keeps going after ads or dangerous addresses. The list exists only in the phone's memory and is cleared whenever protection starts or stops.</li>
+<li><b>It blocks dangerous addresses too, without taking in all your traffic.</b> Some malicious software skips the name lookup and connects straight to an address. The app refuses connections to addresses on public lists of known dangerous addresses, such as criminal networks and botnet servers. Only DNS lookups and those connections enter the app. The rest of your traffic never does.</li>
+<li><b>It tells you which app tried.</b> A notification names the app, for example "Chrome tried to connect to …", when Android can say which app it was. With notifications on, you get one for the first block of each of up to 20 different addresses each time protection starts. The Recent blocks list shows what each app tried to reach. It exists only in the phone's memory and is cleared whenever protection starts or stops.</li>
+<li><b>It does not stop silently.</b> If protection stops without your asking, the app tries to send a notification saying that DNS lookups are no longer filtered. This needs notifications on, and the notice may not appear if Android ends the app abruptly. If you turn off the app's notifications, the screen reminds you that it cannot tell you.</li>
+<li><b>Encrypted lookups stay encrypted.</b> Lookups that are not blocked are sent on by Android itself. If Android encrypts your lookups (Private DNS on Automatic, when the network supports it), they stay encrypted.</li>
+<li><b>Nothing to set up.</b> No settings and no lists to choose. Built for TalkBack: every button has a spoken description, status changes are read aloud, and text can be enlarged to 200%.</li>
 </ul>
 
+<b>Getting started</b>
+Open the app and tap Start protection. Android asks you for permission for the VPN connection and, on Android 13 or later, for notifications. You stop protection with the Stop protection button.
+
+<b>How it works</b>
+When an app wants to open a site, the phone first asks where the site is. This is called a DNS lookup. If the name is on the block list (the AdGuard DNS filter, built into the app), the app gives an empty answer, and the site or ad is not loaded. Every other lookup goes on to your network's own DNS server.
+
 <b>What passes through the app</b>
-The app uses Android's VPN feature, but only as a local tunnel that ends inside the app. There is no VPN server. Only DNS lookups and connections to known dangerous addresses enter the tunnel. The rest of your traffic goes out as before. That is why Android shows a key in the status bar while protection runs.
+The app uses Android's VPN feature, but only as a local tunnel that ends inside the app. There is no VPN server. That is why Android shows a key in the status bar while protection runs.
 
 <b>Privacy</b>
 <ul>
 <li>The app collects no information about you. No account, no analytics, no ads, and no server run by us.</li>
-<li>Lookups that are not blocked go to the network's own DNS server, just as before you installed the app.</li>
 <li>The address lists are downloaded straight from the publishers to the phone, normally once a day and only while protection runs. As with any visit to a website, the publishers can see your IP address.</li>
-<li>You grant only permission for the VPN connection and, on Android 13 or later, for notifications. Android grants network access automatically, and it is also used to download the lists.</li>
+<li>You grant only permission for the VPN connection and, on Android 13 or later, for notifications. Android grants network access automatically.</li>
 <li>Free software under the GPL-3.0, and free of charge. Anyone can read the code.</li>
 </ul>
-
-<b>Notice when protection stops</b>
-If protection stops without your asking, for example because another VPN app took over, the app tries to send a notification saying that DNS lookups are no longer filtered. Notifications must be on, and if Android ends the app's process unexpectedly, the notice may not appear. If you stop it yourself, the screen says so. If you turn off the app's notifications, it cannot tell you, and the screen reminds you of that.
-
-<b>Made for TalkBack and large text</b>
-Every button has a spoken description, status changes are read aloud, and text can be enlarged to 200%.
 
 <b>Limits</b>
 <ul>
 <li>Apps with their own secure DNS, for example a browser with DoH turned on, bypass the name filter.</li>
 <li>Android's Private DNS set to a specific server can't be used with the app. The phone could not reach the internet, so protection stops and says so. "Automatic" works. For the same reason, Android's "Block connections without VPN" setting can't be used with the app either.</li>
 <li>Android allows only one VPN app at a time, so the app can't run alongside another VPN.</li>
-<li>Address blocking needs the lists to be downloaded and under 7 days old, because old lists can block addresses that others use now. The screen says if a list is missing or is not in use because it is too old. The name filter works regardless.</li>
+<li>Address blocking needs the lists to be downloaded and under 7 days old, because old lists can block addresses that others use now. The screen says if a list is missing or too old to be used. The name filter works regardless.</li>
 <li>No list catches everything.</li>
 </ul>

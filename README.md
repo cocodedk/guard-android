@@ -28,13 +28,27 @@ notifications. The screen always says whether the phone is protected. You stop p
 
 ## Features
 
-- Blocks dangerous sites and ads in every app on the phone, on any network: home Wi-Fi, mobile data,
-  café Wi-Fi, abroad.
-- Refuses connections to known dangerous addresses on the internet (IP addresses), and can tell you
-  which app tried.
-- Filters on the phone itself, through a local tunnel that ends inside the app. No VPN server, no
-  account, no server run by us.
-- Danish and English, and built for TalkBack from the start (see [Accessibility](#accessibility)).
+Blocks dangerous sites and ads in every app on the phone, on any network: home Wi-Fi, mobile data,
+café Wi-Fi, abroad. What sets it apart:
+
+- **It blocks dangerous addresses too, without taking in all your traffic.** Some malware skips DNS
+  and connects straight to an IP address. The app refuses connections to addresses on public lists of
+  known criminal networks and botnet servers. Only DNS lookups and those connections enter its local
+  tunnel; all other traffic stays off it. No VPN server, no account, no server run by us.
+- **It names the app that tried.** The notification for a blocked address names the app as Android
+  reports it ("Chrome tried to connect to …"). With notifications on, it comes for the first block of
+  each of up to 20 different addresses every time protection starts. The Recent blocks list on the
+  home screen groups blocks by app.
+- **It does not fail silently.** When protection stops without the owner asking, the app tries to
+  post a notification saying DNS lookups are no longer filtered. That needs the app's notifications
+  to be on, and nothing can appear if Android ends the whole app abruptly. Private DNS set to a
+  specific server, and "Block connections without VPN", would cut the phone off while a DNS-only
+  tunnel runs, so the app detects both, stops and says why on the screen.
+- **It keeps encrypted DNS encrypted.** Lookups that aren't blocked go out through Android's own
+  resolver (`DnsResolver`), so a lookup Android encrypts (Private DNS on Automatic, when the
+  network's DNS server supports it) stays encrypted.
+- **Nothing to configure.** Tap **Start protection**; there are no settings and no lists to choose.
+  Danish and English, and built for TalkBack from the start (see [Accessibility](#accessibility)).
 
 ## How it works
 

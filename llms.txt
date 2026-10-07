@@ -7,7 +7,7 @@
 > account, no analytics. Kotlin and Jetpack Compose, with no Google Play services, built for TalkBack and
 > large text. The phone companion of the Cocode Guard home-network box.
 
-Built by Babak Bandpey (Cocode, https://cocode.dk). Status: early; version 0.1.0 is released, with
+Built by Babak Bandpey (Cocode, https://cocode.dk). Status: early; version 0.1.1 is released, with
 DNS filtering and address blocking (specs 01 and 02 in docs/lean).
 
 Design rules that explain most of the code:

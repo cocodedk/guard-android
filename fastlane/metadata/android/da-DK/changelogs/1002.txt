@@ -1,0 +1,1 @@
+Ingen ændringer i appen. Beskrivelsen begynder nu med det særlige ved appen: den blokerer farlige adresser, uden at al din trafik går gennem appen, nævner den app, der prøvede, når Android kan oplyse det, og forsøger at give besked, når beskyttelsen stopper.
