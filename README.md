@@ -22,8 +22,9 @@ Status: early. The first version is out.
 <!-- cocode-apps:install:end -->
 
 After installing, open the app and tap **Start protection** (*Start beskyttelse* in Danish). Android
-asks for your permission to set up the VPN connection and to send notifications. The screen always
-says whether the phone is protected. You stop protection with **Stop protection**.
+asks for your permission to set up the VPN connection and, on Android 13 or later, to send
+notifications. The screen always says whether the phone is protected. You stop protection with
+**Stop protection**.
 
 ## Features
 
@@ -40,23 +41,27 @@ says whether the phone is protected. You stop protection with **Stop protection*
 Whenever an app opens a site, the phone first asks a DNS server where that site is. That question is
 a DNS lookup. Android lets one app see these lookups through its VPN feature (`VpnService`). Guard
 for Android uses that feature **only as a local tunnel that ends inside the app**. There is no VPN
-server, and your traffic is not sent on to anyone.
+server, and your web, video and app traffic is not sent through anyone else's computer. Lookups
+that aren't blocked go on to the network's own DNS server, as they did before.
 
 1. Only two kinds of traffic enter the tunnel: DNS lookups, and connections to addresses on public
    lists of known dangerous IP addresses. (An IP address is the number that identifies a computer on
    the internet. Technically, the tunnel's routes are a made-up DNS address and the address ranges
    from those lists.) Web pages, video and app data go out exactly as before.
 2. Each lookup is checked against the block list: the AdGuard DNS filter, which ships inside the app.
-3. A blocked name gets an empty answer (`0.0.0.0`), so the site or ad does not load. Every other
+3. A blocked name gets an empty answer, so the site or ad does not load: `0.0.0.0` for an IPv4
+   lookup, `::` for an IPv6 lookup, and no address at all for any other kind of lookup. Every other
    lookup goes to the network's own DNS server, and the answer comes back through the tunnel.
 4. A connection from any app to a listed address is refused on the spot, inside the app (technically
    a TCP reset, or an ICMP "administratively prohibited" reply for UDP). Nothing is relayed to the
-   internet. The app counts it, and a notification names the app Android says made it, the address
-   and the list. If Android can't say which app it was, the notification says only "an app".
-5. The home screen shows how many names and addresses were blocked since start, and a "Recent
-   blocks" list: which apps were blocked, how many times, and what they tried to reach. A "Good to
-   know" block repeats the promises on this page, and an About page gives the version, the license,
-   links and credits.
+   internet. The app counts it. With notifications on, the first refusal of each address also posts
+   a notification (for up to 20 different addresses each time protection starts) that names the app
+   Android says made it, the address and the list. If Android can't say which app it was, the
+   notification says only "an app".
+5. The home screen shows how many DNS lookups and connections were blocked since protection
+   started, and a "Recent blocks" list: which apps were blocked, how many times, and what they tried
+   to reach. A "Good to know" block repeats the promises on this page, and an About page gives the
+   version, the license, links and credits.
 
 While the app protects the phone, Android shows a key icon in the status bar. That icon is Android's
 own sign for apps that use its VPN feature. It does not mean your traffic goes to a remote VPN.
@@ -69,9 +74,10 @@ publishers, over HTTPS**: Spamhaus DROP (`drop_v4.json`, `drop_v6.json`) and the
 Tracker recommended IP blocklist. There is no Cocode server in between. Details:
 
 - Only those three files are fetched. They are data: the app reads them and never runs them.
-- Normally once a day. A failed download is retried after at least an hour.
-- Each list is stored in the app's private files. A list older than 7 days is paused, and the screen
-  says so, because old lists can block addresses that others use now.
+- Normally once a day. While protection keeps running, a failed download is retried about once an
+  hour. Stopping and starting protection can trigger an earlier retry.
+- Each list is stored in the app's private files. A list older than 7 days is not used, and the
+  screen says so, because old lists can block addresses that others use now.
 - Each publisher sees what any web server sees: the phone's IP address, the time and the ordinary
   details of a request (Android's default user agent). The app sends no account, identifier or data
   about the user or about what was blocked.
@@ -91,17 +97,19 @@ Tracker recommended IP blocklist. There is no Cocode server in between. Details:
 - Apps with **their own secure DNS** (for example a browser's DoH setting) bypass the name filter.
 - Android allows **one VPN at a time**, so the app can't run alongside a work VPN or another VPN
   app.
-- If protection stops without your asking, a notification says so: DNS lookups are no longer
-  filtered. If you stop it yourself, the screen says so. If you turn off the app's notifications, the
-  app can't tell you when protection stops, and the screen reminds you of that.
+- If protection stops without your asking, the app posts a notification saying that DNS lookups are
+  no longer filtered. That needs the app's notifications to be on, and no notification can appear if
+  Android ends the whole app abruptly. If you stop protection yourself, the screen says so. If you
+  turn off the app's notifications, the app can't tell you when protection stops, and the screen
+  reminds you of that.
 - Address blocking needs downloaded lists. A list that is missing, or older than 7 days, is not used,
   and the screen says so. The name filter works regardless. No list catches everything.
 
 ## Accessibility
 
 Built for blind and low-vision people from the start: every control has a spoken label for TalkBack
-(Android's screen reader), status changes are announced, text scales to 200%, and a unit test holds
-every color pair to WCAG AA contrast.
+(Android's screen reader), status changes are announced, text scales to 200%, and a unit test checks
+the palette's text and icon colors against WCAG AA contrast.
 
 ## Privacy
 
@@ -109,12 +117,15 @@ The app collects nothing about you and sends nothing to us. Read the full [priva
 
 ### Permissions
 
-You grant only the VPN connection and notifications. The VPN permission lets the app see DNS
-lookups and refuse connections to dangerous addresses. Notifications let it tell you when protection
-stops or a connection is refused. Network access (to pass lookups on and to download the address
-lists) is an install-time permission Android grants automatically. No contacts, location, storage or
-accessibility access. The manifest also declares `<queries>` for apps with a launcher icon, so a
-notification can name the app that tried to connect (an app without a launcher icon is not named); it
+Android asks you for only two permissions: the VPN connection and, on Android 13 or later,
+notifications. The VPN permission lets the app see DNS lookups and refuse connections to dangerous
+addresses. Notifications let it tell you when protection stops or a connection is refused. Android
+also grants three install-time permissions automatically: internet access (to pass lookups on and to
+download the address lists), checking whether the network is up, and running protection as a
+foreground service (the ongoing notification). No contacts, location, storage or accessibility
+access. The manifest also declares `<queries>` for apps with a launcher icon, so a notification can
+name the app that tried to connect. Android also shows the app a few other packages by default, such
+as system components, and names those too; an app Android doesn't show it is not named. `<queries>`
 is not a permission, and `QUERY_ALL_PACKAGES` is not used.
 
 ### Third-party data
@@ -145,12 +156,12 @@ bash scripts/install-hooks.sh
 
 ## Architecture
 
-Kotlin and Jetpack Compose, one `app` module, no Google libraries. Package root `dk.cocode.guard`:
+Kotlin and Jetpack Compose, one `app` module, no Google Play services. Package root `dk.cocode.guard`:
 
 | Package | Holds |
 |---|---|
 | `ui/` | Compose screens |
-| `ui/theme/` | The palette (`GuardColors`, shared with the box's site) and `GuardTheme` |
+| `ui/theme/` | The app's neon palette (`GuardColors`), shapes and `GuardTheme` |
 
 Feature work is specified in [`docs/lean/`](docs/lean/), one file per feature.
 

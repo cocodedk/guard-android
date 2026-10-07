@@ -341,7 +341,6 @@ then set it back; font size at maximum with nothing clipped.
 
 ## Out of scope
 
-Downloading or updating the AdGuard name list, attributing a blocked connection to the app that
-made it, a history screen of blocked addresses, addresses the owner adds or allows, other IP lists
+Downloading or updating the AdGuard name list, a history screen of blocked addresses, addresses the owner adds or allows, other IP lists
 (FireHOL, DShield, Emerging Threats), inbound filtering, IPv6 extension-header parsing, TCP DNS,
 Google Play.

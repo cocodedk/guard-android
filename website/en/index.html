@@ -100,7 +100,7 @@
       <li>Only DNS lookups and connections to known dangerous addresses pass through the app. A DNS lookup is when the phone asks where a site is. The rest of your traffic, such as web pages, video and app data, goes out as before.</li>
       <li>DNS lookups that are not blocked go only to the network's own DNS server, as before.</li>
       <li>Lists of dangerous addresses are downloaded straight from their publishers. They can see the phone's IP address, as any website can when you visit it. An IP address is the number your connection has on the internet.</li>
-      <li>You grant only two permissions: to use Android's VPN feature and to show notifications. The app has no access to contacts, location or files.</li>
+      <li>You grant only permission to use Android's VPN feature and, on Android 13 or later, to show notifications. The app has no access to contacts, location or files.</li>
       <li>Free of charge and free software under the GPL-3.0 licence. Anyone can read, change and share the code.</li>
       <li>Made for TalkBack, Android's screen reader, and for large text.</li>
     </ul>
@@ -113,9 +113,9 @@
     <h2 id="h-what">What it does</h2>
     <p class="intro">The app blocks in two ways, for every app on the phone. The name filter stops known dangerous sites and ads. Address blocking refuses connections to known dangerous addresses.</p>
     <ul class="cards" role="list">
-      <li><h3>Every app</h3><p>Games, news apps and browsers are filtered the same way. You don't set anything up app by app.</p></li>
+      <li><h3>Every app</h3><p>Apps that use the phone's normal DNS lookups are filtered without individual setup, whether they are games, news apps or browsers. Apps with their own DNS <a href="#limits">can bypass the name filter</a>.</p></li>
       <li><h3>Any network</h3><p>At home, on mobile data or on hotel Wi-Fi. The protection travels with the phone.</p></li>
-      <li><h3>Dangerous addresses</h3><p>Some apps and some malicious software go straight to an address without looking up a name, so the name filter cannot stop them. The app refuses connections to addresses on public lists of known dangerous addresses. When it does, a notification tells you which app tried.</p></li>
+      <li><h3>Dangerous addresses</h3><p>Some apps and some malicious software go straight to an address without looking up a name, so the name filter cannot stop them. The app refuses connections to addresses on public lists of known dangerous addresses. With notifications on, you are told about the first block of each of up to 20 different addresses every time protection starts. The app's name is shown when Android can say which app it was.</p></li>
       <li><h3>Free, with no account</h3><p>No payment and no login. The code is open under the GPL-3.0, so anyone can read it.</p></li>
       <li><h3>A name list from AdGuard</h3><p>The names come from AdGuard's DNS filter, a list of sites to block. The list is inside the app. The app does not download it.</p></li>
       <li><h3>Public address lists</h3><p>The addresses come from public lists of known dangerous addresses. The app downloads them to the phone itself, straight from the publishers, about once a day while protection runs. The publishers can see the phone's IP address. <a href="/en/privacy/">Read about it in the privacy policy.</a></p></li>
@@ -134,7 +134,7 @@
     </ol>
     <div class="why">
       <h3>And dangerous addresses?</h3>
-      <p>Some apps and some malicious software do not ask for a name, but go straight to an address. So the app downloads lists of known dangerous addresses while protection runs. If an app tries to connect to an address on the lists, the app refuses the connection at once, inside the phone. Nothing is sent to that address. A notification tells you which app tried and which address it was. All other connections go around the app.</p>
+      <p>Some apps and some malicious software do not ask for a name, but go straight to an address. So the app downloads lists of known dangerous addresses while protection runs. If an app tries to connect to an address on the lists, the app refuses the connection at once, inside the phone. Nothing is sent to that address. With notifications on, you are told about the first block of each address (up to 20 different ones every time protection starts). The notice names the address and, when Android can say, the app that tried. All other connections go around the app.</p>
     </div>
     <div class="why">
       <h3>Why does the app ask for VPN permission?</h3>
@@ -149,12 +149,12 @@
     <h2 id="h-limits">What the app cannot do</h2>
     <p class="intro">Here are the limits, so you can judge whether the app suits you.</p>
     <ul class="cards" role="list">
-      <li><h3>Private DNS must be Automatic or Off</h3><p>Private DNS is an Android setting. Where it is depends on the phone; on Samsung phones it is under Connections. If it is set to Automatic or Off, the app works and you need to do nothing. If it is set to a specific server (a host name), the app cannot be used. The phone would not reach the internet while protection runs. So the app stops protection and tells you with a notification. The app's screen then has a button, Open network settings, where you can change the setting. Afterwards, tap Start again.</p></li>
+      <li><h3>Private DNS must be Automatic or Off</h3><p>Private DNS is an Android setting. Where it is depends on the phone; on Samsung phones it is under Connections. If it is set to Automatic or Off, the app works and you need to do nothing. If it is set to a specific server (a host name), the app cannot be used. The phone would not reach the internet while protection runs. So the app stops protection and tells you on the screen and, if notifications are on, with a notification. The app's screen then has a button, Open network settings, where you can change the setting. Afterwards, tap Start protection again.</p></li>
       <li><h3>Apps with their own secure DNS bypass the name filter</h3><p>Some apps and browsers look sites up in their own encrypted way, for example a browser's secure DNS (DoH) setting. The app cannot see those lookups, so it cannot block them.</p></li>
       <li><h3>One VPN at a time</h3><p>Android allows only one VPN-type app at a time, so a work VPN cannot run alongside Guard for Android. Android's “Block connections without VPN” setting cannot be used with the app either. The app sends only DNS lookups and connections to dangerous addresses through its tunnel, so the phone would not be able to reach the internet. If the setting is on, protection cannot run, and the app says so.</p></li>
       <li><h3>No list catches everything</h3><p>The app blocks what is on the lists. A new dangerous site or address can slip through, and a harmless site can be blocked by mistake.</p></li>
       <li><h3>Address blocking needs fresh lists</h3><p>The app downloads the address lists when the phone is online. If a list is missing or is more than 7 days old, the app does not use it, because old lists can block addresses that other people use now. The screen tells you. Right after the first start, address blocking begins once the lists have downloaded. The name filter works regardless.</p></li>
-      <li><h3>If protection stops, you are told</h3><p>If protection stops without you asking, the app sends a notification saying that DNS lookups are no longer filtered. This needs notifications from the app to be switched on. If they are off, the screen shows a warning about it. If you stop protection yourself with Stop protection, the screen says it has stopped.</p></li>
+      <li><h3>Notice when protection stops</h3><p>If protection stops without you asking, the app tries to send a notification saying that DNS lookups are no longer filtered. This needs notifications from the app to be switched on. If they are off, the screen shows a warning about it. If Android ends the app's process unexpectedly, for example after a crash, the notification may not appear. If you stop protection yourself with Stop protection, the screen says it has stopped.</p></li>
     </ul>
   </div>
 </section>

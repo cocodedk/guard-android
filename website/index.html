@@ -100,7 +100,7 @@
       <li>Kun DNS-opslag og forbindelser til kendte farlige adresser går gennem appen. Et DNS-opslag er, når telefonen spørger, hvor en side ligger. Resten af din trafik, for eksempel sider, video og appdata, går ud som før.</li>
       <li>DNS-opslag, der ikke blokeres, går kun til netværkets egen DNS-server, som før.</li>
       <li>Lister over farlige adresser hentes direkte fra udgiverne. De kan se telefonens IP-adresse, som en hjemmeside kan, når du besøger den. En IP-adresse er det nummer, din forbindelse har på internettet.</li>
-      <li>Du giver kun to tilladelser: at bruge Androids VPN-funktion og at vise notifikationer. Appen har ikke adgang til kontakter, placering eller filer.</li>
+      <li>Du giver kun tilladelse til at bruge Androids VPN-funktion og, fra Android 13, til at vise notifikationer. Appen har ikke adgang til kontakter, placering eller filer.</li>
       <li>Gratis og fri software under licensen GPL-3.0. Alle kan læse, ændre og dele koden.</li>
       <li>Lavet til TalkBack, Androids skærmlæser, og til stor skrift.</li>
     </ul>
@@ -113,9 +113,9 @@
     <h2 id="h-what">Hvad den gør</h2>
     <p class="intro">Appen blokerer på to måder for alle apps på telefonen. Navnefilteret stopper kendte farlige sider og reklamer. Adresseblokeringen afviser forbindelser til kendte farlige adresser.</p>
     <ul class="cards" role="list">
-      <li><h3>Alle apps</h3><p>Spil, nyhedsapps og browsere filtreres på samme måde. Du skal ikke sætte noget op i hver enkelt app.</p></li>
+      <li><h3>Alle apps</h3><p>Apps, der bruger telefonens almindelige DNS-opslag, filtreres uden særskilt opsætning, hvad enten det er spil, nyhedsapps eller browsere. Apps med egen DNS <a href="#limits">kan gå uden om navnefilteret</a>.</p></li>
       <li><h3>Alle netværk</h3><p>Hjemme, på mobildata eller på hotellets wifi. Beskyttelsen følger med telefonen.</p></li>
-      <li><h3>Farlige adresser</h3><p>Nogle apps og noget skadeligt software går direkte til en adresse uden at slå et navn op, så navnefilteret kan ikke stoppe dem. Appen afviser forbindelser til adresser på offentlige lister over kendte farlige adresser. Når det sker, fortæller en notifikation dig, hvilken app der prøvede.</p></li>
+      <li><h3>Farlige adresser</h3><p>Nogle apps og noget skadeligt software går direkte til en adresse uden at slå et navn op, så navnefilteret kan ikke stoppe dem. Appen afviser forbindelser til adresser på offentlige lister over kendte farlige adresser. Med notifikationer slået til får du besked om den første blokering af op til 20 forskellige adresser, hver gang beskyttelsen startes. Appens navn vises, når Android kan oplyse det.</p></li>
       <li><h3>Gratis og uden konto</h3><p>Ingen betaling og intet login. Koden er åben under GPL-3.0, så alle kan læse den.</p></li>
       <li><h3>Navneliste fra AdGuard</h3><p>Navnene kommer fra AdGuards DNS-filter, en liste over sider, der skal blokeres. Listen ligger i selve appen. Appen henter den ikke fra nettet.</p></li>
       <li><h3>Offentlige adresselister</h3><p>Adresserne kommer fra offentlige lister over kendte farlige adresser. Appen henter dem selv til telefonen, direkte fra udgiverne, cirka en gang i døgnet, mens beskyttelsen kører. Udgiverne kan se telefonens IP-adresse. <a href="/privacy/">Læs om det i privatlivspolitikken.</a></p></li>
@@ -134,7 +134,7 @@
     </ol>
     <div class="why">
       <h3>Og farlige adresser?</h3>
-      <p>Nogle apps og noget skadeligt software spørger ikke efter et navn, men går direkte til en adresse. Derfor henter appen lister over kendte farlige adresser, mens beskyttelsen kører. Prøver en app at forbinde til en adresse på listerne, afviser appen forbindelsen med det samme, inde i telefonen. Der sendes ikke noget til adressen. En notifikation fortæller, hvilken app der prøvede, og hvilken adresse det var. Alle andre forbindelser går uden om appen.</p>
+      <p>Nogle apps og noget skadeligt software spørger ikke efter et navn, men går direkte til en adresse. Derfor henter appen lister over kendte farlige adresser, mens beskyttelsen kører. Prøver en app at forbinde til en adresse på listerne, afviser appen forbindelsen med det samme, inde i telefonen. Der sendes ikke noget til adressen. Med notifikationer slået til får du besked om den første blokering af hver adresse (op til 20 forskellige, hver gang beskyttelsen startes). Beskeden nævner adressen og, når Android kan oplyse det, hvilken app der prøvede. Alle andre forbindelser går uden om appen.</p>
     </div>
     <div class="why">
       <h3>Hvorfor beder appen om VPN-tilladelse?</h3>
@@ -149,12 +149,12 @@
     <h2 id="h-limits">Det kan appen ikke</h2>
     <p class="intro">Her er begrænsningerne, så du kan vurdere, om appen passer til dig.</p>
     <ul class="cards" role="list">
-      <li><h3>Privat DNS skal være Automatisk eller Fra</h3><p>Privat DNS er en indstilling i Android. Hvor den ligger, afhænger af telefonen; på Samsung finder du den under Forbindelser. Står den på Automatisk eller Fra, virker appen, og du skal ikke gøre noget. Er den sat til en bestemt server (et værtsnavn), kan appen ikke bruges. Telefonen ville ikke kunne komme på internettet, mens beskyttelsen kører. Derfor stopper appen beskyttelsen og siger det med en notifikation. Appens skærm har så en knap, Åbn netværksindstillinger, hvor du kan ændre indstillingen. Tryk bagefter på Start igen.</p></li>
+      <li><h3>Privat DNS skal være Automatisk eller Fra</h3><p>Privat DNS er en indstilling i Android. Hvor den ligger, afhænger af telefonen; på Samsung finder du den under Forbindelser. Står den på Automatisk eller Fra, virker appen, og du skal ikke gøre noget. Er den sat til en bestemt server (et værtsnavn), kan appen ikke bruges. Telefonen ville ikke kunne komme på internettet, mens beskyttelsen kører. Derfor stopper appen beskyttelsen og siger det på skærmen og, hvis notifikationer er slået til, med en notifikation. Appens skærm har så en knap, Åbn netværksindstillinger, hvor du kan ændre indstillingen. Tryk bagefter på Start beskyttelsen igen.</p></li>
       <li><h3>Apps med egen sikker DNS går uden om navnefilteret</h3><p>Nogle apps og browsere slår selv sider op på en krypteret måde, for eksempel en browsers indstilling for sikker DNS (DoH). De opslag kan appen ikke se, så den kan ikke blokere dem.</p></li>
       <li><h3>Kun én VPN ad gangen</h3><p>Android tillader kun én VPN-app ad gangen. En arbejds-VPN kan derfor ikke køre samtidig med Guard for Android. Androids indstilling “Bloker forbindelser uden VPN” kan heller ikke bruges sammen med appen. Appen sender kun DNS-opslag og forbindelser til farlige adresser gennem sin tunnel, så telefonen ikke ville kunne komme på nettet. Er indstillingen slået til, kan beskyttelsen ikke køre, og appen siger det.</p></li>
       <li><h3>Ingen liste fanger alt</h3><p>Appen blokerer det, der står på listerne. En ny farlig side eller adresse kan slippe igennem, og en harmløs side kan blive blokeret ved en fejl.</p></li>
       <li><h3>Adresseblokering kræver friske lister</h3><p>Appen henter adresselisterne, når telefonen er på nettet. Mangler en liste, eller er den mere end 7 dage gammel, bruger appen den ikke, fordi gamle lister kan blokere adresser, som andre bruger nu. Skærmen siger det. Lige efter første start begynder adresseblokeringen, når listerne er hentet. Navnefilteret virker uanset.</p></li>
-      <li><h3>Stopper beskyttelsen, får du besked</h3><p>Stopper beskyttelsen, uden at du har bedt om det, sender appen en notifikation om, at DNS-opslag ikke længere filtreres. Det kræver, at notifikationer fra appen er slået til. Ellers viser skærmen en advarsel om det. Stopper du selv beskyttelsen med Stop beskyttelse, siger skærmen, at den er stoppet.</p></li>
+      <li><h3>Besked, når beskyttelsen stopper</h3><p>Stopper beskyttelsen, uden at du har bedt om det, forsøger appen at sende en notifikation om, at DNS-opslag ikke længere filtreres. Det kræver, at notifikationer fra appen er slået til. Ellers viser skærmen en advarsel om det. Lukkes selve appens proces uventet, for eksempel ved et nedbrud, kan notifikationen udeblive. Stopper du selv beskyttelsen med Stop beskyttelse, siger skærmen, at den er stoppet.</p></li>
     </ul>
   </div>
 </section>

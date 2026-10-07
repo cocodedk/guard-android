@@ -12,8 +12,8 @@
     <string name="action_start">Start beskyttelse</string>
     <string name="action_starting">Starter beskyttelse</string>
     <string name="action_stop">Stop beskyttelse</string>
-    <string name="action_start_again">Start igen</string>
-    <string name="action_try_again">Prøv igen</string>
+    <string name="action_start_again">Start beskyttelsen igen</string>
+    <string name="action_try_again">Start beskyttelse</string>
 
     <string name="tile_lookups_tag">Opslag</string>
     <string name="tile_lookups_label">blokeret, siden beskyttelsen startede</string>
@@ -23,8 +23,8 @@
     <string name="tile_connections_spoken">%1$s blokerede forbindelser til farlige adresser, siden beskyttelsen startede</string>
     <string name="lists_title">Lister</string>
     <string name="list_names_active">%1$s navne</string>
-    <string name="list_active">%1$s · hentet %2$s</string>
-    <string name="list_paused">Sat på pause · hentet %1$s</string>
+    <string name="list_active">%1$s poster på listen · hentet %2$s</string>
+    <string name="list_paused">Blokerer ikke: listen er over 7 dage gammel · hentet %1$s</string>
     <string name="list_not_yet">Ikke hentet endnu</string>
     <string name="address_blocking_off">Blokering af farlige adresser er ikke aktiv. Appen henter listerne direkte fra udgiverne, når telefonen er på nettet. Indtil da blokeres kun efter navn.</string>
 
@@ -35,20 +35,20 @@
     <string name="recent_note">Listen bliver kun på telefonen og slettes, hver gang beskyttelsen starter eller stopper.</string>
 
     <string name="card_refused_title">Tilladelsen blev ikke givet</string>
-    <string name="card_refused_body">Uden Androids VPN-tilladelse kan appen ikke se DNS-opslag og derfor ikke blokere noget. Tilladelsen bruges kun på telefonen, og der er ingen Cocode-server. Opslag, der ikke blokeres, går til netværkets egen DNS-server som før. Tryk på \"Prøv igen\", hvis du vil give tilladelsen nu.</string>
+    <string name="card_refused_body">Uden Androids VPN-tilladelse kan appen ikke se DNS-opslag og derfor ikke blokere noget. Tilladelsen bruges kun på telefonen, og der er ingen Cocode-server. Opslag, der ikke blokeres, går til netværkets egen DNS-server som før. Tryk på \"Start beskyttelse\", hvis du vil give tilladelsen nu.</string>
     <string name="card_revoked_title">Beskyttelsen er stoppet</string>
-    <string name="card_revoked_body">Telefonen er ikke længere beskyttet: DNS-opslag bliver ikke filtreret, så farlige sider og reklamer ikke bliver blokeret. Android stoppede beskyttelsen, for eksempel fordi en anden VPN-app tog over, eller fordi VPN blev slået fra i Androids indstillinger. Tryk på \"Start igen\" i appen for at starte beskyttelsen igen.</string>
+    <string name="card_revoked_body">Telefonen er ikke længere beskyttet: DNS-opslag bliver ikke filtreret, så farlige sider og reklamer ikke bliver blokeret. Android stoppede beskyttelsen, for eksempel fordi en anden VPN-app tog over, eller fordi VPN blev slået fra i Androids indstillinger. Tryk på \"Start beskyttelsen igen\" i appen.</string>
     <string name="card_lockdown_title">Beskyttelsen kan ikke køre</string>
-    <string name="card_lockdown_body">Telefonen er ikke beskyttet: DNS-opslag bliver ikke filtreret, så farlige sider og reklamer ikke bliver blokeret. Årsagen er Androids indstilling \"Bloker forbindelser uden VPN\". Når den er slået til, lader Android kun trafik gå gennem en VPN, og appens VPN-forbindelse tager kun imod DNS-opslag og forbindelser til kendte farlige adresser. Derfor kan telefonen slet ikke komme på nettet. Slå indstillingen fra i Androids VPN-indstillinger, og tryk derefter på \"Start igen\" i appen.</string>
+    <string name="card_lockdown_body">Telefonen er ikke beskyttet: DNS-opslag bliver ikke filtreret, så farlige sider og reklamer ikke bliver blokeret. Årsagen er Androids indstilling \"Bloker forbindelser uden VPN\". Når den er slået til, lader Android kun trafik gå gennem en VPN, og appens VPN-forbindelse tager kun imod DNS-opslag og forbindelser til kendte farlige adresser. Derfor kan telefonen slet ikke komme på nettet. Slå indstillingen fra i Androids VPN-indstillinger, og tryk derefter på \"Start beskyttelsen igen\" i appen.</string>
     <string name="card_error_title">Beskyttelsen er stoppet</string>
-    <string name="card_error_body">Telefonen er ikke længere beskyttet: DNS-opslag bliver ikke filtreret, så farlige sider og reklamer ikke bliver blokeret. Der skete en fejl. Tryk på \"Start igen\" i appen for at prøve at starte beskyttelsen igen.</string>
+    <string name="card_error_body">Telefonen er ikke længere beskyttet: DNS-opslag bliver ikke filtreret, så farlige sider og reklamer ikke bliver blokeret. Der skete en fejl. Tryk på \"Start beskyttelsen igen\" i appen for at prøve igen.</string>
     <string name="card_always_on_title">Altid aktiveret VPN er slået til</string>
     <string name="card_always_on_body">Android holder beskyttelsen tændt, så du kan ikke stoppe den her i appen. Vil du stoppe den, skal du slå \"Altid aktiveret VPN\" fra i Androids VPN-indstillinger. Tryk på \"Åbn VPN-indstillinger\" for at komme dertil.</string>
     <string name="card_vpn_settings_action">Åbn VPN-indstillinger</string>
     <string name="card_private_dns_title">Beskyttelsen kan ikke køre med Privat DNS</string>
-    <string name="card_private_dns_body">Telefonen er ikke beskyttet: DNS-opslag bliver ikke filtreret, så farlige sider og reklamer ikke bliver blokeret. \"Privat DNS\" er sat til en bestemt server. Med den indstilling kan telefonen slet ikke komme på nettet, mens beskyttelsen kører, så appen har stoppet beskyttelsen. Tryk på \"Åbn netværksindstillinger\", find \"Privat DNS\", og vælg \"Fra\" eller \"Automatisk\". Tryk derefter på \"Start igen\" i appen.</string>
+    <string name="card_private_dns_body">Telefonen er ikke beskyttet: DNS-opslag bliver ikke filtreret, så farlige sider og reklamer ikke bliver blokeret. \"Privat DNS\" er sat til en bestemt server. Med den indstilling kan telefonen slet ikke komme på nettet, mens beskyttelsen kører, så appen har stoppet beskyttelsen. Tryk på \"Åbn netværksindstillinger\", find \"Privat DNS\", og vælg \"Fra\" eller \"Automatisk\". Tryk derefter på \"Start beskyttelsen igen\" i appen.</string>
     <string name="card_private_dns_action">Åbn netværksindstillinger</string>
-    <string name="card_notifications_title">Notifikationer er slået fra</string>
+    <string name="card_notifications_title">Advarsler om stoppet beskyttelse er slået fra</string>
     <string name="card_notifications_body">Appen kan ikke give dig besked, hvis beskyttelsen stopper. Så kan du være ubeskyttet uden at vide det. Tryk på \"Åbn notifikationsindstillinger\", og slå notifikationer til for appen. Sørg også for, at \"Advarsler\" er slået til.</string>
     <string name="card_notifications_action">Åbn notifikationsindstillinger</string>
 
@@ -57,7 +57,7 @@
     <string name="promise_on_phone">Blokeringen sker på telefonen. Der er ingen Cocode-server og ingen VPN-server. Lister over farlige adresser hentes direkte fra udgiverne, som kan se din IP-adresse, ligesom en hjemmeside kan det ved et besøg.</string>
     <string name="promise_only_dns">Kun DNS-opslag og forbindelser til kendte farlige adresser går gennem appen. Et DNS-opslag er måden, telefonen finder ud af, hvor en side ligger. Opslag, der ikke blokeres, går videre til netværkets egen DNS-server som før. Resten af din trafik rører appen ikke.</string>
     <string name="promise_free">Appen er gratis, og alle kan læse koden. Den er fri software under licensen GPL-3.0.</string>
-    <string name="promise_permissions">Appen beder kun om to tilladelser: VPN og notifikationer. Den har ikke adgang til dine kontakter, din placering eller dine filer.</string>
+    <string name="promise_permissions">Appen beder kun om tilladelse til VPN og, fra Android 13, til notifikationer. Den har ikke adgang til dine kontakter, din placering eller dine filer.</string>
     <string name="promise_accessible">Kan bruges med TalkBack og stor skrift.</string>
     <string name="promise_limit">Én begrænsning: Apps med deres egen krypterede DNS går uden om navnefilteret, så i dem kan nogle farlige sider og reklamer slippe igennem.</string>
     <string name="action_about">Om Guard for Android</string>

@@ -4,21 +4,22 @@
 > phone, on any network, by filtering DNS lookups on the phone itself. It also refuses connections to
 > known-bad IP addresses, using public lists the phone downloads straight from their publishers. It
 > uses Android's VpnService only as a local tunnel that ends inside the app: no VPN server, no
-> account, no analytics. Kotlin and Jetpack Compose, no Google libraries, built for TalkBack and large
-> text. The phone companion of the Cocode Guard home-network box.
+> account, no analytics. Kotlin and Jetpack Compose, with no Google Play services, built for TalkBack and
+> large text. The phone companion of the Cocode Guard home-network box.
 
-Built by Babak Bandpey (Cocode, https://cocode.dk). Status: early; the first version with
-protection is being built (specs 01 and 02 in docs/lean), so the behaviour below is the design.
+Built by Babak Bandpey (Cocode, https://cocode.dk). Status: early; version 0.1.0 is released, with
+DNS filtering and address blocking (specs 01 and 02 in docs/lean).
 
 Design rules that explain most of the code:
 
 - **Only DNS and listed bad addresses enter the tunnel.** Its routes are a fake DNS address and the
   ranges on the bad-address lists; traffic to a listed address is refused inside the app, never
   relayed. All other traffic bypasses the app. The lists are downloaded on the phone, data only.
-- **Stop means stop, said plainly.** If protection stops, a notification says so; the app never
-  fails silently.
+- **Stop means stop, said plainly.** If you stop protection, the screen says so. If protection stops
+  without your asking, the app posts a notification saying so when notifications are on; if Android
+  ends the whole app abruptly, no notification can be posted.
 - **Blind-friendly is a requirement, not a polish step.** Spoken labels, live-region status,
-  200% font size, WCAG AA contrast enforced by a unit test.
+  200% font size, and a unit test that checks the palette's text colors against WCAG AA contrast.
 
 ## Docs
 
