@@ -17,8 +17,8 @@ Status: early. The first version is out.
 
 <!-- cocode-apps:install:start -->
 - Coming to F-Droid
-- [Download the APK from GitHub](https://github.com/cocodedk/guard-android/releases/latest/download/GuardAndroid.apk)
-- [Auto-update the GitHub APK with Obtainium](https://apps.obtainium.imranr.dev/redirect?r=obtainium://add/https://github.com/cocodedk/guard-android)
+- [Download the Android installation file (APK) from GitHub](https://github.com/cocodedk/guard-android/releases/latest/download/GuardAndroid.apk)
+- [Add the app to Obtainium, an app that keeps it up to date](https://apps.obtainium.imranr.dev/redirect?r=obtainium://add/https://github.com/cocodedk/guard-android)
 <!-- cocode-apps:install:end -->
 
 After installing, open the app and tap **Start protection** (*Start beskyttelse* in Danish). Android
