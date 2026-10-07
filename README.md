@@ -120,8 +120,8 @@ The app collects nothing about you and sends nothing to us. Read the full [priva
 Android asks you for only two permissions: the VPN connection and, on Android 13 or later,
 notifications. The VPN permission lets the app see DNS lookups and refuse connections to dangerous
 addresses. Notifications let it tell you when protection stops or a connection is refused. Android
-also grants four install-time permissions automatically: internet access (to pass lookups on and to
-download the address lists), checking whether the network is up, and two for running protection as a
+also grants three things automatically at install: internet access (to pass lookups on and to
+download the address lists), checking whether the network is up, and running protection as a
 foreground service (the ongoing notification). No contacts, location, storage or accessibility
 access. The manifest also declares `<queries>` for apps with a launcher icon, so a notification can
 name the app that tried to connect. Android also shows the app a few other packages by default, such
