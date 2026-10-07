@@ -39,11 +39,11 @@ café Wi-Fi, abroad. What sets it apart:
   reports it ("Chrome tried to connect to …"). With notifications on, it comes for the first block of
   each of up to 20 different addresses every time protection starts. The Recent blocks list on the
   home screen groups blocks by app.
-- **It does not fail silently.** When protection stops without the owner asking, the app tries to
-  post a notification saying DNS lookups are no longer filtered. That needs the app's notifications
-  to be on, and nothing can appear if Android ends the whole app abruptly. Private DNS set to a
-  specific server, and "Block connections without VPN", would cut the phone off while a DNS-only
-  tunnel runs, so the app detects both, stops and says why on the screen.
+- **It tries to tell you when protection stops.** When protection stops without the owner asking,
+  the app tries to post a notification saying DNS lookups are no longer filtered. That needs the
+  app's notifications to be on, and nothing can appear if Android ends the whole app abruptly.
+  Private DNS set to a specific server, and "Block connections without VPN", would cut the phone off
+  while a DNS-only tunnel runs, so the app detects both, stops and says why on the screen.
 - **It keeps encrypted DNS encrypted.** Lookups that aren't blocked go out through Android's own
   resolver (`DnsResolver`), so a lookup Android encrypts (Private DNS on Automatic, when the
   network's DNS server supports it) stays encrypted.
@@ -108,7 +108,8 @@ Tracker recommended IP blocklist. There is no Cocode server in between. Details:
 - Android's "Block connections without VPN" can't be used with the app either. The tunnel carries
   only DNS lookups and connections to listed addresses, so with that setting the phone can't reach
   the internet. Protection can't run, and the screen says so.
-- Apps with **their own secure DNS** (for example a browser's DoH setting) bypass the name filter.
+- Apps with **their own DNS** (for example a browser with encrypted DNS, DoH, turned on) bypass the
+  name filter. Their lookups go straight to their own server and never enter the tunnel.
 - Android allows **one VPN at a time**, so the app can't run alongside a work VPN or another VPN
   app.
 - If protection stops without your asking, the app posts a notification saying that DNS lookups are
