@@ -56,7 +56,7 @@
     <string name="promise_free">The app is free of charge, and anyone can read its code. It is free software under the GPL-3.0 license.</string>
     <string name="promise_permissions">The app asks only for permission to use a VPN and, on Android 13 or later, to show notifications. It has no access to your contacts, location or files.</string>
     <string name="promise_accessible">Works with TalkBack and large text sizes.</string>
-    <string name="promise_limit">One limit: apps that use their own encrypted DNS bypass the name filter, so some dangerous sites and ads can get through in them.</string>
+    <string name="promise_limit">One limit: apps that use their own DNS, such as encrypted DNS, bypass the name filter, so some dangerous sites and ads can get through in them.</string>
     <string name="action_about">About Guard for Android</string>
     <string name="action_back">Back</string>
 
