@@ -12,10 +12,10 @@ We will acknowledge within 5 business days and aim to release a fix within 30 da
 
 - The app has **no backend, no account and no analytics**. There are no credentials to leak.
 - It sees the DNS lookups that apps send through the phone's normal DNS setting. Apps with their own
-  DNS (for example a browser's secure DNS) bypass it. It keeps none of the lookups: they are answered
-  or passed on to the network's own DNS server. In memory only, it holds counters and up to 200
-  recent blocked lookups and refused connections (the name or address, and the app's name when
-  Android can tell). That list is cleared whenever protection starts or stops.
+  DNS (for example a browser's secure DNS) bypass it. Lookups it passes on to the network's own DNS
+  server are not kept. Blocked ones are: in memory only, it holds counters and up to 200 recent
+  blocked lookups and refused connections (the name or address, and the app's name when Android can
+  tell). That list is cleared whenever protection starts or stops.
 - Its network traffic is the passed-on lookups and the HTTPS downloads of the address lists from
   their publishers.
 

@@ -46,7 +46,7 @@ Every change keeps the app usable without sight:
 
 - Kotlin official style. Code files under 200 lines; split at a natural seam.
 - No Google Play services, no tracking library, and no permission a spec does not name. AndroidX and
-  Jetpack Compose are the dependencies the app uses.
+  Jetpack Compose provide the app's Android UI.
 - User-facing text lives in `res/values/strings.xml` (Danish, the default) and
   `res/values-en/strings.xml` (English). Plain words, short sentences.
 
