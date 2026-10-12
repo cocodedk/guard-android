@@ -3,7 +3,7 @@
 // plugin 2.2.10. The Compose compiler plugin must match the Kotlin version exactly.
 plugins {
     id("com.android.application") version "9.3.1" apply false
-    id("org.jetbrains.kotlin.plugin.compose") version "2.2.21" apply false
+    id("org.jetbrains.kotlin.plugin.compose") version "2.4.21" apply false
 }
 
 // One command for CI and the pre-push hook, so what blocks a push is exactly what
