@@ -2,7 +2,7 @@
 // apply on anything below Gradle 9.5, and declares a hard dependency on Kotlin Gradle
 // plugin 2.2.10. The Compose compiler plugin must match the Kotlin version exactly.
 plugins {
-    id("com.android.application") version "9.3.1" apply false
+    id("com.android.application") version "9.4.1" apply false
     id("org.jetbrains.kotlin.plugin.compose") version "2.2.21" apply false
 }
 
