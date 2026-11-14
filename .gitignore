@@ -11,3 +11,6 @@ captures/
 *.apk
 *.keystore
 !debug.keystore
+
+# Project notes live in a private repo; memory is a symlink to them
+memory
